@@ -814,7 +814,20 @@
     // Profile Management (Genesis vs Sibling)
     let currentProfile = localStorage.getItem('open_aac_active_profile') || 'Genesis';
     let storageKey = `open_aac_boards_${currentProfile}`;
-    let boards = JSON.parse(localStorage.getItem(storageKey) || 'null') || DEFAULT_BOARDS;
+    let stored = JSON.parse(localStorage.getItem(storageKey) || 'null');
+    
+    // Merge DEFAULT_BOARDS with stored user boards so new updates always appear!
+    let boards = stored ? JSON.parse(JSON.stringify(DEFAULT_BOARDS)) : DEFAULT_BOARDS;
+    if (stored) {
+      for (const [bId, bData] of Object.entries(stored)) {
+        if (!boards[bId]) {
+          boards[bId] = bData;
+        } else {
+          boards[bId].name = bData.name || boards[bId].name;
+          boards[bId].tiles = Object.assign({}, boards[bId].tiles, bData.tiles || {});
+        }
+      }
+    }
 
     let currentBoardId = 'home';
     let isEditMode = false;
