@@ -21,3 +21,6 @@ __pycache__/
 # OS
 Thumbs.db
 .DS_Store
+
+# Audio Cache
+assets/audio_cache/*.mp3
