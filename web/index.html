@@ -635,9 +635,11 @@
         "I am having sensory overload right now. I cannot process words or speak. Please dim the lights, do not touch me, and give me safe, quiet space."
       </div>
       <div class="overload-buttons">
-        <button class="btn-overload-action" onclick="speakText('Please give me my headphones.')">🎧 Need Headphones</button>
+        <button class="btn-overload-action" onclick="speakText('The dishes clattering is hurting my ears! Please give me my headphones.')">🍽️ Dishes Hurt Ears</button>
+        <button class="btn-overload-action" onclick="speakText('Please take me to my quiet bedroom.')">🚪 Go to My Room</button>
+        <button class="btn-overload-action" onclick="speakText('Please put my headphones on my ears right now.')">🎧 Need Headphones</button>
         <button class="btn-overload-action" onclick="speakText('Please turn off the bright lights.')">💡 Too Bright</button>
-        <button class="btn-overload-action" onclick="speakText('Please give me deep pressure.')">🫂 Deep Pressure</button>
+        <button class="btn-overload-action" onclick="speakText('Please give me deep pressure or a tight hug.')">🫂 Deep Pressure</button>
         <button class="btn-overload-action" onclick="speakText('I just need to sit quietly.')">🤫 Quiet Space</button>
       </div>
       <button class="btn-overload-close" onclick="closeEmergencyOverloadModal()">I Feel Regulated (Close)</button>
@@ -680,7 +682,7 @@
           "3_0": { label: "Happy", speech: "Happy", icon: "😄", pos: "pos-adjective", pitch: 1.2 },
           "3_1": { label: "Mad", speech: "I am mad", icon: "😠", pos: "pos-adjective", pitch: 0.95 },
           "3_2": { label: "Tired", speech: "I am tired", icon: "😴", pos: "pos-adjective", pitch: 0.9 },
-          "3_3": { label: "Too Loud", speech: "It is too loud!", icon: "🔇", pos: "pos-sensory", pitch: 1.25 },
+          "3_3": { label: "Dishes Hurt", speech: "The dishes clattering is hurting my ears! Please give me my headphones.", icon: "🍽️", pos: "pos-sensory", pitch: 1.25 },
           "3_4": { label: "My Space", speech: "Please give me space", icon: "🛑", pos: "pos-social", pitch: 1.1 },
           "3_5": { label: "Funny", speech: "That is hilarious!", icon: "🤣", pos: "pos-slang", pitch: 1.3 },
           "3_6": { label: "Gross", speech: "Eww, that is so gross!", icon: "🤢", pos: "pos-slang", pitch: 1.25 },
@@ -745,19 +747,25 @@
         name: "🧠 Sensory & Body",
         tiles: {
           "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
-          "0_1": { label: "Too Loud", speech: "It is way too loud in here!", icon: "🔇", pos: "pos-sensory", pitch: 1.2 },
-          "0_2": { label: "Too Bright", speech: "The lights are way too bright for my eyes.", icon: "💡", pos: "pos-sensory", pitch: 1.1 },
-          "0_3": { label: "Headphones", speech: "Please give me my headphones right now.", icon: "🎧", pos: "pos-sensory", pitch: 1.15 },
-          "0_4": { label: "Tummy Hurts", speech: "My tummy hurts.", icon: "🤢", pos: "pos-sensory", pitch: 1.0 },
-          "0_5": { label: "Itchy", speech: "My clothes feel too itchy on my skin.", icon: "👕", pos: "pos-sensory", pitch: 1.15 },
+          "0_1": { label: "Dishes Hurt", speech: "The dishes clattering is hurting my ears! Please give me headphones.", icon: "🍽️", pos: "pos-sensory", pitch: 1.25 },
+          "0_2": { label: "Too Loud", speech: "It is way too loud in here!", icon: "🔇", pos: "pos-sensory", pitch: 1.2 },
+          "0_3": { label: "Too Bright", speech: "The lights are way too bright for my eyes.", icon: "💡", pos: "pos-sensory", pitch: 1.1 },
+          "0_4": { label: "Headphones", speech: "Please give me my headphones right now.", icon: "🎧", pos: "pos-sensory", pitch: 1.2 },
+          "0_5": { label: "Tummy Hurts", speech: "My tummy hurts.", icon: "🤢", pos: "pos-sensory", pitch: 1.0 },
           "0_6": { label: "Need Hug", speech: "I need deep pressure or a tight hug please.", icon: "🫂", pos: "pos-sensory", pitch: 1.1 },
 
           "1_1": { label: "Quiet Room", speech: "I need to go to a quiet room.", icon: "🤫", pos: "pos-sensory", pitch: 1.0 },
           "1_2": { label: "Rocking", speech: "Rocking my body helps me calm down.", icon: "🪑", pos: "pos-sensory", pitch: 1.1 },
-          "1_3": { label: "Too Hot", speech: "I am feeling too hot.", icon: "🥵", pos: "pos-sensory", pitch: 1.1 },
-          "1_4": { label: "Too Cold", speech: "I am feeling too cold.", icon: "🥶", pos: "pos-sensory", pitch: 1.1 },
+          "1_3": { label: "Go to Room", speech: "Can I please go to my quiet bedroom?", icon: "🚪", pos: "pos-sensory", pitch: 1.1 },
+          "1_4": { label: "Kitchen Noise", speech: "The kitchen sounds are way too loud for me right now.", icon: "🥄", pos: "pos-sensory", pitch: 1.2 },
           "1_5": { label: "Take Break", speech: "I really need a break right now.", icon: "⏸️", pos: "pos-sensory", pitch: 1.1 },
-          "1_6": { label: "Chew Toy", speech: "I need my chew toy please.", icon: "🦷", pos: "pos-sensory", pitch: 1.15 }
+          "1_6": { label: "Itchy Clothes", speech: "My clothes feel too itchy on my skin.", icon: "👕", pos: "pos-sensory", pitch: 1.15 },
+
+          "2_1": { label: "Sharp Sound", speech: "That sharp clinking sound physically hurts my ears!", icon: "👂", pos: "pos-sensory", pitch: 1.25 },
+          "2_2": { label: "Sink Water", speech: "The running sink water and clattering is too loud.", icon: "🚰", pos: "pos-sensory", pitch: 1.15 },
+          "2_3": { label: "Too Hot", speech: "I am feeling too hot.", icon: "🥵", pos: "pos-sensory", pitch: 1.1 },
+          "2_4": { label: "Too Cold", speech: "I am feeling too cold.", icon: "🥶", pos: "pos-sensory", pitch: 1.1 },
+          "2_5": { label: "Chew Toy", speech: "I need my chew toy please.", icon: "🦷", pos: "pos-sensory", pitch: 1.15 }
         }
       },
 
