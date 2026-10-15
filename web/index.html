@@ -312,6 +312,107 @@
     .pos-strawberry { background: #fecdd3; border-color: #e11d48; color: #881337; }
     .pos-preposition { background: #e2e8f0; border-color: #94a3b8; color: #334155; }
 
+    /* ==========================================
+       SENSORY DARK MODE (Low-Stimulation Theme)
+       ========================================== */
+    body.dark-theme {
+      background: #090d16;
+      color: #e2e8f0;
+    }
+    body.dark-theme header {
+      background: #0f172a;
+      border-bottom-color: #1e293b;
+    }
+    body.dark-theme .brand-title {
+      color: #f8fafc;
+    }
+    body.dark-theme .tabs-bar {
+      background: #0b1120;
+      border-bottom-color: #1e293b;
+    }
+    body.dark-theme .tab-chip {
+      background: #1e293b;
+      border-color: #334155;
+      color: #cbd5e1;
+    }
+    body.dark-theme .tab-chip.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #38bdf8;
+    }
+    body.dark-theme .sentence-strip-container {
+      background: #0f172a;
+      border-bottom-color: #1e293b;
+    }
+    body.dark-theme .sentence-strip {
+      background: #1e293b;
+      border-color: #475569;
+    }
+    body.dark-theme .strip-placeholder {
+      color: #64748b;
+    }
+    body.dark-theme .btn-action {
+      background: #1e293b;
+      border-color: #334155;
+      color: #cbd5e1;
+    }
+    body.dark-theme .btn-icon {
+      background: #1e293b;
+      border-color: #334155;
+      color: #38bdf8;
+    }
+    body.dark-theme .mode-toggle {
+      background: #1e293b;
+      border-color: #334155;
+      color: #cbd5e1;
+    }
+    body.dark-theme .mode-toggle.active {
+      background: #713f12;
+      border-color: #ca8a04;
+      color: #fef08a;
+    }
+    body.dark-theme .empty-slot {
+      background: rgba(30, 41, 59, 0.4);
+      border-color: #334155;
+    }
+    body.dark-theme .edit-mode .empty-slot {
+      background: rgba(2, 132, 199, 0.2);
+      border-color: #38bdf8;
+      color: #38bdf8;
+    }
+
+    /* Soft, non-glare, matte sensory dark button colors */
+    body.dark-theme .pos-pronoun { background: #713f12; border-color: #a16207; color: #fef08a; }
+    body.dark-theme .pos-verb { background: #14532d; border-color: #15803d; color: #bbf7d0; }
+    body.dark-theme .pos-noun { background: #7c2d12; border-color: #c2410c; color: #fed7aa; }
+    body.dark-theme .pos-adjective { background: #0c4a6e; border-color: #0369a1; color: #bae6fd; }
+    body.dark-theme .pos-social { background: #831843; border-color: #be185d; color: #fbcfe8; }
+    body.dark-theme .pos-slang { background: #581c87; border-color: #7e22ce; color: #e9d5ff; }
+    body.dark-theme .pos-sensory { background: #312e81; border-color: #4338ca; color: #c7d2fe; }
+    body.dark-theme .pos-strawberry { background: #881337; border-color: #be123c; color: #fecdd3; }
+    body.dark-theme .pos-preposition { background: #1e293b; border-color: #475569; color: #e2e8f0; }
+
+    body.dark-theme .modal-box {
+      background: #0f172a;
+      color: #f8fafc;
+      border: 1px solid #334155;
+    }
+    body.dark-theme .modal-box h3 {
+      color: #f8fafc;
+    }
+    body.dark-theme .form-group label {
+      color: #94a3b8;
+    }
+    body.dark-theme .form-group input, body.dark-theme .form-group select {
+      background: #1e293b;
+      border-color: #334155;
+      color: #f8fafc;
+    }
+    body.dark-theme .btn-cancel {
+      background: #1e293b;
+      color: #cbd5e1;
+    }
+
     /* EMPTY SLOT (LOCKED COORDINATES) */
     .empty-slot {
       background: rgba(255, 255, 255, 0.4);
@@ -518,9 +619,15 @@
       </select>
     </div>
 
-    <div id="modeToggle" class="mode-toggle" onclick="toggleEditMode()">
-      <span id="modeIcon">🔒</span>
-      <span id="modeText">Child Mode</span>
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button class="btn-icon" id="themeToggleBtn" onclick="toggleSensoryTheme()" title="Toggle Sensory Dark / Low-Stim Mode" style="font-size: 0.85rem; padding: 5px 12px; border-radius: 20px;">
+        <span id="themeIcon">🌙</span> <span id="themeText">Sensory Dark</span>
+      </button>
+
+      <div id="modeToggle" class="mode-toggle" onclick="toggleEditMode()">
+        <span id="modeIcon">🔒</span>
+        <span id="modeText">Child Mode</span>
+      </div>
     </div>
   </header>
 
@@ -1269,7 +1376,33 @@
       }
     }
 
+    // ==========================================
+    // SENSORY DARK THEME (LOW STIMULATION)
+    // ==========================================
+    let isDarkTheme = localStorage.getItem('open_aac_dark_mode') === 'true';
+
+    function applyTheme() {
+      const icon = document.getElementById('themeIcon');
+      const text = document.getElementById('themeText');
+      if (isDarkTheme) {
+        document.body.classList.add('dark-theme');
+        if (icon) icon.textContent = '☀️';
+        if (text) text.textContent = 'Day Mode';
+      } else {
+        document.body.classList.remove('dark-theme');
+        if (icon) icon.textContent = '🌙';
+        if (text) text.textContent = 'Sensory Dark';
+      }
+    }
+
+    function toggleSensoryTheme() {
+      isDarkTheme = !isDarkTheme;
+      localStorage.setItem('open_aac_dark_mode', isDarkTheme);
+      applyTheme();
+    }
+
     // Init App
+    applyTheme();
     document.getElementById('profileBadge').textContent = `🌸 ${currentProfile}`;
     renderTabs();
     renderGrid();
