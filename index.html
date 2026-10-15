@@ -638,8 +638,8 @@
 
   <!-- SENTENCE STRIP (MESSAGE BAR) -->
   <div class="sentence-strip-container">
-    <div id="sentenceStrip" class="sentence-strip">
-      <span id="stripPlaceholder" class="strip-placeholder">Tap buttons below to formulate speech...</span>
+    <div id="sentenceStrip" class="sentence-strip" onclick="speakFullSentence()" style="cursor: pointer;" title="Tap this bar to speak all words together!">
+      <span id="stripPlaceholder" class="strip-placeholder">Tap buttons to speak & build sentences...</span>
     </div>
     <button class="btn-speak" onclick="speakFullSentence()">
       <span>🔊</span> Speak
@@ -1002,17 +1002,43 @@
       } catch (e) {}
     }
 
+    // Global reference prevents Chrome from garbage-collecting speech mid-sentence
+    window._activeUtterance = null;
+
     function speakText(text, pitch = 1.15, rate = 0.95) {
-      if (!text) return;
+      if (!text || !text.toString().trim()) return;
       playBeep();
+
       if (!('speechSynthesis' in window)) return;
 
-      window.speechSynthesis.resume();
-      const utterance = new SpeechSynthesisUtterance(text);
-      if (selectedVoice) utterance.voice = selectedVoice;
-      utterance.pitch = pitch;
-      utterance.rate = rate;
-      window.speechSynthesis.speak(utterance);
+      try {
+        // Cancel stuck speech queue and resume Chrome engine
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.resume();
+
+        const utterance = new SpeechSynthesisUtterance(text.toString());
+        window._activeUtterance = utterance; // Retain reference
+
+        if (selectedVoice) {
+          utterance.voice = selectedVoice;
+        }
+
+        utterance.pitch = pitch;
+        utterance.rate = rate;
+
+        utterance.onend = () => {
+          window._activeUtterance = null;
+        };
+
+        utterance.onerror = (e) => {
+          console.warn("SpeechSynthesis utterance error:", e);
+          window._activeUtterance = null;
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } catch (e) {
+        console.error("speakText error:", e);
+      }
     }
 
     function testSound() {
@@ -1103,14 +1129,20 @@
         return;
       }
 
-      sentence.forEach(item => {
+      sentence.forEach((item, idx) => {
         const itemEl = document.createElement('div');
         itemEl.className = `strip-item ${item.pos}`;
-        const visual = item.photo ? `<img src="${item.photo}">` : `<span class="emoji">${item.icon}</span>`;
+        const visual = item.photo ? `<img src="${item.photo}">` : `<span class="emoji">${item.icon || '⭐'}</span>`;
         itemEl.innerHTML = `
           ${visual}
           <span>${item.label}</span>
         `;
+        // Tapping an individual word in the sentence bar speaks it aloud again!
+        itemEl.onclick = (e) => {
+          e.stopPropagation();
+          const wordToSay = item.speech || item.label;
+          if (wordToSay) speakText(wordToSay, item.pitch || 1.15);
+        };
         strip.appendChild(itemEl);
       });
       strip.scrollLeft = strip.scrollWidth;
@@ -1125,12 +1157,22 @@
         return;
       }
 
-      if (tile.speech) {
-        speakText(tile.speech, tile.pitch || 1.15);
+      // 1. ALWAYS speak immediately on hitting the button!
+      const textToSay = (tile.speech && tile.speech.toString().trim())
+                     ? tile.speech.toString().trim()
+                     : (tile.spokenText && tile.spokenText.toString().trim() ? tile.spokenText.toString().trim() : tile.label);
+
+      if (textToSay) {
+        speakText(textToSay, tile.pitch || 1.15);
+      }
+
+      // 2. Add word to the top bar so child can build longer sentences
+      if (tile.label && !tile.label.includes('← Home')) {
         sentence.push(tile);
         renderSentenceStrip();
       }
 
+      // 3. Navigate if this is a folder/category button
       if (tile.targetBoard) {
         switchTab(tile.targetBoard);
       }
@@ -1146,7 +1188,8 @@
 
     function speakFullSentence() {
       if (sentence.length === 0) return;
-      const fullText = sentence.map(s => s.speech).join(' ');
+      // Speaks all words in the sentence bar together as one fluent thought!
+      const fullText = sentence.map(s => s.speech || s.label).join(' ');
       speakText(fullText, 1.15, 0.95);
     }
 
