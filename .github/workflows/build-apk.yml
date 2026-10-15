@@ -1,0 +1,67 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: Build & Release Android APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java Development Kit (JDK)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Generate Android Skeleton & Fetch Dependencies
+        run: |
+          flutter create . --platforms=android --org=com.genesisspeech --project-name=genesis_speech_tab
+          flutter pub get
+
+      - name: Build Android Release APK
+        run: flutter build apk --release
+
+      - name: Rename APK for Easy Download
+        run: cp build/app/outputs/flutter-apk/app-release.apk GenesisSpeechTab.apk
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GenesisSpeechTab-Android-APK
+          path: GenesisSpeechTab.apk
+
+      - name: Create GitHub Release with APK
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
+        with:
+          tag_name: v1.0.0
+          name: Genesis Speech Tab (Android APK v1.0.0)
+          body: |
+            ## 🗣️ Genesis Speech Tab - Free Android APK
+            
+            Download `GenesisSpeechTab.apk` below and install it directly onto any Android or Amazon Fire tablet!
+            
+            ### How to Install:
+            1. Tap **`GenesisSpeechTab.apk`** below to download to your tablet.
+            2. Tap the downloaded file in your tablet's Notifications or Downloads folder.
+            3. If Android prompts *"Install unknown apps"*, tap **Settings** and toggle **Allow from this source**.
+            4. Open Genesis Speech Tab and enjoy your child's free communication app!
+          files: GenesisSpeechTab.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
