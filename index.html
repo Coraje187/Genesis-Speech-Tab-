@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>OpenAAC - Free Speech Board for Android & Web</title>
+  <title>Genesis Speech Tab - Free AAC for Autism</title>
   <meta name="theme-color" content="#0284c7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
@@ -29,33 +29,41 @@
     header {
       background: #ffffff;
       border-bottom: 2px solid #e2e8f0;
-      padding: 8px 16px;
+      padding: 6px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       height: 60px;
+      gap: 8px;
     }
     .nav-left {
       display: flex;
       align-items: center;
       gap: 10px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
     }
     .brand-title {
-      font-weight: 800;
-      font-size: 1.1rem;
+      font-weight: 900;
+      font-size: 1.15rem;
       color: #0f172a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
     }
-    select.tab-select {
-      font-size: 1rem;
-      font-weight: 700;
-      padding: 6px 12px;
-      border-radius: 8px;
-      border: 1.5px solid #cbd5e1;
-      background: #f8fafc;
-      color: #1e293b;
+    .profile-badge {
+      background: #fdf2f8;
+      border: 1.5px solid #f472b6;
+      color: #db2777;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
       cursor: pointer;
-      outline: none;
     }
+
     .btn-icon {
       background: #e0f2fe;
       color: #0284c7;
@@ -64,26 +72,50 @@
       border-radius: 8px;
       font-weight: 700;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 6px;
+      white-space: nowrap;
+      font-size: 0.85rem;
     }
     .btn-icon:active {
       background: #bae6fd;
+    }
+
+    /* EMERGENCY SENSORY OVERLOAD BUTTON */
+    .btn-emergency {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 2px solid #f87171;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 900;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      animation: pulse-soft 2s infinite;
+    }
+    @keyframes pulse-soft {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
     }
 
     /* MODE TOGGLE */
     .mode-toggle {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: #f1f5f9;
-      padding: 4px 10px;
+      padding: 5px 12px;
       border-radius: 20px;
       border: 1.5px solid #cbd5e1;
       cursor: pointer;
-      font-size: 0.9rem;
-      font-weight: 700;
+      font-size: 0.85rem;
+      font-weight: 800;
+      white-space: nowrap;
     }
     .mode-toggle.active {
       background: #fef08a;
@@ -91,14 +123,51 @@
       color: #854d0e;
     }
 
+    /* CATEGORY TABS BAR (ONE-TOUCH ACCESS) */
+    .tabs-bar {
+      background: #f8fafc;
+      border-bottom: 2px solid #e2e8f0;
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .tab-chip {
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: #334155;
+      font-weight: 800;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+    .tab-chip.active {
+      background: #0284c7;
+      color: #ffffff;
+      border-color: #0284c7;
+      box-shadow: 0 2px 4px rgba(2, 132, 199, 0.3);
+    }
+    .tab-chip-add {
+      background: #f0fdf4;
+      border: 1.5px dashed #22c55e;
+      color: #15803d;
+    }
+
     /* SENTENCE STRIP */
     .sentence-strip-container {
       background: #ffffff;
-      padding: 8px 16px;
+      padding: 6px 14px;
       display: flex;
       align-items: center;
-      gap: 12px;
-      height: 85px;
+      gap: 10px;
+      height: 80px;
       border-bottom: 2px solid #cbd5e1;
     }
     .sentence-strip {
@@ -109,7 +178,7 @@
       border-radius: 12px;
       display: flex;
       align-items: center;
-      padding: 4px 12px;
+      padding: 4px 10px;
       gap: 8px;
       overflow-x: auto;
       white-space: nowrap;
@@ -117,23 +186,29 @@
     .strip-placeholder {
       color: #94a3b8;
       font-style: italic;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
     .strip-item {
       display: inline-flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-radius: 8px;
       border: 1.5px solid rgba(0,0,0,0.2);
-      font-weight: 700;
-      font-size: 0.85rem;
-      min-width: 60px;
-      height: 60px;
+      font-weight: 800;
+      font-size: 0.8rem;
+      min-width: 58px;
+      height: 58px;
     }
     .strip-item .emoji {
-      font-size: 1.4rem;
+      font-size: 1.3rem;
+    }
+    .strip-item img {
+      width: 26px;
+      height: 26px;
+      object-fit: cover;
+      border-radius: 4px;
     }
 
     .btn-speak {
@@ -141,10 +216,10 @@
       color: #ffffff;
       border: none;
       border-radius: 12px;
-      padding: 0 24px;
+      padding: 0 20px;
       height: 100%;
-      font-size: 1.25rem;
-      font-weight: 800;
+      font-size: 1.2rem;
+      font-weight: 900;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -159,8 +234,8 @@
       border: 1.5px solid #cbd5e1;
       border-radius: 12px;
       height: 100%;
-      width: 55px;
-      font-size: 1.25rem;
+      width: 50px;
+      font-size: 1.2rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -173,7 +248,7 @@
     /* MOTOR PLANNING 5x7 GRID */
     .grid-container {
       flex: 1;
-      padding: 10px;
+      padding: 8px;
       display: grid;
       grid-template-columns: repeat(7, 1fr);
       grid-template-rows: repeat(5, 1fr);
@@ -190,7 +265,7 @@
       align-items: center;
       justify-content: center;
       font-weight: 800;
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       cursor: pointer;
       box-shadow: 0 2px 4px rgba(0,0,0,0.06);
       transition: transform 0.05s ease;
@@ -205,6 +280,14 @@
     .aac-tile .tile-icon {
       font-size: 2rem;
       margin-bottom: 2px;
+    }
+    .aac-tile img.custom-photo {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 2px;
+      border: 1px solid rgba(0,0,0,0.2);
     }
     .aac-tile .tile-label {
       line-height: 1.1;
@@ -225,6 +308,8 @@
     .pos-adjective { background: #bae6fd; border-color: #0284c7; color: #0c4a6e; }
     .pos-social { background: #fbcfe8; border-color: #db2777; color: #831843; }
     .pos-slang { background: #e9d5ff; border-color: #9333ea; color: #581c87; }
+    .pos-sensory { background: #c7d2fe; border-color: #4f46e5; color: #312e81; }
+    .pos-strawberry { background: #fecdd3; border-color: #e11d48; color: #881337; }
     .pos-preposition { background: #e2e8f0; border-color: #94a3b8; color: #334155; }
 
     /* EMPTY SLOT (LOCKED COORDINATES) */
@@ -238,11 +323,11 @@
       cursor: default;
     }
     .edit-mode .empty-slot {
-      background: rgba(186, 230, 253, 0.25);
+      background: rgba(186, 230, 253, 0.3);
       border: 2px dashed #0284c7;
       cursor: pointer;
       color: #0284c7;
-      font-size: 1.8rem;
+      font-size: 1.6rem;
     }
     .edit-mode .aac-tile {
       box-shadow: 0 0 0 2px #0284c7;
@@ -267,17 +352,20 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      backdrop-filter: blur(2px);
     }
     .modal-overlay.open {
       display: flex;
     }
     .modal-box {
       background: white;
-      border-radius: 16px;
-      width: 90%;
-      max-width: 480px;
-      padding: 20px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      border-radius: 18px;
+      width: 92%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 22px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     }
     .modal-box h3 {
       margin-bottom: 14px;
@@ -289,7 +377,7 @@
     .form-group label {
       display: block;
       font-size: 0.85rem;
-      font-weight: 700;
+      font-weight: 800;
       color: #475569;
       margin-bottom: 4px;
     }
@@ -311,9 +399,9 @@
       background: #16a34a;
       color: white;
       border: none;
-      padding: 10px 18px;
+      padding: 10px 20px;
       border-radius: 8px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
     }
     .btn-cancel {
@@ -322,7 +410,7 @@
       border: none;
       padding: 10px 18px;
       border-radius: 8px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
     }
     .btn-delete {
@@ -331,9 +419,61 @@
       border: none;
       padding: 10px 18px;
       border-radius: 8px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       margin-right: auto;
+    }
+
+    /* SENSORY OVERLOAD CALM CARD */
+    .overload-box {
+      background: #0f172a;
+      color: #f8fafc;
+      border: 3px solid #38bdf8;
+      border-radius: 24px;
+      width: 95%;
+      max-width: 580px;
+      padding: 28px;
+      text-align: center;
+    }
+    .overload-box h2 {
+      color: #38bdf8;
+      font-size: 1.8rem;
+      margin-bottom: 12px;
+    }
+    .overload-message {
+      font-size: 1.3rem;
+      line-height: 1.5;
+      margin-bottom: 24px;
+      background: #1e293b;
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px solid #334155;
+    }
+    .overload-buttons {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .btn-overload-action {
+      background: #334155;
+      color: white;
+      border: 1px solid #475569;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 1.05rem;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-overload-close {
+      background: #38bdf8;
+      color: #0f172a;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 20px;
+      font-weight: 900;
+      font-size: 1.1rem;
+      cursor: pointer;
     }
 
     /* EMOJI / ICON SELECTOR ROW */
@@ -341,7 +481,7 @@
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding: 4px 0;
+      padding: 6px 0;
     }
     .icon-opt {
       font-size: 1.6rem;
@@ -350,6 +490,7 @@
       border-radius: 8px;
       cursor: pointer;
       border: 1.5px solid transparent;
+      flex-shrink: 0;
     }
     .icon-opt.selected {
       background: #bae6fd;
@@ -362,17 +503,17 @@
   <!-- HEADER & NAVIGATION -->
   <header>
     <div class="nav-left">
-      <span class="brand-title">🗣️ OpenAAC</span>
-      <select id="tabSelect" class="tab-select" onchange="switchTab(this.value)">
-        <!-- Injected via JS -->
-      </select>
-      <button class="btn-icon" onclick="openNewTabModal()">
-        <span>➕</span> New Tab
+      <span class="brand-title">🗣️ Genesis Speech Tab</span>
+      <div id="profileBadge" class="profile-badge" onclick="switchProfilePrompt()" title="Switch Child Profile">
+        🌸 Genesis
+      </div>
+      <button class="btn-emergency" onclick="openEmergencyOverloadModal()" title="Sensory Overload Card">
+        <span>🆘</span> Overload Card
       </button>
       <button class="btn-icon" onclick="testSound()" title="Click to test tablet speech">
         <span>🔊</span> Test Sound
       </button>
-      <select id="voiceSelect" class="tab-select" onchange="changeVoice(this.value)" style="max-width: 160px; font-size: 0.85rem;" title="Select voice">
+      <select id="voiceSelect" class="btn-icon" onchange="changeVoice(this.value)" style="max-width: 150px; font-size: 0.8rem; background: #f8fafc;" title="Select voice">
         <option value="">Default Voice</option>
       </select>
     </div>
@@ -382,6 +523,11 @@
       <span id="modeText">Child Mode</span>
     </div>
   </header>
+
+  <!-- QUICK ACCESS CATEGORY TABS -->
+  <div class="tabs-bar" id="tabsBar">
+    <!-- Populated by JS -->
+  </div>
 
   <!-- SENTENCE STRIP (MESSAGE BAR) -->
   <div class="sentence-strip-container">
@@ -411,29 +557,40 @@
       
       <div class="form-group">
         <label>Display Label (Button Text)</label>
-        <input type="text" id="tileLabel" placeholder="e.g. Bruh, Apple, Sister">
+        <input type="text" id="tileLabel" placeholder="e.g. Pupcake, Bruh, Hug, Apple">
       </div>
 
       <div class="form-group">
         <label>What the Tablet Speaks</label>
-        <input type="text" id="tileSpeech" placeholder="e.g. Bruh... / That is my sister!">
+        <input type="text" id="tileSpeech" placeholder="e.g. Look at Pupcake! / I need a hug please">
       </div>
 
       <div class="form-group">
-        <label>Part of Speech / Color (Fitzgerald Standard)</label>
+        <label>Color / Category (Fitzgerald Standard)</label>
         <select id="tilePos">
+          <option value="pos-strawberry">🍓 Strawberry Pink - Characters & Sweet Treats</option>
+          <option value="pos-noun">Orange - Noun / Animals & Things</option>
+          <option value="pos-sensory">Indigo - Sensory & Body Regulation</option>
+          <option value="pos-slang">Purple - Slang / Vibes & Banter</option>
           <option value="pos-pronoun">Yellow - Pronoun (I, You, Mom)</option>
-          <option value="pos-verb">Green - Verb / Action (Want, Go, Eat)</option>
-          <option value="pos-noun">Orange - Noun / Object (Apple, Toy, Water)</option>
-          <option value="pos-adjective">Blue - Descriptor (More, Finished, Loud)</option>
+          <option value="pos-verb">Green - Verb / Action (Want, Go, Play)</option>
+          <option value="pos-adjective">Blue - Descriptor (More, Finished, Soft)</option>
           <option value="pos-social">Pink - Social (Please, Thank you, Help)</option>
-          <option value="pos-slang">Purple - Slang / Vibes (Bruh, Let's go, Cap)</option>
           <option value="pos-preposition">Grey - Navigation / Preposition</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>Choose an Icon / Emoji</label>
+        <label>Snap Camera Photo / Upload Custom Image</label>
+        <input type="file" id="tileImageInput" accept="image/*" onchange="handleImageUpload(event)" style="font-size: 0.9rem;">
+        <div id="imagePreviewContainer" style="margin-top: 8px; display: none; align-items: center; gap: 8px;">
+          <img id="imagePreview" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid #cbd5e1;">
+          <button type="button" class="btn-cancel" style="padding: 4px 10px; font-size: 0.8rem;" onclick="removeCustomImage()">Remove Photo</button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Or Choose an Icon / Emoji</label>
         <div class="icon-palette" id="iconPalette">
           <!-- Icons injected by JS -->
         </div>
@@ -458,10 +615,10 @@
   <!-- ADD TAB MODAL -->
   <div id="tabModal" class="modal-overlay">
     <div class="modal-box">
-      <h3>➕ Create New Tab / Category</h3>
+      <h3>➕ Create New Category Tab</h3>
       <div class="form-group">
         <label>Category Name</label>
-        <input type="text" id="newTabName" placeholder="e.g. School, Roblox, Sensory, Park">
+        <input type="text" id="newTabName" placeholder="e.g. School, Sensory Toys, Roblox, Park">
       </div>
       <div class="modal-actions">
         <button class="btn-cancel" onclick="closeNewTabModal()">Cancel</button>
@@ -470,9 +627,26 @@
     </div>
   </div>
 
+  <!-- EMERGENCY SENSORY OVERLOAD MODAL -->
+  <div id="overloadModal" class="modal-overlay">
+    <div class="overload-box">
+      <h2>🛑 SENSORY OVERLOAD</h2>
+      <div class="overload-message">
+        "I am having sensory overload right now. I cannot process words or speak. Please dim the lights, do not touch me, and give me safe, quiet space."
+      </div>
+      <div class="overload-buttons">
+        <button class="btn-overload-action" onclick="speakText('Please give me my headphones.')">🎧 Need Headphones</button>
+        <button class="btn-overload-action" onclick="speakText('Please turn off the bright lights.')">💡 Too Bright</button>
+        <button class="btn-overload-action" onclick="speakText('Please give me deep pressure.')">🫂 Deep Pressure</button>
+        <button class="btn-overload-action" onclick="speakText('I just need to sit quietly.')">🤫 Quiet Space</button>
+      </div>
+      <button class="btn-overload-close" onclick="closeEmergencyOverloadModal()">I Feel Regulated (Close)</button>
+    </div>
+  </div>
+
   <script>
     // ==========================================
-    // DEFAULT VOCABULARY & MOTOR PLANNING DATA
+    // DEFAULT RICH VOCABULARY BOARDS
     // ==========================================
     const DEFAULT_BOARDS = {
       home: {
@@ -481,9 +655,11 @@
         tiles: {
           "0_0": { label: "I", speech: "I", icon: "🙋", pos: "pos-pronoun", pitch: 1.1 },
           "0_1": { label: "You", speech: "You", icon: "👉", pos: "pos-pronoun", pitch: 1.1 },
-          "0_4": { label: "Yes", speech: "Yes", icon: "👍", pos: "pos-social", pitch: 1.15 },
-          "0_5": { label: "No Way", speech: "No way!", icon: "👎", pos: "pos-social", pitch: 1.3 },
-          "0_6": { label: "⚡ Slang", speech: "", icon: "⚡", pos: "pos-slang", targetBoard: "slang" },
+          "0_2": { label: "🍓 Strawberry", speech: "Strawberry Shortcake", icon: "🍓", pos: "pos-strawberry", targetBoard: "strawberry" },
+          "0_3": { label: "🐾 Animals", speech: "Animals", icon: "🐾", pos: "pos-noun", targetBoard: "animals" },
+          "0_4": { label: "🧠 Sensory", speech: "My sensory needs", icon: "🧠", pos: "pos-sensory", targetBoard: "sensory" },
+          "0_5": { label: "Yes", speech: "Yes", icon: "👍", pos: "pos-social", pitch: 1.15 },
+          "0_6": { label: "No Way", speech: "No way!", icon: "👎", pos: "pos-social", pitch: 1.3 },
 
           "1_0": { label: "Want", speech: "Want", icon: "🤲", pos: "pos-verb", pitch: 1.1 },
           "1_1": { label: "Like", speech: "Like", icon: "❤️", pos: "pos-verb", pitch: 1.1 },
@@ -497,14 +673,14 @@
           "2_1": { label: "Play", speech: "Play", icon: "🎮", pos: "pos-verb", pitch: 1.1 },
           "2_2": { label: "More", speech: "More", icon: "➕", pos: "pos-adjective", pitch: 1.1 },
           "2_3": { label: "All Done", speech: "I am all done", icon: "✅", pos: "pos-adjective", pitch: 1.1 },
-          "2_4": { label: "Awesome", speech: "That is awesome!", icon: "⭐", pos: "pos-slang", pitch: 1.3 },
+          "2_4": { label: "⚡ Slang", speech: "", icon: "⚡", pos: "pos-slang", targetBoard: "slang" },
           "2_5": { label: "Chill", speech: "Chill out", icon: "🧊", pos: "pos-slang", pitch: 1.0 },
           "2_6": { label: "Bruh", speech: "Bruh...", icon: "😐", pos: "pos-slang", pitch: 0.85 },
 
           "3_0": { label: "Happy", speech: "Happy", icon: "😄", pos: "pos-adjective", pitch: 1.2 },
           "3_1": { label: "Mad", speech: "I am mad", icon: "😠", pos: "pos-adjective", pitch: 0.95 },
           "3_2": { label: "Tired", speech: "I am tired", icon: "😴", pos: "pos-adjective", pitch: 0.9 },
-          "3_3": { label: "Too Loud", speech: "It is too loud!", icon: "🔇", pos: "pos-social", pitch: 1.25 },
+          "3_3": { label: "Too Loud", speech: "It is too loud!", icon: "🔇", pos: "pos-sensory", pitch: 1.25 },
           "3_4": { label: "My Space", speech: "Please give me space", icon: "🛑", pos: "pos-social", pitch: 1.1 },
           "3_5": { label: "Funny", speech: "That is hilarious!", icon: "🤣", pos: "pos-slang", pitch: 1.3 },
           "3_6": { label: "Gross", speech: "Eww, that is so gross!", icon: "🤢", pos: "pos-slang", pitch: 1.25 },
@@ -518,6 +694,74 @@
           "4_6": { label: "Bathroom", speech: "I need to use the bathroom", icon: "🚻", pos: "pos-noun", pitch: 1.1 }
         }
       },
+
+      // STRAWBERRY SHORTCAKE BOARD
+      strawberry: {
+        id: "strawberry",
+        name: "🍓 Strawberry Shortcake",
+        tiles: {
+          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
+          "0_1": { label: "Strawberry", speech: "I love Strawberry Shortcake!", icon: "🍓", pos: "pos-strawberry", pitch: 1.3 },
+          "0_2": { label: "Custard", speech: "Meow! Custard the kitty is so cute!", icon: "🐱", pos: "pos-strawberry", pitch: 1.35 },
+          "0_3": { label: "Pupcake", speech: "Woof! Pupcake the puppy is my favorite!", icon: "🐶", pos: "pos-strawberry", pitch: 1.25 },
+          "0_4": { label: "Blueberry", speech: "Blueberry Muffin!", icon: "🫐", pos: "pos-strawberry", pitch: 1.2 },
+          "0_5": { label: "Raspberry", speech: "Raspberry Torte!", icon: "🧁", pos: "pos-strawberry", pitch: 1.25 },
+          "0_6": { label: "Lemon", speech: "Lemon Meringue!", icon: "🍋", pos: "pos-strawberry", pitch: 1.2 },
+
+          "1_1": { label: "Orange", speech: "Orange Blossom!", icon: "🍊", pos: "pos-strawberry", pitch: 1.2 },
+          "1_2": { label: "Plum", speech: "Plum Pudding!", icon: "🍰", pos: "pos-strawberry", pitch: 1.2 },
+          "1_3": { label: "Berry Sweet", speech: "That is berry sweet!", icon: "💖", pos: "pos-strawberry", pitch: 1.35 },
+          "1_4": { label: "Bake Cakes", speech: "Let's bake sweet cakes together!", icon: "🎂", pos: "pos-verb", pitch: 1.25 },
+          "1_5": { label: "Cute Hat", speech: "I love her strawberry hat!", icon: "👒", pos: "pos-noun", pitch: 1.2 },
+          "1_6": { label: "Sing Song", speech: "Let's sing the Strawberry Shortcake song!", icon: "🎶", pos: "pos-verb", pitch: 1.3 }
+        }
+      },
+
+      // ANIMALS & PETS BOARD
+      animals: {
+        id: "animals",
+        name: "🐾 Animals & Pets",
+        tiles: {
+          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
+          "0_1": { label: "Puppy", speech: "Woof woof! I love puppies!", icon: "🐶", pos: "pos-noun", pitch: 1.25 },
+          "0_2": { label: "Kitty", speech: "Meow! Look at the cute kitty!", icon: "🐱", pos: "pos-noun", pitch: 1.3 },
+          "0_3": { label: "Bunny", speech: "Hop hop! Look at the fluffy bunny!", icon: "🐰", pos: "pos-noun", pitch: 1.3 },
+          "0_4": { label: "Horse", speech: "Neigh! I love horses!", icon: "🐴", pos: "pos-noun", pitch: 1.1 },
+          "0_5": { label: "Dolphin", speech: "Look at the swimming dolphin!", icon: "🐬", pos: "pos-noun", pitch: 1.25 },
+          "0_6": { label: "Bear", speech: "Teddy bear!", icon: "🧸", pos: "pos-noun", pitch: 1.15 },
+
+          "1_1": { label: "Panda", speech: "Look at the cute panda!", icon: "🐼", pos: "pos-noun", pitch: 1.2 },
+          "1_2": { label: "Duck", speech: "Quack quack!", icon: "🦆", pos: "pos-noun", pitch: 1.3 },
+          "1_3": { label: "Tiger", speech: "Roar! Look at the tiger!", icon: "🐯", pos: "pos-noun", pitch: 1.1 },
+          "1_4": { label: "Elephant", speech: "Look at the big elephant!", icon: "🐘", pos: "pos-noun", pitch: 1.1 },
+          "1_5": { label: "Pet Animal", speech: "I want to pet the animal gently.", icon: "🤲", pos: "pos-verb", pitch: 1.15 },
+          "1_6": { label: "Bird", speech: "Chirp chirp! Beautiful bird!", icon: "🐦", pos: "pos-noun", pitch: 1.3 }
+        }
+      },
+
+      // SENSORY & BODY REGULATION (INTEROCEPTION)
+      sensory: {
+        id: "sensory",
+        name: "🧠 Sensory & Body",
+        tiles: {
+          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
+          "0_1": { label: "Too Loud", speech: "It is way too loud in here!", icon: "🔇", pos: "pos-sensory", pitch: 1.2 },
+          "0_2": { label: "Too Bright", speech: "The lights are way too bright for my eyes.", icon: "💡", pos: "pos-sensory", pitch: 1.1 },
+          "0_3": { label: "Headphones", speech: "Please give me my headphones right now.", icon: "🎧", pos: "pos-sensory", pitch: 1.15 },
+          "0_4": { label: "Tummy Hurts", speech: "My tummy hurts.", icon: "🤢", pos: "pos-sensory", pitch: 1.0 },
+          "0_5": { label: "Itchy", speech: "My clothes feel too itchy on my skin.", icon: "👕", pos: "pos-sensory", pitch: 1.15 },
+          "0_6": { label: "Need Hug", speech: "I need deep pressure or a tight hug please.", icon: "🫂", pos: "pos-sensory", pitch: 1.1 },
+
+          "1_1": { label: "Quiet Room", speech: "I need to go to a quiet room.", icon: "🤫", pos: "pos-sensory", pitch: 1.0 },
+          "1_2": { label: "Rocking", speech: "Rocking my body helps me calm down.", icon: "🪑", pos: "pos-sensory", pitch: 1.1 },
+          "1_3": { label: "Too Hot", speech: "I am feeling too hot.", icon: "🥵", pos: "pos-sensory", pitch: 1.1 },
+          "1_4": { label: "Too Cold", speech: "I am feeling too cold.", icon: "🥶", pos: "pos-sensory", pitch: 1.1 },
+          "1_5": { label: "Take Break", speech: "I really need a break right now.", icon: "⏸️", pos: "pos-sensory", pitch: 1.1 },
+          "1_6": { label: "Chew Toy", speech: "I need my chew toy please.", icon: "🦷", pos: "pos-sensory", pitch: 1.15 }
+        }
+      },
+
+      // SLANG & VIBES BOARD
       slang: {
         id: "slang",
         name: "⚡ Vibes & Slang",
@@ -542,6 +786,8 @@
           "2_4": { label: "You Rock", speech: "You rock!", icon: "🎸", pos: "pos-slang", pitch: 1.3 }
         }
       },
+
+      // FOOD BOARD
       food: {
         id: "food",
         name: "🍎 Food & Drinks",
@@ -557,25 +803,24 @@
       }
     };
 
-    // Load from LocalStorage if available so edits are permanent!
-    let boards = JSON.parse(localStorage.getItem('open_aac_boards') || 'null') || DEFAULT_BOARDS;
+    // Profile Management (Genesis vs Sibling)
+    let currentProfile = localStorage.getItem('open_aac_active_profile') || 'Genesis';
+    let storageKey = `open_aac_boards_${currentProfile}`;
+    let boards = JSON.parse(localStorage.getItem(storageKey) || 'null') || DEFAULT_BOARDS;
+
     let currentBoardId = 'home';
     let isEditMode = false;
     let sentence = [];
 
     // ==========================================
-    // BULLETPROOF SPEECH SYNTHESIS ENGINE
+    // AUDIO ENGINE & VOICES
     // ==========================================
-    const synth = window.AudioContext || window.webkitAudioContext ? new (window.AudioContext || window.webkitAudioContext)() : null;
+    const audioCtx = window.AudioContext || window.webkitAudioContext ? new (window.AudioContext || window.webkitAudioContext)() : null;
     let availableVoices = [];
     let selectedVoice = null;
 
     function initVoices() {
-      if (!('speechSynthesis' in window)) {
-        showStatusNotice("⚠️ Speech Synthesis is not supported in this browser. Try Google Chrome.");
-        return;
-      }
-
+      if (!('speechSynthesis' in window)) return;
       availableVoices = window.speechSynthesis.getVoices();
       const select = document.getElementById('voiceSelect');
       if (select && availableVoices.length > 0) {
@@ -587,7 +832,6 @@
           select.appendChild(opt);
         });
 
-        // Prefer natural English voices
         const defaultIdx = availableVoices.findIndex(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha')));
         if (defaultIdx !== -1) {
           select.selectedIndex = defaultIdx;
@@ -598,6 +842,47 @@
       }
     }
 
+    if ('speechSynthesis' in window) {
+      initVoices();
+      window.speechSynthesis.onvoiceschanged = initVoices;
+    }
+
+    function playBeep() {
+      if (!audioCtx) return;
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.13);
+      } catch (e) {}
+    }
+
+    function speakText(text, pitch = 1.15, rate = 0.95) {
+      if (!text) return;
+      playBeep();
+      if (!('speechSynthesis' in window)) return;
+
+      window.speechSynthesis.resume();
+      const utterance = new SpeechSynthesisUtterance(text);
+      if (selectedVoice) utterance.voice = selectedVoice;
+      utterance.pitch = pitch;
+      utterance.rate = rate;
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function testSound() {
+      playBeep();
+      speakText("Hello Genesis! Your speech tablet sound is working perfectly.");
+    }
+
     function changeVoice(idx) {
       if (availableVoices[idx]) {
         selectedVoice = availableVoices[idx];
@@ -605,119 +890,31 @@
       }
     }
 
-    function testSound() {
-      // Unlocks browser audio restrictions on direct user click
-      playBeep();
-      speakText("Hello! Your speech tablet sound is working perfectly.");
-    }
-
-    if ('speechSynthesis' in window) {
-      initVoices();
-      window.speechSynthesis.onvoiceschanged = initVoices;
-    }
-
-    // Play a friendly beep fallback via Web Audio API if TTS is blocked
-    function playBeep() {
-      if (!synth) return;
-      try {
-        if (synth.state === 'suspended') synth.resume();
-        const osc = synth.createOscillator();
-        const gain = synth.createGain();
-        osc.connect(gain);
-        gain.connect(synth.destination);
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(587.33, synth.currentTime); // D5
-        osc.frequency.exponentialRampToValueAtTime(880, synth.currentTime + 0.1); // A5
-        gain.gain.setValueAtTime(0.2, synth.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, synth.currentTime + 0.15);
-        osc.start();
-        osc.stop(synth.currentTime + 0.16);
-      } catch (e) {
-        console.error("Audio beep error:", e);
-      }
-    }
-
-    function showStatusNotice(msg) {
-      let banner = document.getElementById('statusBanner');
-      if (!banner) {
-        banner = document.createElement('div');
-        banner.id = 'statusBanner';
-        banner.style.position = 'fixed';
-        banner.style.bottom = '20px';
-        banner.style.left = '50%';
-        banner.style.transform = 'translateX(-50%)';
-        banner.style.background = '#1e293b';
-        banner.style.color = '#ffffff';
-        banner.style.padding = '12px 24px';
-        banner.style.borderRadius = '30px';
-        banner.style.fontWeight = 'bold';
-        banner.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.3)';
-        banner.style.zIndex = '9999';
-        banner.style.transition = 'opacity 0.3s ease';
-        document.body.appendChild(banner);
-      }
-      banner.textContent = msg;
-      banner.style.opacity = '1';
-      banner.style.display = 'block';
-      setTimeout(() => {
-        banner.style.opacity = '0';
-        setTimeout(() => { banner.style.display = 'none'; }, 300);
-      }, 4000);
-    }
-
-    function speakText(text, pitch = 1.1, rate = 0.95) {
-      if (!text) return;
-      playBeep(); // Immediate audio tactile confirmation
-
-      if (!('speechSynthesis' in window)) {
-        showStatusNotice("Speech not supported on this browser.");
-        return;
-      }
-
-      // Chrome bug fix: resume if paused or frozen
-      window.speechSynthesis.resume();
-
-      const utterance = new SpeechSynthesisUtterance(text);
-      if (selectedVoice) {
-        utterance.voice = selectedVoice;
-      }
-      utterance.pitch = pitch;
-      utterance.rate = rate;
-
-      utterance.onstart = () => {
-        console.log("Speech started:", text);
-      };
-
-      utterance.onerror = (e) => {
-        console.error("SpeechSynthesis error:", e);
-        if (e.error === 'not-allowed') {
-          showStatusNotice("Audio blocked: Tap anywhere on the screen first to allow sound.");
-        } else {
-          showStatusNotice(`Voice engine status: ${e.error || 'Check volume'}`);
-        }
-      };
-
-      // Speak directly without canceling abruptly
-      window.speechSynthesis.speak(utterance);
-    }
-
     function saveBoardsToStorage() {
-      localStorage.setItem('open_aac_boards', JSON.stringify(boards));
+      localStorage.setItem(storageKey, JSON.stringify(boards));
     }
 
     // ==========================================
     // RENDER FUNCTIONS
     // ==========================================
     function renderTabs() {
-      const select = document.getElementById('tabSelect');
-      select.innerHTML = '';
+      const container = document.getElementById('tabsBar');
+      container.innerHTML = '';
+
       for (const [id, board] of Object.entries(boards)) {
-        const opt = document.createElement('option');
-        opt.value = id;
-        opt.textContent = board.name;
-        opt.selected = (id === currentBoardId);
-        select.appendChild(opt);
+        const chip = document.createElement('div');
+        chip.className = `tab-chip ${id === currentBoardId ? 'active' : ''}`;
+        chip.textContent = board.name;
+        chip.onclick = () => switchTab(id);
+        container.appendChild(chip);
       }
+
+      // Add New Tab Chip
+      const addChip = document.createElement('div');
+      addChip.className = 'tab-chip tab-chip-add';
+      addChip.innerHTML = '➕ New Tab';
+      addChip.onclick = openNewTabModal;
+      container.appendChild(addChip);
     }
 
     function renderGrid() {
@@ -726,7 +923,6 @@
       const currentBoard = boards[currentBoardId] || boards['home'];
       const tiles = currentBoard.tiles || {};
 
-      // 5 Rows x 7 Columns = 35 Fixed Grid Cells
       for (let r = 0; r < 5; r++) {
         for (let c = 0; c < 7; c++) {
           const key = `${r}_${c}`;
@@ -735,15 +931,20 @@
           if (tile) {
             const el = document.createElement('div');
             el.className = `aac-tile ${tile.pos || 'pos-noun'}`;
+            
+            // Check if tile has a custom photo uploaded!
+            const visualContent = tile.photo 
+              ? `<img src="${tile.photo}" class="custom-photo" alt="${tile.label}">`
+              : `<div class="tile-icon">${tile.icon || '⭐'}</div>`;
+
             el.innerHTML = `
-              <div class="tile-icon">${tile.icon || '⭐'}</div>
+              ${visualContent}
               <div class="tile-label">${tile.label}</div>
               ${tile.targetBoard ? '<span class="nav-indicator">▶</span>' : ''}
             `;
             el.onclick = () => onTileClick(tile, r, c);
             container.appendChild(el);
           } else {
-            // Empty Cell (preserves coordinates)
             const emptyEl = document.createElement('div');
             emptyEl.className = 'empty-slot';
             if (isEditMode) {
@@ -761,15 +962,16 @@
       strip.innerHTML = '';
 
       if (sentence.length === 0) {
-        strip.innerHTML = `<span class="strip-placeholder">${isEditMode ? '🔧 Edit Mode is ON: Tap any empty tile to ADD, or tap a button to EDIT.' : 'Tap buttons below to formulate speech...'}</span>`;
+        strip.innerHTML = `<span class="strip-placeholder">${isEditMode ? '🔧 Edit Mode is ON: Tap any empty tile to ADD words, or tap buttons to EDIT.' : 'Tap buttons below to formulate speech...'}</span>`;
         return;
       }
 
       sentence.forEach(item => {
         const itemEl = document.createElement('div');
         itemEl.className = `strip-item ${item.pos}`;
+        const visual = item.photo ? `<img src="${item.photo}">` : `<span class="emoji">${item.icon}</span>`;
         itemEl.innerHTML = `
-          <span class="emoji">${item.icon}</span>
+          ${visual}
           <span>${item.label}</span>
         `;
         strip.appendChild(itemEl);
@@ -778,7 +980,7 @@
     }
 
     // ==========================================
-    // INTERACTIONS & CLICKS
+    // INTERACTIONS
     // ==========================================
     function onTileClick(tile, r, c) {
       if (isEditMode) {
@@ -786,14 +988,12 @@
         return;
       }
 
-      // 1. Speak word
       if (tile.speech) {
-        speakText(tile.speech, tile.pitch || 1.1);
+        speakText(tile.speech, tile.pitch || 1.15);
         sentence.push(tile);
         renderSentenceStrip();
       }
 
-      // 2. Navigation
       if (tile.targetBoard) {
         switchTab(tile.targetBoard);
       }
@@ -810,7 +1010,7 @@
     function speakFullSentence() {
       if (sentence.length === 0) return;
       const fullText = sentence.map(s => s.speech).join(' ');
-      speakText(fullText, 1.1, 0.9);
+      speakText(fullText, 1.15, 0.95);
     }
 
     function deleteLastWord() {
@@ -845,13 +1045,27 @@
     }
 
     // ==========================================
-    // MODAL DIALOGS (ADD/EDIT WORDS)
+    // EMERGENCY OVERLOAD MODAL
+    // ==========================================
+    function openEmergencyOverloadModal() {
+      document.getElementById('overloadModal').classList.add('open');
+      speakText("I am having sensory overload right now. Please dim the lights, do not touch me, and give me quiet, safe space.");
+    }
+
+    function closeEmergencyOverloadModal() {
+      document.getElementById('overloadModal').classList.remove('open');
+      speakText("Thank you for giving me space. I feel better.");
+    }
+
+    // ==========================================
+    // MODAL DIALOGS (ADD/EDIT WORDS WITH PHOTO UPLOAD)
     // ==========================================
     let editingCoord = null;
     let editingTile = null;
     let selectedIcon = '⭐';
+    let currentUploadedPhoto = null;
 
-    const EMOJI_LIST = ['⭐','🙋','👉','🤲','❤️','🏃','🛑','🆘','🍽️','🥤','👀','🎮','➕','✅','😄','😠','😴','🔇','📱','🎵','🧸','🌳','🙏','🤝','🚻','⚡','🚀','😐','❓','🤯','😅','🙄','🔥','🧢','✨','🧊','🚫','🧠','🎸','🍎','🍌','🍕','💧','🧃','🍪','🐱','🐶','👨‍👩‍👧','🏫'];
+    const EMOJI_LIST = ['🍓','🐱','🐶','🐰','🐴','🐬','🐼','🦆','🐯','🐘','🫐','🧁','🍋','🍊','🍰','💖','🎂','👒','🎶','🔇','💡','🎧','🤢','👕','🫂','🤫','🪑','🦷','🚀','😐','❓','🤯','😅','🙄','🔥','🧢','👀','✨','🧊','🚫','🧠','🎸','🍎','🍌','🍕','💧','🧃','🍪','⭐','🙋','👉','🤲','❤️','🏃','🛑','🆘','🍽️','🥤','🎮','➕','✅','😄','😠','😴','📱','🎵','🧸','🌳','🙏','🤝','🚻','⚡'];
 
     function initEmojiPalette() {
       const palette = document.getElementById('iconPalette');
@@ -862,6 +1076,8 @@
         span.textContent = em;
         span.onclick = () => {
           selectedIcon = em;
+          currentUploadedPhoto = null;
+          document.getElementById('imagePreviewContainer').style.display = 'none';
           document.querySelectorAll('.icon-opt').forEach(el => el.classList.remove('selected'));
           span.classList.add('selected');
         };
@@ -869,14 +1085,36 @@
       });
     }
 
+    function handleImageUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(evt) {
+        currentUploadedPhoto = evt.target.result;
+        document.getElementById('imagePreview').src = currentUploadedPhoto;
+        document.getElementById('imagePreviewContainer').style.display = 'flex';
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeCustomImage() {
+      currentUploadedPhoto = null;
+      document.getElementById('tileImageInput').value = '';
+      document.getElementById('imagePreviewContainer').style.display = 'none';
+    }
+
     function openAddTileModal(r, c) {
       editingCoord = `${r}_${c}`;
       editingTile = null;
+      currentUploadedPhoto = null;
       document.getElementById('modalTitle').textContent = `Add Word (Row ${r+1}, Col ${c+1})`;
       document.getElementById('tileLabel').value = '';
       document.getElementById('tileSpeech').value = '';
       document.getElementById('tilePos').value = 'pos-noun';
-      document.getElementById('tilePitch').value = '1.1';
+      document.getElementById('tilePitch').value = '1.15';
+      document.getElementById('tileImageInput').value = '';
+      document.getElementById('imagePreviewContainer').style.display = 'none';
       document.getElementById('btnDeleteTile').style.display = 'none';
       selectedIcon = '⭐';
       initEmojiPalette();
@@ -886,11 +1124,21 @@
     function openEditTileModal(tile, r, c) {
       editingCoord = `${r}_${c}`;
       editingTile = tile;
+      currentUploadedPhoto = tile.photo || null;
       document.getElementById('modalTitle').textContent = `Edit Word (Row ${r+1}, Col ${c+1})`;
       document.getElementById('tileLabel').value = tile.label || '';
       document.getElementById('tileSpeech').value = tile.speech || '';
       document.getElementById('tilePos').value = tile.pos || 'pos-noun';
-      document.getElementById('tilePitch').value = tile.pitch || '1.1';
+      document.getElementById('tilePitch').value = tile.pitch || '1.15';
+      document.getElementById('tileImageInput').value = '';
+
+      if (currentUploadedPhoto) {
+        document.getElementById('imagePreview').src = currentUploadedPhoto;
+        document.getElementById('imagePreviewContainer').style.display = 'flex';
+      } else {
+        document.getElementById('imagePreviewContainer').style.display = 'none';
+      }
+
       document.getElementById('btnDeleteTile').style.display = 'block';
       selectedIcon = tile.icon || '⭐';
       initEmojiPalette();
@@ -903,7 +1151,7 @@
 
     function previewCurrentSpeech() {
       const text = document.getElementById('tileSpeech').value || document.getElementById('tileLabel').value;
-      const pitch = parseFloat(document.getElementById('tilePitch').value) || 1.1;
+      const pitch = parseFloat(document.getElementById('tilePitch').value) || 1.15;
       speakText(text, pitch);
     }
 
@@ -911,7 +1159,7 @@
       const label = document.getElementById('tileLabel').value.trim();
       let speech = document.getElementById('tileSpeech').value.trim();
       const pos = document.getElementById('tilePos').value;
-      const pitch = parseFloat(document.getElementById('tilePitch').value) || 1.1;
+      const pitch = parseFloat(document.getElementById('tilePitch').value) || 1.15;
 
       if (!label) return alert("Please enter a button label.");
       if (!speech) speech = label;
@@ -925,6 +1173,7 @@
         speech,
         pos,
         icon: selectedIcon,
+        photo: currentUploadedPhoto,
         pitch
       };
 
@@ -972,7 +1221,26 @@
       switchTab(newId);
     }
 
-    // Start App
+    // ==========================================
+    // MULTI-CHILD PROFILE SWITCHER
+    // ==========================================
+    function switchProfilePrompt() {
+      const newName = prompt("Enter profile name for this child (e.g. Genesis or Sibling):", currentProfile);
+      if (newName && newName.trim() && newName.trim() !== currentProfile) {
+        currentProfile = newName.trim();
+        localStorage.setItem('open_aac_active_profile', currentProfile);
+        storageKey = `open_aac_boards_${currentProfile}`;
+        boards = JSON.parse(localStorage.getItem(storageKey) || 'null') || DEFAULT_BOARDS;
+        document.getElementById('profileBadge').textContent = `🌸 ${currentProfile}`;
+        currentBoardId = 'home';
+        renderTabs();
+        renderGrid();
+        renderSentenceStrip();
+      }
+    }
+
+    // Init App
+    document.getElementById('profileBadge').textContent = `🌸 ${currentProfile}`;
     renderTabs();
     renderGrid();
     renderSentenceStrip();
