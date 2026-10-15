@@ -950,38 +950,47 @@
     let sentence = [];
 
     // ==========================================
-    // AUDIO ENGINE & VOICES
+    // AUDIO ENGINE & GOOGLE NATURAL VOICES
     // ==========================================
     const audioCtx = window.AudioContext || window.webkitAudioContext ? new (window.AudioContext || window.webkitAudioContext)() : null;
-    let availableVoices = [];
-    let selectedVoice = null;
 
-    function initVoices() {
-      if (!('speechSynthesis' in window)) return;
-      availableVoices = window.speechSynthesis.getVoices();
+    // GOOGLE NATURAL VOICE PROFILES & MULTI-LANGUAGE
+    const GOOGLE_VOICE_PROFILES = {
+      'en_female': { name: '🇺🇸 Google US (Female)', tl: 'en' },
+      'en_male': { name: '🇬🇧 Google UK (Male)', tl: 'en-gb' },
+      'en_au': { name: '🇦🇺 Google Australia (Female)', tl: 'en-au' },
+      'es': { name: '🇪🇸 Spanish / Español', tl: 'es' },
+      'es_mx': { name: '🇲🇽 Spanish (México)', tl: 'es-es' },
+      'fr': { name: '🇫🇷 French / Français', tl: 'fr' },
+      'de': { name: '🇩🇪 German / Deutsch', tl: 'de' },
+      'it': { name: '🇮🇹 Italian / Italiano', tl: 'it' },
+      'pt': { name: '🇵🇹 Portuguese / Português', tl: 'pt' },
+      'ja': { name: '🇯🇵 Japanese / 日本語', tl: 'ja' },
+      'ko': { name: '🇰🇷 Korean / 한국어', tl: 'ko' }
+    };
+
+    let currentVoiceKey = localStorage.getItem('open_aac_voice_profile') || 'en_female';
+    let currentAudio = null;
+
+    function renderVoiceDropdown() {
       const select = document.getElementById('voiceSelect');
-      if (select && availableVoices.length > 0) {
-        select.innerHTML = '';
-        availableVoices.forEach((v, idx) => {
-          const opt = document.createElement('option');
-          opt.value = idx;
-          opt.textContent = `${v.name} (${v.lang})`;
-          select.appendChild(opt);
-        });
-
-        const defaultIdx = availableVoices.findIndex(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha')));
-        if (defaultIdx !== -1) {
-          select.selectedIndex = defaultIdx;
-          selectedVoice = availableVoices[defaultIdx];
-        } else {
-          selectedVoice = availableVoices[0];
-        }
+      if (!select) return;
+      select.innerHTML = '';
+      for (const [key, prof] of Object.entries(GOOGLE_VOICE_PROFILES)) {
+        const opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = prof.name;
+        opt.selected = (key === currentVoiceKey);
+        select.appendChild(opt);
       }
     }
 
-    if ('speechSynthesis' in window) {
-      initVoices();
-      window.speechSynthesis.onvoiceschanged = initVoices;
+    function changeVoice(key) {
+      if (GOOGLE_VOICE_PROFILES[key]) {
+        currentVoiceKey = key;
+        localStorage.setItem('open_aac_voice_profile', key);
+        speakText("Voice selected: " + GOOGLE_VOICE_PROFILES[key].name);
+      }
     }
 
     function playBeep() {
@@ -1009,48 +1018,60 @@
       if (!text || !text.toString().trim()) return;
       playBeep();
 
-      if (!('speechSynthesis' in window)) return;
+      const cleanText = text.toString().trim();
+      const profile = GOOGLE_VOICE_PROFILES[currentVoiceKey] || GOOGLE_VOICE_PROFILES['en_female'];
+      const langCode = profile.tl;
 
+      // 1. PRIMARY: High-Definition Google Natural Audio (Plays real MP3, works on all systems including Linux!)
       try {
-        // Cancel stuck speech queue and resume Chrome engine
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.resume();
-
-        const utterance = new SpeechSynthesisUtterance(text.toString());
-        window._activeUtterance = utterance; // Retain reference
-
-        if (selectedVoice) {
-          utterance.voice = selectedVoice;
+        if (currentAudio) {
+          currentAudio.pause();
+          currentAudio = null;
         }
 
+        const ttsUrl = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
+          ? `/tts?q=${encodeURIComponent(cleanText)}&tl=${encodeURIComponent(langCode)}`
+          : `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanText)}&tl=${encodeURIComponent(langCode)}&client=tw-ob`;
+
+        const audio = new Audio(ttsUrl);
+        currentAudio = audio;
+
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+          playPromise.then(() => {
+            console.log("Speaking with Google Voice:", cleanText);
+          }).catch(err => {
+            console.warn("Direct audio play error, falling back to local speech engine:", err);
+            speakViaLocalEngine(cleanText, pitch, rate);
+          });
+          return;
+        }
+      } catch (e) {
+        console.warn("Google TTS audio error:", e);
+      }
+
+      // 2. SECONDARY / OFFLINE FALLBACK: Browser local speech synthesis
+      speakViaLocalEngine(cleanText, pitch, rate);
+    }
+
+    function speakViaLocalEngine(cleanText, pitch, rate) {
+      if (!('speechSynthesis' in window)) return;
+      try {
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.resume();
+        const utterance = new SpeechSynthesisUtterance(cleanText);
+        window._activeUtterance = utterance;
         utterance.pitch = pitch;
         utterance.rate = rate;
-
-        utterance.onend = () => {
-          window._activeUtterance = null;
-        };
-
-        utterance.onerror = (e) => {
-          console.warn("SpeechSynthesis utterance error:", e);
-          window._activeUtterance = null;
-        };
-
+        utterance.onend = () => { window._activeUtterance = null; };
+        utterance.onerror = () => { window._activeUtterance = null; };
         window.speechSynthesis.speak(utterance);
-      } catch (e) {
-        console.error("speakText error:", e);
-      }
+      } catch (e) {}
     }
 
     function testSound() {
       playBeep();
       speakText("Hello Genesis! Your speech tablet sound is working perfectly.");
-    }
-
-    function changeVoice(idx) {
-      if (availableVoices[idx]) {
-        selectedVoice = availableVoices[idx];
-        speakText("Voice selected!");
-      }
     }
 
     function saveBoardsToStorage() {
@@ -1446,6 +1467,7 @@
 
     // Init App
     applyTheme();
+    renderVoiceDropdown();
     document.getElementById('profileBadge').textContent = `🌸 ${currentProfile}`;
     renderTabs();
     renderGrid();
