@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>OpenAAC - Free Speech Board for Android & Web</title>
+  <meta name="theme-color" content="#0284c7">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: #f1f5f9;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* TOP HEADER & NAVBAR */
+    header {
+      background: #ffffff;
+      border-bottom: 2px solid #e2e8f0;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 60px;
+    }
+    .nav-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #0f172a;
+    }
+    select.tab-select {
+      font-size: 1rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1.5px solid #cbd5e1;
+      background: #f8fafc;
+      color: #1e293b;
+      cursor: pointer;
+      outline: none;
+    }
+    .btn-icon {
+      background: #e0f2fe;
+      color: #0284c7;
+      border: 1.5px solid #bae6fd;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-icon:active {
+      background: #bae6fd;
+    }
+
+    /* MODE TOGGLE */
+    .mode-toggle {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1.5px solid #cbd5e1;
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .mode-toggle.active {
+      background: #fef08a;
+      border-color: #ca8a04;
+      color: #854d0e;
+    }
+
+    /* SENTENCE STRIP */
+    .sentence-strip-container {
+      background: #ffffff;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      height: 85px;
+      border-bottom: 2px solid #cbd5e1;
+    }
+    .sentence-strip {
+      flex: 1;
+      height: 100%;
+      background: #f8fafc;
+      border: 2px dashed #94a3b8;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      padding: 4px 12px;
+      gap: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .strip-placeholder {
+      color: #94a3b8;
+      font-style: italic;
+      font-size: 1rem;
+    }
+    .strip-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1.5px solid rgba(0,0,0,0.2);
+      font-weight: 700;
+      font-size: 0.85rem;
+      min-width: 60px;
+      height: 60px;
+    }
+    .strip-item .emoji {
+      font-size: 1.4rem;
+    }
+
+    .btn-speak {
+      background: #16a34a;
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 0 24px;
+      height: 100%;
+      font-size: 1.25rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.4);
+    }
+    .btn-speak:active {
+      transform: scale(0.97);
+    }
+    .btn-action {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      height: 100%;
+      width: 55px;
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-action:active {
+      background: #f1f5f9;
+    }
+
+    /* MOTOR PLANNING 5x7 GRID */
+    .grid-container {
+      flex: 1;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 8px;
+      overflow: hidden;
+    }
+
+    /* FITZGERALD BUTTONS */
+    .aac-tile {
+      border-radius: 12px;
+      border: 2px solid rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+      transition: transform 0.05s ease;
+      position: relative;
+      text-align: center;
+      padding: 4px;
+    }
+    .aac-tile:active {
+      transform: scale(0.95);
+      filter: brightness(0.92);
+    }
+    .aac-tile .tile-icon {
+      font-size: 2rem;
+      margin-bottom: 2px;
+    }
+    .aac-tile .tile-label {
+      line-height: 1.1;
+      word-break: break-word;
+    }
+    .aac-tile .nav-indicator {
+      position: absolute;
+      top: 4px;
+      right: 6px;
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    /* FITZGERALD COLOR THEMES */
+    .pos-pronoun { background: #fef08a; border-color: #ca8a04; color: #713f12; }
+    .pos-verb { background: #bbf7d0; border-color: #16a34a; color: #14532d; }
+    .pos-noun { background: #fed7aa; border-color: #ea580c; color: #7c2d12; }
+    .pos-adjective { background: #bae6fd; border-color: #0284c7; color: #0c4a6e; }
+    .pos-social { background: #fbcfe8; border-color: #db2777; color: #831843; }
+    .pos-slang { background: #e9d5ff; border-color: #9333ea; color: #581c87; }
+    .pos-preposition { background: #e2e8f0; border-color: #94a3b8; color: #334155; }
+
+    /* EMPTY SLOT (LOCKED COORDINATES) */
+    .empty-slot {
+      background: rgba(255, 255, 255, 0.4);
+      border: 1px dashed #cbd5e1;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+    }
+    .edit-mode .empty-slot {
+      background: rgba(186, 230, 253, 0.25);
+      border: 2px dashed #0284c7;
+      cursor: pointer;
+      color: #0284c7;
+      font-size: 1.8rem;
+    }
+    .edit-mode .aac-tile {
+      box-shadow: 0 0 0 2px #0284c7;
+    }
+    .edit-mode .aac-tile::after {
+      content: "✏️";
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      font-size: 0.8rem;
+      background: white;
+      border-radius: 50%;
+      padding: 2px;
+    }
+
+    /* MODAL POPUPS */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .modal-overlay.open {
+      display: flex;
+    }
+    .modal-box {
+      background: white;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 480px;
+      padding: 20px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    }
+    .modal-box h3 {
+      margin-bottom: 14px;
+      color: #0f172a;
+    }
+    .form-group {
+      margin-bottom: 12px;
+    }
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 4px;
+    }
+    .form-group input, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+    }
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn-save {
+      background: #16a34a;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-cancel {
+      background: #f1f5f9;
+      color: #475569;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .btn-delete {
+      background: #fee2e2;
+      color: #dc2626;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-right: auto;
+    }
+
+    /* EMOJI / ICON SELECTOR ROW */
+    .icon-palette {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 4px 0;
+    }
+    .icon-opt {
+      font-size: 1.6rem;
+      padding: 6px;
+      background: #f1f5f9;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1.5px solid transparent;
+    }
+    .icon-opt.selected {
+      background: #bae6fd;
+      border-color: #0284c7;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER & NAVIGATION -->
+  <header>
+    <div class="nav-left">
+      <span class="brand-title">🗣️ OpenAAC</span>
+      <select id="tabSelect" class="tab-select" onchange="switchTab(this.value)">
+        <!-- Injected via JS -->
+      </select>
+      <button class="btn-icon" onclick="openNewTabModal()">
+        <span>➕</span> New Tab
+      </button>
+      <button class="btn-icon" onclick="testSound()" title="Click to test tablet speech">
+        <span>🔊</span> Test Sound
+      </button>
+      <select id="voiceSelect" class="tab-select" onchange="changeVoice(this.value)" style="max-width: 160px; font-size: 0.85rem;" title="Select voice">
+        <option value="">Default Voice</option>
+      </select>
+    </div>
+
+    <div id="modeToggle" class="mode-toggle" onclick="toggleEditMode()">
+      <span id="modeIcon">🔒</span>
+      <span id="modeText">Child Mode</span>
+    </div>
+  </header>
+
+  <!-- SENTENCE STRIP (MESSAGE BAR) -->
+  <div class="sentence-strip-container">
+    <div id="sentenceStrip" class="sentence-strip">
+      <span id="stripPlaceholder" class="strip-placeholder">Tap buttons below to formulate speech...</span>
+    </div>
+    <button class="btn-speak" onclick="speakFullSentence()">
+      <span>🔊</span> Speak
+    </button>
+    <button class="btn-action" onclick="deleteLastWord()" title="Delete last word">
+      <span>⌫</span>
+    </button>
+    <button class="btn-action" onclick="clearSentence()" title="Clear bar">
+      <span>🗑️</span>
+    </button>
+  </div>
+
+  <!-- 5x7 MOTOR PLANNING GRID -->
+  <main id="gridContainer" class="grid-container">
+    <!-- 35 fixed cells injected by JS -->
+  </main>
+
+  <!-- ADD / EDIT BUTTON MODAL -->
+  <div id="btnModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3 id="modalTitle">Edit Word Tile</h3>
+      
+      <div class="form-group">
+        <label>Display Label (Button Text)</label>
+        <input type="text" id="tileLabel" placeholder="e.g. Bruh, Apple, Sister">
+      </div>
+
+      <div class="form-group">
+        <label>What the Tablet Speaks</label>
+        <input type="text" id="tileSpeech" placeholder="e.g. Bruh... / That is my sister!">
+      </div>
+
+      <div class="form-group">
+        <label>Part of Speech / Color (Fitzgerald Standard)</label>
+        <select id="tilePos">
+          <option value="pos-pronoun">Yellow - Pronoun (I, You, Mom)</option>
+          <option value="pos-verb">Green - Verb / Action (Want, Go, Eat)</option>
+          <option value="pos-noun">Orange - Noun / Object (Apple, Toy, Water)</option>
+          <option value="pos-adjective">Blue - Descriptor (More, Finished, Loud)</option>
+          <option value="pos-social">Pink - Social (Please, Thank you, Help)</option>
+          <option value="pos-slang">Purple - Slang / Vibes (Bruh, Let's go, Cap)</option>
+          <option value="pos-preposition">Grey - Navigation / Preposition</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Choose an Icon / Emoji</label>
+        <div class="icon-palette" id="iconPalette">
+          <!-- Icons injected by JS -->
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Voice Energy / Pitch</label>
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <input type="range" id="tilePitch" min="0.7" max="1.5" step="0.1" value="1.1">
+          <button type="button" class="btn-icon" onclick="previewCurrentSpeech()">Test 🔊</button>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="btnDeleteTile" class="btn-delete" onclick="deleteCurrentTile()">Delete Tile</button>
+        <button class="btn-cancel" onclick="closeTileModal()">Cancel</button>
+        <button class="btn-save" onclick="saveTileModal()">Save Tile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD TAB MODAL -->
+  <div id="tabModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>➕ Create New Tab / Category</h3>
+      <div class="form-group">
+        <label>Category Name</label>
+        <input type="text" id="newTabName" placeholder="e.g. School, Roblox, Sensory, Park">
+      </div>
+      <div class="modal-actions">
+        <button class="btn-cancel" onclick="closeNewTabModal()">Cancel</button>
+        <button class="btn-save" onclick="saveNewTab()">Create Tab</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================
+    // DEFAULT VOCABULARY & MOTOR PLANNING DATA
+    // ==========================================
+    const DEFAULT_BOARDS = {
+      home: {
+        id: "home",
+        name: "🏠 Home",
+        tiles: {
+          "0_0": { label: "I", speech: "I", icon: "🙋", pos: "pos-pronoun", pitch: 1.1 },
+          "0_1": { label: "You", speech: "You", icon: "👉", pos: "pos-pronoun", pitch: 1.1 },
+          "0_4": { label: "Yes", speech: "Yes", icon: "👍", pos: "pos-social", pitch: 1.15 },
+          "0_5": { label: "No Way", speech: "No way!", icon: "👎", pos: "pos-social", pitch: 1.3 },
+          "0_6": { label: "⚡ Slang", speech: "", icon: "⚡", pos: "pos-slang", targetBoard: "slang" },
+
+          "1_0": { label: "Want", speech: "Want", icon: "🤲", pos: "pos-verb", pitch: 1.1 },
+          "1_1": { label: "Like", speech: "Like", icon: "❤️", pos: "pos-verb", pitch: 1.1 },
+          "1_2": { label: "Go", speech: "Go", icon: "🏃", pos: "pos-verb", pitch: 1.1 },
+          "1_3": { label: "Stop", speech: "Stop!", icon: "🛑", pos: "pos-verb", pitch: 1.25 },
+          "1_4": { label: "Help", speech: "Help me please", icon: "🆘", pos: "pos-social", pitch: 1.2 },
+          "1_5": { label: "Eat", speech: "Eat", icon: "🍽️", pos: "pos-verb", targetBoard: "food" },
+          "1_6": { label: "Drink", speech: "Drink", icon: "🥤", pos: "pos-verb", pitch: 1.1 },
+
+          "2_0": { label: "See", speech: "See", icon: "👀", pos: "pos-verb", pitch: 1.1 },
+          "2_1": { label: "Play", speech: "Play", icon: "🎮", pos: "pos-verb", pitch: 1.1 },
+          "2_2": { label: "More", speech: "More", icon: "➕", pos: "pos-adjective", pitch: 1.1 },
+          "2_3": { label: "All Done", speech: "I am all done", icon: "✅", pos: "pos-adjective", pitch: 1.1 },
+          "2_4": { label: "Awesome", speech: "That is awesome!", icon: "⭐", pos: "pos-slang", pitch: 1.3 },
+          "2_5": { label: "Chill", speech: "Chill out", icon: "🧊", pos: "pos-slang", pitch: 1.0 },
+          "2_6": { label: "Bruh", speech: "Bruh...", icon: "😐", pos: "pos-slang", pitch: 0.85 },
+
+          "3_0": { label: "Happy", speech: "Happy", icon: "😄", pos: "pos-adjective", pitch: 1.2 },
+          "3_1": { label: "Mad", speech: "I am mad", icon: "😠", pos: "pos-adjective", pitch: 0.95 },
+          "3_2": { label: "Tired", speech: "I am tired", icon: "😴", pos: "pos-adjective", pitch: 0.9 },
+          "3_3": { label: "Too Loud", speech: "It is too loud!", icon: "🔇", pos: "pos-social", pitch: 1.25 },
+          "3_4": { label: "My Space", speech: "Please give me space", icon: "🛑", pos: "pos-social", pitch: 1.1 },
+          "3_5": { label: "Funny", speech: "That is hilarious!", icon: "🤣", pos: "pos-slang", pitch: 1.3 },
+          "3_6": { label: "Gross", speech: "Eww, that is so gross!", icon: "🤢", pos: "pos-slang", pitch: 1.25 },
+
+          "4_0": { label: "Tablet", speech: "Tablet", icon: "📱", pos: "pos-noun", pitch: 1.1 },
+          "4_1": { label: "Music", speech: "Music", icon: "🎵", pos: "pos-noun", pitch: 1.1 },
+          "4_2": { label: "Toy", speech: "Toy", icon: "🧸", pos: "pos-noun", pitch: 1.1 },
+          "4_3": { label: "Outside", speech: "Outside", icon: "🌳", pos: "pos-noun", pitch: 1.1 },
+          "4_4": { label: "Please", speech: "Please", icon: "🙏", pos: "pos-social", pitch: 1.1 },
+          "4_5": { label: "Thanks", speech: "Thank you", icon: "🤝", pos: "pos-social", pitch: 1.1 },
+          "4_6": { label: "Bathroom", speech: "I need to use the bathroom", icon: "🚻", pos: "pos-noun", pitch: 1.1 }
+        }
+      },
+      slang: {
+        id: "slang",
+        name: "⚡ Vibes & Slang",
+        tiles: {
+          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
+          "0_1": { label: "Let's Go!", speech: "Let's gooo!", icon: "🚀", pos: "pos-slang", pitch: 1.35 },
+          "0_2": { label: "Bruh", speech: "Bruh...", icon: "😐", pos: "pos-slang", pitch: 0.85 },
+          "0_3": { label: "For Real?", speech: "Are you for real?", icon: "❓", pos: "pos-slang", pitch: 1.2 },
+          "0_4": { label: "No Way!", speech: "No way! You are kidding!", icon: "🤯", pos: "pos-slang", pitch: 1.3 },
+          "0_5": { label: "My Bad", speech: "My bad, sorry about that.", icon: "😅", pos: "pos-slang", pitch: 1.1 },
+          "0_6": { label: "Whatever", speech: "Whatever...", icon: "🙄", pos: "pos-slang", pitch: 0.9 },
+
+          "1_1": { label: "Lit / Fire", speech: "That is fire!", icon: "🔥", pos: "pos-slang", pitch: 1.3 },
+          "1_2": { label: "Cap", speech: "That's cap, you are lying!", icon: "🧢", pos: "pos-slang", pitch: 1.1 },
+          "1_3": { label: "Sus", speech: "That is so sus.", icon: "👀", pos: "pos-slang", pitch: 1.1 },
+          "1_4": { label: "Nailed It", speech: "You totally nailed it!", icon: "✨", pos: "pos-slang", pitch: 1.3 },
+          "1_5": { label: "Chill Out", speech: "Bro, chill out.", icon: "🧊", pos: "pos-slang", pitch: 1.0 },
+
+          "2_1": { label: "Leave Me", speech: "Leave me alone please.", icon: "🚫", pos: "pos-social", pitch: 1.1 },
+          "2_2": { label: "Too Much", speech: "This is too much for me.", icon: "🧠", pos: "pos-social", pitch: 1.0 },
+          "2_3": { label: "I'm Done", speech: "I am completely done with this.", icon: "🛑", pos: "pos-social", pitch: 1.0 },
+          "2_4": { label: "You Rock", speech: "You rock!", icon: "🎸", pos: "pos-slang", pitch: 1.3 }
+        }
+      },
+      food: {
+        id: "food",
+        name: "🍎 Food & Drinks",
+        tiles: {
+          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
+          "1_0": { label: "Apple", speech: "Apple", icon: "🍎", pos: "pos-noun", pitch: 1.1 },
+          "1_1": { label: "Banana", speech: "Banana", icon: "🍌", pos: "pos-noun", pitch: 1.1 },
+          "1_2": { label: "Pizza", speech: "Pizza", icon: "🍕", pos: "pos-noun", pitch: 1.1 },
+          "1_3": { label: "Water", speech: "Water", icon: "💧", pos: "pos-noun", pitch: 1.1 },
+          "1_4": { label: "Juice", speech: "Juice", icon: "🧃", pos: "pos-noun", pitch: 1.1 },
+          "1_5": { label: "Snack", speech: "Snack", icon: "🍪", pos: "pos-noun", pitch: 1.1 }
+        }
+      }
+    };
+
+    // Load from LocalStorage if available so edits are permanent!
+    let boards = JSON.parse(localStorage.getItem('open_aac_boards') || 'null') || DEFAULT_BOARDS;
+    let currentBoardId = 'home';
+    let isEditMode = false;
+    let sentence = [];
+
+    // ==========================================
+    // BULLETPROOF SPEECH SYNTHESIS ENGINE
+    // ==========================================
+    const synth = window.AudioContext || window.webkitAudioContext ? new (window.AudioContext || window.webkitAudioContext)() : null;
+    let availableVoices = [];
+    let selectedVoice = null;
+
+    function initVoices() {
+      if (!('speechSynthesis' in window)) {
+        showStatusNotice("⚠️ Speech Synthesis is not supported in this browser. Try Google Chrome.");
+        return;
+      }
+
+      availableVoices = window.speechSynthesis.getVoices();
+      const select = document.getElementById('voiceSelect');
+      if (select && availableVoices.length > 0) {
+        select.innerHTML = '';
+        availableVoices.forEach((v, idx) => {
+          const opt = document.createElement('option');
+          opt.value = idx;
+          opt.textContent = `${v.name} (${v.lang})`;
+          select.appendChild(opt);
+        });
+
+        // Prefer natural English voices
+        const defaultIdx = availableVoices.findIndex(v => v.lang.startsWith('en') && (v.name.includes('Natural') || v.name.includes('Google') || v.name.includes('Samantha')));
+        if (defaultIdx !== -1) {
+          select.selectedIndex = defaultIdx;
+          selectedVoice = availableVoices[defaultIdx];
+        } else {
+          selectedVoice = availableVoices[0];
+        }
+      }
+    }
+
+    function changeVoice(idx) {
+      if (availableVoices[idx]) {
+        selectedVoice = availableVoices[idx];
+        speakText("Voice selected!");
+      }
+    }
+
+    function testSound() {
+      // Unlocks browser audio restrictions on direct user click
+      playBeep();
+      speakText("Hello! Your speech tablet sound is working perfectly.");
+    }
+
+    if ('speechSynthesis' in window) {
+      initVoices();
+      window.speechSynthesis.onvoiceschanged = initVoices;
+    }
+
+    // Play a friendly beep fallback via Web Audio API if TTS is blocked
+    function playBeep() {
+      if (!synth) return;
+      try {
+        if (synth.state === 'suspended') synth.resume();
+        const osc = synth.createOscillator();
+        const gain = synth.createGain();
+        osc.connect(gain);
+        gain.connect(synth.destination);
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, synth.currentTime); // D5
+        osc.frequency.exponentialRampToValueAtTime(880, synth.currentTime + 0.1); // A5
+        gain.gain.setValueAtTime(0.2, synth.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, synth.currentTime + 0.15);
+        osc.start();
+        osc.stop(synth.currentTime + 0.16);
+      } catch (e) {
+        console.error("Audio beep error:", e);
+      }
+    }
+
+    function showStatusNotice(msg) {
+      let banner = document.getElementById('statusBanner');
+      if (!banner) {
+        banner = document.createElement('div');
+        banner.id = 'statusBanner';
+        banner.style.position = 'fixed';
+        banner.style.bottom = '20px';
+        banner.style.left = '50%';
+        banner.style.transform = 'translateX(-50%)';
+        banner.style.background = '#1e293b';
+        banner.style.color = '#ffffff';
+        banner.style.padding = '12px 24px';
+        banner.style.borderRadius = '30px';
+        banner.style.fontWeight = 'bold';
+        banner.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.3)';
+        banner.style.zIndex = '9999';
+        banner.style.transition = 'opacity 0.3s ease';
+        document.body.appendChild(banner);
+      }
+      banner.textContent = msg;
+      banner.style.opacity = '1';
+      banner.style.display = 'block';
+      setTimeout(() => {
+        banner.style.opacity = '0';
+        setTimeout(() => { banner.style.display = 'none'; }, 300);
+      }, 4000);
+    }
+
+    function speakText(text, pitch = 1.1, rate = 0.95) {
+      if (!text) return;
+      playBeep(); // Immediate audio tactile confirmation
+
+      if (!('speechSynthesis' in window)) {
+        showStatusNotice("Speech not supported on this browser.");
+        return;
+      }
+
+      // Chrome bug fix: resume if paused or frozen
+      window.speechSynthesis.resume();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+      utterance.pitch = pitch;
+      utterance.rate = rate;
+
+      utterance.onstart = () => {
+        console.log("Speech started:", text);
+      };
+
+      utterance.onerror = (e) => {
+        console.error("SpeechSynthesis error:", e);
+        if (e.error === 'not-allowed') {
+          showStatusNotice("Audio blocked: Tap anywhere on the screen first to allow sound.");
+        } else {
+          showStatusNotice(`Voice engine status: ${e.error || 'Check volume'}`);
+        }
+      };
+
+      // Speak directly without canceling abruptly
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function saveBoardsToStorage() {
+      localStorage.setItem('open_aac_boards', JSON.stringify(boards));
+    }
+
+    // ==========================================
+    // RENDER FUNCTIONS
+    // ==========================================
+    function renderTabs() {
+      const select = document.getElementById('tabSelect');
+      select.innerHTML = '';
+      for (const [id, board] of Object.entries(boards)) {
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.textContent = board.name;
+        opt.selected = (id === currentBoardId);
+        select.appendChild(opt);
+      }
+    }
+
+    function renderGrid() {
+      const container = document.getElementById('gridContainer');
+      container.innerHTML = '';
+      const currentBoard = boards[currentBoardId] || boards['home'];
+      const tiles = currentBoard.tiles || {};
+
+      // 5 Rows x 7 Columns = 35 Fixed Grid Cells
+      for (let r = 0; r < 5; r++) {
+        for (let c = 0; c < 7; c++) {
+          const key = `${r}_${c}`;
+          const tile = tiles[key];
+
+          if (tile) {
+            const el = document.createElement('div');
+            el.className = `aac-tile ${tile.pos || 'pos-noun'}`;
+            el.innerHTML = `
+              <div class="tile-icon">${tile.icon || '⭐'}</div>
+              <div class="tile-label">${tile.label}</div>
+              ${tile.targetBoard ? '<span class="nav-indicator">▶</span>' : ''}
+            `;
+            el.onclick = () => onTileClick(tile, r, c);
+            container.appendChild(el);
+          } else {
+            // Empty Cell (preserves coordinates)
+            const emptyEl = document.createElement('div');
+            emptyEl.className = 'empty-slot';
+            if (isEditMode) {
+              emptyEl.innerHTML = '➕';
+              emptyEl.onclick = () => openAddTileModal(r, c);
+            }
+            container.appendChild(emptyEl);
+          }
+        }
+      }
+    }
+
+    function renderSentenceStrip() {
+      const strip = document.getElementById('sentenceStrip');
+      strip.innerHTML = '';
+
+      if (sentence.length === 0) {
+        strip.innerHTML = `<span class="strip-placeholder">${isEditMode ? '🔧 Edit Mode is ON: Tap any empty tile to ADD, or tap a button to EDIT.' : 'Tap buttons below to formulate speech...'}</span>`;
+        return;
+      }
+
+      sentence.forEach(item => {
+        const itemEl = document.createElement('div');
+        itemEl.className = `strip-item ${item.pos}`;
+        itemEl.innerHTML = `
+          <span class="emoji">${item.icon}</span>
+          <span>${item.label}</span>
+        `;
+        strip.appendChild(itemEl);
+      });
+      strip.scrollLeft = strip.scrollWidth;
+    }
+
+    // ==========================================
+    // INTERACTIONS & CLICKS
+    // ==========================================
+    function onTileClick(tile, r, c) {
+      if (isEditMode) {
+        openEditTileModal(tile, r, c);
+        return;
+      }
+
+      // 1. Speak word
+      if (tile.speech) {
+        speakText(tile.speech, tile.pitch || 1.1);
+        sentence.push(tile);
+        renderSentenceStrip();
+      }
+
+      // 2. Navigation
+      if (tile.targetBoard) {
+        switchTab(tile.targetBoard);
+      }
+    }
+
+    function switchTab(boardId) {
+      if (boards[boardId]) {
+        currentBoardId = boardId;
+        renderTabs();
+        renderGrid();
+      }
+    }
+
+    function speakFullSentence() {
+      if (sentence.length === 0) return;
+      const fullText = sentence.map(s => s.speech).join(' ');
+      speakText(fullText, 1.1, 0.9);
+    }
+
+    function deleteLastWord() {
+      sentence.pop();
+      renderSentenceStrip();
+    }
+
+    function clearSentence() {
+      sentence = [];
+      renderSentenceStrip();
+    }
+
+    function toggleEditMode() {
+      isEditMode = !isEditMode;
+      const toggle = document.getElementById('modeToggle');
+      const text = document.getElementById('modeText');
+      const icon = document.getElementById('modeIcon');
+
+      if (isEditMode) {
+        toggle.classList.add('active');
+        text.textContent = 'Edit Mode ON';
+        icon.textContent = '✏️';
+        document.body.classList.add('edit-mode');
+      } else {
+        toggle.classList.remove('active');
+        text.textContent = 'Child Mode';
+        icon.textContent = '🔒';
+        document.body.classList.remove('edit-mode');
+      }
+      renderGrid();
+      renderSentenceStrip();
+    }
+
+    // ==========================================
+    // MODAL DIALOGS (ADD/EDIT WORDS)
+    // ==========================================
+    let editingCoord = null;
+    let editingTile = null;
+    let selectedIcon = '⭐';
+
+    const EMOJI_LIST = ['⭐','🙋','👉','🤲','❤️','🏃','🛑','🆘','🍽️','🥤','👀','🎮','➕','✅','😄','😠','😴','🔇','📱','🎵','🧸','🌳','🙏','🤝','🚻','⚡','🚀','😐','❓','🤯','😅','🙄','🔥','🧢','✨','🧊','🚫','🧠','🎸','🍎','🍌','🍕','💧','🧃','🍪','🐱','🐶','👨‍👩‍👧','🏫'];
+
+    function initEmojiPalette() {
+      const palette = document.getElementById('iconPalette');
+      palette.innerHTML = '';
+      EMOJI_LIST.forEach(em => {
+        const span = document.createElement('span');
+        span.className = `icon-opt ${em === selectedIcon ? 'selected' : ''}`;
+        span.textContent = em;
+        span.onclick = () => {
+          selectedIcon = em;
+          document.querySelectorAll('.icon-opt').forEach(el => el.classList.remove('selected'));
+          span.classList.add('selected');
+        };
+        palette.appendChild(span);
+      });
+    }
+
+    function openAddTileModal(r, c) {
+      editingCoord = `${r}_${c}`;
+      editingTile = null;
+      document.getElementById('modalTitle').textContent = `Add Word (Row ${r+1}, Col ${c+1})`;
+      document.getElementById('tileLabel').value = '';
+      document.getElementById('tileSpeech').value = '';
+      document.getElementById('tilePos').value = 'pos-noun';
+      document.getElementById('tilePitch').value = '1.1';
+      document.getElementById('btnDeleteTile').style.display = 'none';
+      selectedIcon = '⭐';
+      initEmojiPalette();
+      document.getElementById('btnModal').classList.add('open');
+    }
+
+    function openEditTileModal(tile, r, c) {
+      editingCoord = `${r}_${c}`;
+      editingTile = tile;
+      document.getElementById('modalTitle').textContent = `Edit Word (Row ${r+1}, Col ${c+1})`;
+      document.getElementById('tileLabel').value = tile.label || '';
+      document.getElementById('tileSpeech').value = tile.speech || '';
+      document.getElementById('tilePos').value = tile.pos || 'pos-noun';
+      document.getElementById('tilePitch').value = tile.pitch || '1.1';
+      document.getElementById('btnDeleteTile').style.display = 'block';
+      selectedIcon = tile.icon || '⭐';
+      initEmojiPalette();
+      document.getElementById('btnModal').classList.add('open');
+    }
+
+    function closeTileModal() {
+      document.getElementById('btnModal').classList.remove('open');
+    }
+
+    function previewCurrentSpeech() {
+      const text = document.getElementById('tileSpeech').value || document.getElementById('tileLabel').value;
+      const pitch = parseFloat(document.getElementById('tilePitch').value) || 1.1;
+      speakText(text, pitch);
+    }
+
+    function saveTileModal() {
+      const label = document.getElementById('tileLabel').value.trim();
+      let speech = document.getElementById('tileSpeech').value.trim();
+      const pos = document.getElementById('tilePos').value;
+      const pitch = parseFloat(document.getElementById('tilePitch').value) || 1.1;
+
+      if (!label) return alert("Please enter a button label.");
+      if (!speech) speech = label;
+
+      if (!boards[currentBoardId].tiles) {
+        boards[currentBoardId].tiles = {};
+      }
+
+      boards[currentBoardId].tiles[editingCoord] = {
+        label,
+        speech,
+        pos,
+        icon: selectedIcon,
+        pitch
+      };
+
+      saveBoardsToStorage();
+      closeTileModal();
+      renderGrid();
+    }
+
+    function deleteCurrentTile() {
+      if (editingCoord && boards[currentBoardId].tiles) {
+        delete boards[currentBoardId].tiles[editingCoord];
+        saveBoardsToStorage();
+      }
+      closeTileModal();
+      renderGrid();
+    }
+
+    // ==========================================
+    // ADD TAB MODAL
+    // ==========================================
+    function openNewTabModal() {
+      document.getElementById('newTabName').value = '';
+      document.getElementById('tabModal').classList.add('open');
+    }
+
+    function closeNewTabModal() {
+      document.getElementById('tabModal').classList.remove('open');
+    }
+
+    function saveNewTab() {
+      const name = document.getElementById('newTabName').value.trim();
+      if (!name) return alert("Please enter a category name.");
+
+      const newId = 'tab_' + Date.now();
+      boards[newId] = {
+        id: newId,
+        name: `📁 ${name}`,
+        tiles: {
+          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" }
+        }
+      };
+
+      saveBoardsToStorage();
+      closeNewTabModal();
+      switchTab(newId);
+    }
+
+    // Start App
+    renderTabs();
+    renderGrid();
+    renderSentenceStrip();
+    initEmojiPalette();
+  </script>
+</body>
+</html>
