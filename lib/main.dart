@@ -223,7 +223,7 @@ class _AacBoardScreenState extends State<AacBoardScreen> {
     // FOOD BOARD
     final List<AacButtonData> foodButtons = [
       AacButtonData(id: 'back_f', row: 0, col: 0, label: '← Home', spokenText: '', icon: Icons.arrow_back, partOfSpeech: PartOfSpeech.preposition, targetBoardId: 'home'),
-      AacButtonData(id: 'apple', row: 1, col: 0, label: 'Apple', spokenText: 'Apple', icon: Icons.nutrition, partOfSpeech: PartOfSpeech.noun),
+      AacButtonData(id: 'apple', row: 1, col: 0, label: 'Apple', spokenText: 'Apple', icon: Icons.restaurant, partOfSpeech: PartOfSpeech.noun),
       AacButtonData(id: 'banana', row: 1, col: 1, label: 'Banana', spokenText: 'Banana', icon: Icons.lunch_dining, partOfSpeech: PartOfSpeech.noun),
       AacButtonData(id: 'pizza', row: 1, col: 2, label: 'Pizza', spokenText: 'Pizza', icon: Icons.local_pizza, partOfSpeech: PartOfSpeech.noun),
       AacButtonData(id: 'water', row: 1, col: 3, label: 'Water', spokenText: 'Water', icon: Icons.water_drop, partOfSpeech: PartOfSpeech.noun),
