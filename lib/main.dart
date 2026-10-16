@@ -55,15 +55,17 @@ class _GenesisSpeechAppState extends State<GenesisSpeechApp> {
 enum WordType { pronoun, verb, social, adjective, noun, question, learning, slang }
 
 class SymbolItem {
-  final String label;
-  final String spokenText;
-  final String? assetName;
-  final IconData? fallbackIcon;
-  final WordType type;
-  final String category;
-  final Color? customColor;
+  String id;
+  String label;
+  String spokenText;
+  String? assetName;
+  IconData? fallbackIcon;
+  WordType type;
+  String category;
+  Color? customColor;
 
-  const SymbolItem({
+  SymbolItem({
+    required this.id,
     required this.label,
     required this.spokenText,
     this.assetName,
@@ -117,6 +119,20 @@ class SymbolItem {
   }
 }
 
+// List of all 48 locally cached ARASAAC PNG files for the image picker
+const List<String> availableSymbolAssets = [
+  'apple.png', 'banana.png', 'pizza.png', 'cracker.png', 'snack.png',
+  'cookie.png', 'eat.png', 'drink.png', 'water.png', 'juice.png',
+  'milk.png', 'toilet.png', 'tablet.png', 'happy.png', 'sad.png',
+  'tired.png', 'angry.png', 'scared.png', 'sick.png', 'hurt.png',
+  'good.png', 'bad.png', 'hug.png', 'help.png', 'please.png',
+  'thank_you.png', 'stop.png', 'go.png', 'play.png', 'like.png',
+  'see.png', 'want.png', 'yes.png', 'no.png', 'more.png',
+  'i.png', 'you.png', 'mom.png', 'dad.png', 'cat.png',
+  'dog.png', 'book.png', 'pencil.png', 'draw.png', 'music.png',
+  'home.png', 'school.png', 'car.png', 'bed.png'
+];
+
 // ==========================================
 // MAIN SCREEN IMPLEMENTATION
 // ==========================================
@@ -141,115 +157,122 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
   String _typingBuffer = "";
   String _selectedCategory = 'Core';
   bool _useQwerty = false;
-  bool _phonicsMode = false; // False = Letter Name ("Bee"), True = Phonic ("Buh")
+  bool _phonicsMode = false;
+  bool _isEditMode = false; // Toggle to customize buttons & images
 
-  // Master Vocabulary with Real 22+ ARASAAC Symbols and Clinical AAC Expansion
-  late final List<SymbolItem> _vocabulary = [
+  // Voice & Language Settings
+  String _selectedLanguage = 'en-US';
+  String _voiceGender = 'female'; // 'female' or 'male'
+  double _speechRate = 0.48;
+  double _pitch = 1.30; // 1.30 = natural female kid-friendly tone
+  List<dynamic> _availableVoices = [];
+
+  // Master Vocabulary with Real 48 ARASAAC Symbols
+  late List<SymbolItem> _vocabulary = [
     // -------------------------------------------------------------
     // 1. CORE BOARD (Always accessible high-frequency motor words)
     // -------------------------------------------------------------
-    const SymbolItem(label: 'I', spokenText: 'I', assetName: 'i.png', fallbackIcon: Icons.person, type: WordType.pronoun, category: 'Core'),
-    const SymbolItem(label: 'You', spokenText: 'You', assetName: 'you.png', fallbackIcon: Icons.people, type: WordType.pronoun, category: 'Core'),
-    const SymbolItem(label: 'Want', spokenText: 'Want', assetName: 'want.png', fallbackIcon: Icons.pan_tool, type: WordType.verb, category: 'Core'),
-    const SymbolItem(label: 'Like', spokenText: 'Like', assetName: 'like.png', fallbackIcon: Icons.thumb_up, type: WordType.verb, category: 'Core'),
-    const SymbolItem(label: 'See', spokenText: 'See', assetName: 'see.png', fallbackIcon: Icons.visibility, type: WordType.verb, category: 'Core'),
-    const SymbolItem(label: 'Go', spokenText: 'Go', assetName: 'go.png', fallbackIcon: Icons.directions_run, type: WordType.verb, category: 'Core'),
-    const SymbolItem(label: 'Play', spokenText: 'Play', assetName: 'play.png', fallbackIcon: Icons.sports_esports, type: WordType.verb, category: 'Core'),
-    const SymbolItem(label: 'Eat', spokenText: 'Eat', assetName: 'eat.png', fallbackIcon: Icons.restaurant, type: WordType.verb, category: 'Core'),
-    const SymbolItem(label: 'Drink', spokenText: 'Drink', assetName: 'drink.png', fallbackIcon: Icons.local_drink, type: WordType.verb, category: 'Core'),
-    const SymbolItem(label: 'More', spokenText: 'More', assetName: 'more.png', fallbackIcon: Icons.add_circle, type: WordType.adjective, category: 'Core'),
-    const SymbolItem(label: 'Stop', spokenText: 'Stop', assetName: 'stop.png', fallbackIcon: Icons.front_hand, type: WordType.social, category: 'Core'),
-    const SymbolItem(label: 'Help', spokenText: 'Help me please', assetName: 'help.png', fallbackIcon: Icons.help_outline, type: WordType.social, category: 'Core'),
-    const SymbolItem(label: 'Yes', spokenText: 'Yes', assetName: 'yes.png', fallbackIcon: Icons.check_circle, type: WordType.social, category: 'Core'),
-    const SymbolItem(label: 'No', spokenText: 'No', assetName: 'no.png', fallbackIcon: Icons.cancel, type: WordType.social, category: 'Core'),
-    const SymbolItem(label: 'Please', spokenText: 'Please', assetName: 'please.png', fallbackIcon: Icons.volunteer_activism, type: WordType.social, category: 'Core'),
-    const SymbolItem(label: 'Thank You', spokenText: 'Thank you', assetName: 'thank_you.png', fallbackIcon: Icons.handshake, type: WordType.social, category: 'Core'),
-    const SymbolItem(label: 'Good', spokenText: 'Good', assetName: 'good.png', fallbackIcon: Icons.sentiment_very_satisfied, type: WordType.adjective, category: 'Core'),
-    const SymbolItem(label: 'Bad', spokenText: 'Bad', assetName: 'bad.png', fallbackIcon: Icons.sentiment_dissatisfied, type: WordType.adjective, category: 'Core'),
-    const SymbolItem(label: 'Happy', spokenText: 'Happy', assetName: 'happy.png', fallbackIcon: Icons.mood, type: WordType.adjective, category: 'Core'),
-    const SymbolItem(label: 'Tired', spokenText: 'Tired', assetName: 'tired.png', fallbackIcon: Icons.bedtime, type: WordType.adjective, category: 'Core'),
-    const SymbolItem(label: 'Toilet', spokenText: 'I need the bathroom', assetName: 'toilet.png', fallbackIcon: Icons.wc, type: WordType.noun, category: 'Core'),
-    const SymbolItem(label: 'Tablet', spokenText: 'Tablet', assetName: 'tablet.png', fallbackIcon: Icons.tablet, type: WordType.noun, category: 'Core'),
+    SymbolItem(id: 'i', label: 'I', spokenText: 'I', assetName: 'i.png', fallbackIcon: Icons.person, type: WordType.pronoun, category: 'Core'),
+    SymbolItem(id: 'you', label: 'You', spokenText: 'You', assetName: 'you.png', fallbackIcon: Icons.people, type: WordType.pronoun, category: 'Core'),
+    SymbolItem(id: 'want', label: 'Want', spokenText: 'Want', assetName: 'want.png', fallbackIcon: Icons.pan_tool, type: WordType.verb, category: 'Core'),
+    SymbolItem(id: 'like', label: 'Like', spokenText: 'Like', assetName: 'like.png', fallbackIcon: Icons.thumb_up, type: WordType.verb, category: 'Core'),
+    SymbolItem(id: 'see', label: 'See', spokenText: 'See', assetName: 'see.png', fallbackIcon: Icons.visibility, type: WordType.verb, category: 'Core'),
+    SymbolItem(id: 'go', label: 'Go', spokenText: 'Go', assetName: 'go.png', fallbackIcon: Icons.directions_run, type: WordType.verb, category: 'Core'),
+    SymbolItem(id: 'play', label: 'Play', spokenText: 'Play', assetName: 'play.png', fallbackIcon: Icons.sports_esports, type: WordType.verb, category: 'Core'),
+    SymbolItem(id: 'eat', label: 'Eat', spokenText: 'Eat', assetName: 'eat.png', fallbackIcon: Icons.restaurant, type: WordType.verb, category: 'Core'),
+    SymbolItem(id: 'drink', label: 'Drink', spokenText: 'Drink', assetName: 'drink.png', fallbackIcon: Icons.local_drink, type: WordType.verb, category: 'Core'),
+    SymbolItem(id: 'more', label: 'More', spokenText: 'More', assetName: 'more.png', fallbackIcon: Icons.add_circle, type: WordType.adjective, category: 'Core'),
+    SymbolItem(id: 'stop', label: 'Stop', spokenText: 'Stop', assetName: 'stop.png', fallbackIcon: Icons.front_hand, type: WordType.social, category: 'Core'),
+    SymbolItem(id: 'help', label: 'Help', spokenText: 'Help me please', assetName: 'help.png', fallbackIcon: Icons.help_outline, type: WordType.social, category: 'Core'),
+    SymbolItem(id: 'yes', label: 'Yes', spokenText: 'Yes', assetName: 'yes.png', fallbackIcon: Icons.check_circle, type: WordType.social, category: 'Core'),
+    SymbolItem(id: 'no', label: 'No', spokenText: 'No', assetName: 'no.png', fallbackIcon: Icons.cancel, type: WordType.social, category: 'Core'),
+    SymbolItem(id: 'please', label: 'Please', spokenText: 'Please', assetName: 'please.png', fallbackIcon: Icons.volunteer_activism, type: WordType.social, category: 'Core'),
+    SymbolItem(id: 'thank_you', label: 'Thank You', spokenText: 'Thank you', assetName: 'thank_you.png', fallbackIcon: Icons.handshake, type: WordType.social, category: 'Core'),
+    SymbolItem(id: 'good', label: 'Good', spokenText: 'Good', assetName: 'good.png', fallbackIcon: Icons.sentiment_very_satisfied, type: WordType.adjective, category: 'Core'),
+    SymbolItem(id: 'bad', label: 'Bad', spokenText: 'Bad', assetName: 'bad.png', fallbackIcon: Icons.sentiment_dissatisfied, type: WordType.adjective, category: 'Core'),
+    SymbolItem(id: 'happy', label: 'Happy', spokenText: 'Happy', assetName: 'happy.png', fallbackIcon: Icons.mood, type: WordType.adjective, category: 'Core'),
+    SymbolItem(id: 'tired', label: 'Tired', spokenText: 'Tired', assetName: 'tired.png', fallbackIcon: Icons.bedtime, type: WordType.adjective, category: 'Core'),
+    SymbolItem(id: 'toilet', label: 'Toilet', spokenText: 'I need the bathroom', assetName: 'toilet.png', fallbackIcon: Icons.wc, type: WordType.noun, category: 'Core'),
+    SymbolItem(id: 'tablet', label: 'Tablet', spokenText: 'Tablet', assetName: 'tablet.png', fallbackIcon: Icons.tablet, type: WordType.noun, category: 'Core'),
 
     // -------------------------------------------------------------
-    // 2. FOOD & DRINK CATEGORY
+    // 2. FOOD & DRINK CATEGORY (With Real Banana & Food Symbols!)
     // -------------------------------------------------------------
-    const SymbolItem(label: 'Water', spokenText: 'Water', assetName: 'water.png', fallbackIcon: Icons.water_drop, type: WordType.noun, category: 'Food'),
-    const SymbolItem(label: 'Juice', spokenText: 'Juice', assetName: 'juice.png', fallbackIcon: Icons.local_cafe, type: WordType.noun, category: 'Food'),
-    const SymbolItem(label: 'Apple', spokenText: 'Apple', assetName: 'apple.png', fallbackIcon: Icons.restaurant, type: WordType.noun, category: 'Food'),
-    const SymbolItem(label: 'Cracker', spokenText: 'Cracker', assetName: 'cracker.png', fallbackIcon: Icons.fastfood, type: WordType.noun, category: 'Food'),
-    const SymbolItem(label: 'Eat', spokenText: 'Eat food', assetName: 'eat.png', fallbackIcon: Icons.restaurant, type: WordType.verb, category: 'Food'),
-    const SymbolItem(label: 'Drink', spokenText: 'Drink', assetName: 'drink.png', fallbackIcon: Icons.local_drink, type: WordType.verb, category: 'Food'),
-    const SymbolItem(label: 'Banana', spokenText: 'Banana', fallbackIcon: Icons.lunch_dining, type: WordType.noun, category: 'Food'),
-    const SymbolItem(label: 'Pizza', spokenText: 'Pizza', fallbackIcon: Icons.local_pizza, type: WordType.noun, category: 'Food'),
-    const SymbolItem(label: 'Snack', spokenText: 'Snack', fallbackIcon: Icons.cookie, type: WordType.noun, category: 'Food'),
-    const SymbolItem(label: 'Milk', spokenText: 'Milk', fallbackIcon: Icons.local_drink, type: WordType.noun, category: 'Food'),
-    const SymbolItem(label: 'Hot', spokenText: 'It is hot', fallbackIcon: Icons.whatshot, type: WordType.adjective, category: 'Food'),
-    const SymbolItem(label: 'Cold', spokenText: 'It is cold', fallbackIcon: Icons.ac_unit, type: WordType.adjective, category: 'Food'),
-    const SymbolItem(label: 'All Done', spokenText: 'All done eating', fallbackIcon: Icons.done_all, type: WordType.social, category: 'Food'),
+    SymbolItem(id: 'banana', label: 'Banana', spokenText: 'Banana', assetName: 'banana.png', fallbackIcon: Icons.restaurant, type: WordType.noun, category: 'Food'),
+    SymbolItem(id: 'apple', label: 'Apple', spokenText: 'Apple', assetName: 'apple.png', fallbackIcon: Icons.restaurant, type: WordType.noun, category: 'Food'),
+    SymbolItem(id: 'pizza', label: 'Pizza', spokenText: 'Pizza', assetName: 'pizza.png', fallbackIcon: Icons.local_pizza, type: WordType.noun, category: 'Food'),
+    SymbolItem(id: 'cracker', label: 'Cracker', spokenText: 'Cracker', assetName: 'cracker.png', fallbackIcon: Icons.fastfood, type: WordType.noun, category: 'Food'),
+    SymbolItem(id: 'snack', label: 'Snack', spokenText: 'Snack', assetName: 'snack.png', fallbackIcon: Icons.fastfood, type: WordType.noun, category: 'Food'),
+    SymbolItem(id: 'cookie', label: 'Cookie', spokenText: 'Cookie', assetName: 'cookie.png', fallbackIcon: Icons.cookie, type: WordType.noun, category: 'Food'),
+    SymbolItem(id: 'water', label: 'Water', spokenText: 'Water', assetName: 'water.png', fallbackIcon: Icons.water_drop, type: WordType.noun, category: 'Food'),
+    SymbolItem(id: 'juice', label: 'Juice', spokenText: 'Juice', assetName: 'juice.png', fallbackIcon: Icons.local_cafe, type: WordType.noun, category: 'Food'),
+    SymbolItem(id: 'milk', label: 'Milk', spokenText: 'Milk', assetName: 'milk.png', fallbackIcon: Icons.local_drink, type: WordType.noun, category: 'Food'),
+    SymbolItem(id: 'eat_f', label: 'Eat', spokenText: 'Eat food', assetName: 'eat.png', fallbackIcon: Icons.restaurant, type: WordType.verb, category: 'Food'),
+    SymbolItem(id: 'drink_f', label: 'Drink', spokenText: 'Drink', assetName: 'drink.png', fallbackIcon: Icons.local_drink, type: WordType.verb, category: 'Food'),
+    SymbolItem(id: 'hot', label: 'Hot', spokenText: 'It is hot', fallbackIcon: Icons.whatshot, type: WordType.adjective, category: 'Food'),
+    SymbolItem(id: 'cold', label: 'Cold', spokenText: 'It is cold', fallbackIcon: Icons.ac_unit, type: WordType.adjective, category: 'Food'),
+    SymbolItem(id: 'all_done', label: 'All Done', spokenText: 'All done eating', fallbackIcon: Icons.done_all, type: WordType.social, category: 'Food'),
 
     // -------------------------------------------------------------
     // 3. FEELINGS & SENSORY
     // -------------------------------------------------------------
-    const SymbolItem(label: 'Happy', spokenText: 'I am happy', assetName: 'happy.png', fallbackIcon: Icons.mood, type: WordType.adjective, category: 'Feelings'),
-    const SymbolItem(label: 'Tired', spokenText: 'I am tired', assetName: 'tired.png', fallbackIcon: Icons.bedtime, type: WordType.adjective, category: 'Feelings'),
-    const SymbolItem(label: 'Good', spokenText: 'I feel good', assetName: 'good.png', fallbackIcon: Icons.thumb_up, type: WordType.adjective, category: 'Feelings'),
-    const SymbolItem(label: 'Bad', spokenText: 'I feel bad', assetName: 'bad.png', fallbackIcon: Icons.thumb_down, type: WordType.adjective, category: 'Feelings'),
-    const SymbolItem(label: 'Mad / Angry', spokenText: 'I am mad right now', fallbackIcon: Icons.mood_bad, type: WordType.adjective, category: 'Feelings'),
-    const SymbolItem(label: 'Sad', spokenText: 'I am sad', fallbackIcon: Icons.sentiment_dissatisfied, type: WordType.adjective, category: 'Feelings'),
-    const SymbolItem(label: 'Scared', spokenText: 'I am scared', fallbackIcon: Icons.warning_amber, type: WordType.adjective, category: 'Feelings'),
-    const SymbolItem(label: 'Sick', spokenText: 'I feel sick', fallbackIcon: Icons.sick, type: WordType.adjective, category: 'Feelings'),
-    const SymbolItem(label: 'Hurt', spokenText: 'Ouch, that hurts!', fallbackIcon: Icons.healing, type: WordType.social, category: 'Feelings'),
-    const SymbolItem(label: 'Too Loud', spokenText: 'It is too loud in here!', fallbackIcon: Icons.volume_off, type: WordType.social, category: 'Feelings'),
-    const SymbolItem(label: 'Leave Me', spokenText: 'Leave me alone please', fallbackIcon: Icons.do_not_disturb_on, type: WordType.social, category: 'Feelings'),
-    const SymbolItem(label: 'Too Much', spokenText: 'This is too much for me right now', fallbackIcon: Icons.psychology, type: WordType.social, category: 'Feelings'),
-    const SymbolItem(label: 'Hug', spokenText: 'I want a hug please', fallbackIcon: Icons.favorite, type: WordType.social, category: 'Feelings'),
+    SymbolItem(id: 'happy_f', label: 'Happy', spokenText: 'I am happy', assetName: 'happy.png', fallbackIcon: Icons.mood, type: WordType.adjective, category: 'Feelings'),
+    SymbolItem(id: 'sad', label: 'Sad', spokenText: 'I am sad', assetName: 'sad.png', fallbackIcon: Icons.sentiment_dissatisfied, type: WordType.adjective, category: 'Feelings'),
+    SymbolItem(id: 'angry', label: 'Angry', spokenText: 'I am angry', assetName: 'angry.png', fallbackIcon: Icons.mood_bad, type: WordType.adjective, category: 'Feelings'),
+    SymbolItem(id: 'tired_f', label: 'Tired', spokenText: 'I am tired', assetName: 'tired.png', fallbackIcon: Icons.bedtime, type: WordType.adjective, category: 'Feelings'),
+    SymbolItem(id: 'scared', label: 'Scared', spokenText: 'I am scared', assetName: 'scared.png', fallbackIcon: Icons.warning_amber, type: WordType.adjective, category: 'Feelings'),
+    SymbolItem(id: 'sick', label: 'Sick', spokenText: 'I feel sick', assetName: 'sick.png', fallbackIcon: Icons.sick, type: WordType.adjective, category: 'Feelings'),
+    SymbolItem(id: 'hurt', label: 'Hurt', spokenText: 'Ouch, that hurts!', assetName: 'hurt.png', fallbackIcon: Icons.healing, type: WordType.social, category: 'Feelings'),
+    SymbolItem(id: 'good_f', label: 'Good', spokenText: 'I feel good', assetName: 'good.png', fallbackIcon: Icons.thumb_up, type: WordType.adjective, category: 'Feelings'),
+    SymbolItem(id: 'bad_f', label: 'Bad', spokenText: 'I feel bad', assetName: 'bad.png', fallbackIcon: Icons.thumb_down, type: WordType.adjective, category: 'Feelings'),
+    SymbolItem(id: 'hug', label: 'Hug', spokenText: 'I want a hug please', assetName: 'hug.png', fallbackIcon: Icons.favorite, type: WordType.social, category: 'Feelings'),
+    SymbolItem(id: 'too_loud', label: 'Too Loud', spokenText: 'It is too loud in here!', fallbackIcon: Icons.volume_off, type: WordType.social, category: 'Feelings'),
+    SymbolItem(id: 'leave_me', label: 'Leave Me', spokenText: 'Leave me alone please', fallbackIcon: Icons.do_not_disturb_on, type: WordType.social, category: 'Feelings'),
+    SymbolItem(id: 'too_much', label: 'Too Much', spokenText: 'This is too much for me right now', fallbackIcon: Icons.psychology, type: WordType.social, category: 'Feelings'),
 
     // -------------------------------------------------------------
     // 4. LEARNING AREA (Colors, Shapes, School & Concepts)
     // -------------------------------------------------------------
-    const SymbolItem(label: 'Red', spokenText: 'Red', fallbackIcon: Icons.circle, customColor: Color(0xFFEF4444), type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Blue', spokenText: 'Blue', fallbackIcon: Icons.circle, customColor: Color(0xFF3B82F6), type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Green', spokenText: 'Green', fallbackIcon: Icons.circle, customColor: Color(0xFF22C55E), type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Yellow', spokenText: 'Yellow', fallbackIcon: Icons.circle, customColor: Color(0xFFEAB308), type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Orange', spokenText: 'Orange', fallbackIcon: Icons.circle, customColor: Color(0xFFF97316), type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Purple', spokenText: 'Purple', fallbackIcon: Icons.circle, customColor: Color(0xFFA855F7), type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Pink', spokenText: 'Pink', fallbackIcon: Icons.circle, customColor: Color(0xFFEC4899), type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Black', spokenText: 'Black', fallbackIcon: Icons.circle, customColor: Color(0xFF1E293B), type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'White', spokenText: 'White', fallbackIcon: Icons.circle_outlined, customColor: Color(0xFFF8FAFC), type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Circle', spokenText: 'Circle', fallbackIcon: Icons.circle_outlined, type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Square', spokenText: 'Square', fallbackIcon: Icons.crop_square, type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Triangle', spokenText: 'Triangle', fallbackIcon: Icons.change_history, type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Star', spokenText: 'Star', fallbackIcon: Icons.star, type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Heart', spokenText: 'Heart', fallbackIcon: Icons.favorite, type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Big', spokenText: 'Big', fallbackIcon: Icons.aspect_ratio, type: WordType.adjective, category: 'Learning'),
-    const SymbolItem(label: 'Small', spokenText: 'Small', fallbackIcon: Icons.zoom_in_map, type: WordType.adjective, category: 'Learning'),
-    const SymbolItem(label: 'Book / Read', spokenText: 'Read a book', fallbackIcon: Icons.menu_book, type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Pencil / Write', spokenText: 'Write with pencil', fallbackIcon: Icons.edit, type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Draw', spokenText: 'Draw and color', fallbackIcon: Icons.palette, type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Teacher', spokenText: 'My teacher', fallbackIcon: Icons.person, type: WordType.noun, category: 'Learning'),
-    const SymbolItem(label: 'School', spokenText: 'At school', fallbackIcon: Icons.school, type: WordType.noun, category: 'Learning'),
-    const SymbolItem(label: 'Listen', spokenText: 'Listen carefully', fallbackIcon: Icons.hearing, type: WordType.learning, category: 'Learning'),
-    const SymbolItem(label: 'Good Job!', spokenText: 'Great job! You did it!', fallbackIcon: Icons.thumb_up, type: WordType.social, category: 'Learning'),
+    SymbolItem(id: 'c_red', label: 'Red', spokenText: 'Red', fallbackIcon: Icons.circle, customColor: const Color(0xFFEF4444), type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'c_blue', label: 'Blue', spokenText: 'Blue', fallbackIcon: Icons.circle, customColor: const Color(0xFF3B82F6), type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'c_green', label: 'Green', spokenText: 'Green', fallbackIcon: Icons.circle, customColor: const Color(0xFF22C55E), type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'c_yellow', label: 'Yellow', spokenText: 'Yellow', fallbackIcon: Icons.circle, customColor: const Color(0xFFEAB308), type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'c_orange', label: 'Orange', spokenText: 'Orange', fallbackIcon: Icons.circle, customColor: const Color(0xFFF97316), type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'c_purple', label: 'Purple', spokenText: 'Purple', fallbackIcon: Icons.circle, customColor: const Color(0xFFA855F7), type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'c_pink', label: 'Pink', spokenText: 'Pink', fallbackIcon: Icons.circle, customColor: const Color(0xFFEC4899), type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'c_black', label: 'Black', spokenText: 'Black', fallbackIcon: Icons.circle, customColor: const Color(0xFF1E293B), type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'c_white', label: 'White', spokenText: 'White', fallbackIcon: Icons.circle_outlined, customColor: const Color(0xFFF8FAFC), type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'sh_circle', label: 'Circle', spokenText: 'Circle', fallbackIcon: Icons.circle_outlined, type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'sh_square', label: 'Square', spokenText: 'Square', fallbackIcon: Icons.crop_square, type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'sh_triangle', label: 'Triangle', spokenText: 'Triangle', fallbackIcon: Icons.change_history, type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'sh_star', label: 'Star', spokenText: 'Star', fallbackIcon: Icons.star, type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'sh_heart', label: 'Heart', spokenText: 'Heart', fallbackIcon: Icons.favorite, type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'cn_big', label: 'Big', spokenText: 'Big', fallbackIcon: Icons.aspect_ratio, type: WordType.adjective, category: 'Learning'),
+    SymbolItem(id: 'cn_small', label: 'Small', spokenText: 'Small', fallbackIcon: Icons.zoom_in_map, type: WordType.adjective, category: 'Learning'),
+    SymbolItem(id: 'bk_read', label: 'Book / Read', spokenText: 'Read a book', assetName: 'book.png', fallbackIcon: Icons.menu_book, type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'pn_write', label: 'Pencil / Write', spokenText: 'Write with pencil', assetName: 'pencil.png', fallbackIcon: Icons.edit, type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'dr_art', label: 'Draw', spokenText: 'Draw and color', assetName: 'draw.png', fallbackIcon: Icons.palette, type: WordType.learning, category: 'Learning'),
+    SymbolItem(id: 'sc_school', label: 'School', spokenText: 'At school', assetName: 'school.png', fallbackIcon: Icons.school, type: WordType.noun, category: 'Learning'),
+    SymbolItem(id: 'mu_music', label: 'Music', spokenText: 'Listen to music', assetName: 'music.png', fallbackIcon: Icons.music_note, type: WordType.noun, category: 'Learning'),
+    SymbolItem(id: 'gd_job', label: 'Good Job!', spokenText: 'Great job! You did it!', fallbackIcon: Icons.thumb_up, type: WordType.social, category: 'Learning'),
 
     // -------------------------------------------------------------
     // 5. VIBES & PEER SLANG
     // -------------------------------------------------------------
-    const SymbolItem(label: "Let's Go!", spokenText: "Let's gooo!", fallbackIcon: Icons.rocket_launch, type: WordType.slang, category: 'Slang'),
-    const SymbolItem(label: 'Bruh', spokenText: 'Bruh...', fallbackIcon: Icons.sentiment_neutral, type: WordType.slang, category: 'Slang'),
-    const SymbolItem(label: 'Cap', spokenText: "That's cap, you are lying!", fallbackIcon: Icons.sports_baseball, type: WordType.slang, category: 'Slang'),
-    const SymbolItem(label: 'Sus', spokenText: 'That is so sus.', fallbackIcon: Icons.warning_amber, type: WordType.slang, category: 'Slang'),
-    const SymbolItem(label: 'Fire', spokenText: 'That is fire!', fallbackIcon: Icons.local_fire_department, type: WordType.slang, category: 'Slang'),
-    const SymbolItem(label: 'Chill', spokenText: 'Chill out please.', fallbackIcon: Icons.ac_unit, type: WordType.slang, category: 'Slang'),
-    const SymbolItem(label: 'My Bad', spokenText: 'My bad, sorry about that.', fallbackIcon: Icons.sentiment_dissatisfied, type: WordType.slang, category: 'Slang'),
-    const SymbolItem(label: 'Whatever', spokenText: 'Whatever...', fallbackIcon: Icons.undo, type: WordType.slang, category: 'Slang'),
+    SymbolItem(id: 'sl_lets_go', label: "Let's Go!", spokenText: "Let's gooo!", fallbackIcon: Icons.rocket_launch, type: WordType.slang, category: 'Slang'),
+    SymbolItem(id: 'sl_bruh', label: 'Bruh', spokenText: 'Bruh...', fallbackIcon: Icons.sentiment_neutral, type: WordType.slang, category: 'Slang'),
+    SymbolItem(id: 'sl_cap', label: 'Cap', spokenText: "That's cap, you are lying!", fallbackIcon: Icons.sports_baseball, type: WordType.slang, category: 'Slang'),
+    SymbolItem(id: 'sl_sus', label: 'Sus', spokenText: 'That is so sus.', fallbackIcon: Icons.warning_amber, type: WordType.slang, category: 'Slang'),
+    SymbolItem(id: 'sl_fire', label: 'Fire', spokenText: 'That is fire!', fallbackIcon: Icons.local_fire_department, type: WordType.slang, category: 'Slang'),
+    SymbolItem(id: 'sl_chill', label: 'Chill', spokenText: 'Chill out please.', fallbackIcon: Icons.ac_unit, type: WordType.slang, category: 'Slang'),
+    SymbolItem(id: 'sl_my_bad', label: 'My Bad', spokenText: 'My bad, sorry about that.', fallbackIcon: Icons.sentiment_dissatisfied, type: WordType.slang, category: 'Slang'),
+    SymbolItem(id: 'sl_whatever', label: 'Whatever', spokenText: 'Whatever...', fallbackIcon: Icons.undo, type: WordType.slang, category: 'Slang'),
   ];
 
-  // Common predictive words for fast spelling
   final List<String> _dictionary = const [
-    "I", "want", "need", "help", "please", "water", "food", "bathroom", "hurt",
-    "mom", "dad", "home", "outside", "sleep", "tired", "happy", "sad", "loud",
-    "quiet", "medicine", "hug", "play", "tablet", "music", "stop", "more", "yes", "no"
+    "I", "want", "need", "help", "please", "water", "food", "banana", "apple",
+    "bathroom", "hurt", "mom", "dad", "home", "outside", "sleep", "tired",
+    "happy", "sad", "loud", "quiet", "medicine", "hug", "play", "tablet", "stop"
   ];
 
   @override
@@ -258,26 +281,59 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
     _initTts();
   }
 
-  void _initTts() async {
+  Future<void> _initTts() async {
     try {
       await _flutterTts.awaitSynthCompletion(true);
-      // Look for system TTS engine (like com.ivona.tts.oem on Fire OS)
       final dynamic engines = await _flutterTts.getEngines;
       if (engines is List && engines.isNotEmpty) {
         if (engines.contains("com.ivona.tts.oem")) {
           await _flutterTts.setEngine("com.ivona.tts.oem");
         } else if (engines.contains("com.google.android.tts")) {
           await _flutterTts.setEngine("com.google.android.tts");
-        } else {
-          await _flutterTts.setEngine(engines.first.toString());
         }
       }
-      await _flutterTts.setLanguage("en-US");
-      await _flutterTts.setSpeechRate(0.48);
-      await _flutterTts.setVolume(1.0);
-      await _flutterTts.setPitch(1.05);
+
+      final dynamic voices = await _flutterTts.getVoices;
+      if (voices is List) {
+        _availableVoices = voices;
+      }
+
+      await _applyVoiceSettings();
     } catch (e) {
       debugPrint("TTS init error: $e");
+    }
+  }
+
+  Future<void> _applyVoiceSettings() async {
+    try {
+      await _flutterTts.setLanguage(_selectedLanguage);
+      await _flutterTts.setSpeechRate(_speechRate);
+      await _flutterTts.setVolume(1.0);
+      await _flutterTts.setPitch(_pitch);
+
+      if (_availableVoices.isNotEmpty) {
+        for (var v in _availableVoices) {
+          if (v is Map) {
+            final name = v['name']?.toString().toLowerCase() ?? '';
+            final locale = v['locale']?.toString().toLowerCase() ?? '';
+            final prefix = _selectedLanguage.toLowerCase().substring(0, 2);
+
+            if (locale.contains(prefix)) {
+              if (_voiceGender == 'female' &&
+                  (name.contains('female') || name.contains('salli') || name.contains('kendra') || name.contains('zira') || name.contains('samantha'))) {
+                await _flutterTts.setVoice({"name": v['name'], "locale": v['locale']});
+                break;
+              } else if (_voiceGender == 'male' &&
+                  (name.contains('male') || name.contains('joey') || name.contains('david') || name.contains('guy'))) {
+                await _flutterTts.setVoice({"name": v['name'], "locale": v['locale']});
+                break;
+              }
+            }
+          }
+        }
+      }
+    } catch (e) {
+      debugPrint("Error applying voice settings: $e");
     }
   }
 
@@ -306,6 +362,286 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
     _speakText(fullText);
   }
 
+  // ==========================================
+  // VOICE & LANGUAGE SETTINGS DIALOG
+  // ==========================================
+  void _showVoiceSettingsDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              title: const Row(
+                children: [
+                  Icon(Icons.record_voice_over_rounded, color: Color(0xFF4F46E5)),
+                  SizedBox(width: 8),
+                  Text('Voice & Language Settings', style: TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('Voice Gender & Tone:', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        ChoiceChip(
+                          avatar: const Icon(Icons.female, size: 18),
+                          label: const Text('Female Voice (Natural)'),
+                          selected: _voiceGender == 'female',
+                          selectedColor: const Color(0xFFF48FB1),
+                          onSelected: (val) {
+                            if (val) {
+                              setDialogState(() {
+                                _voiceGender = 'female';
+                                _pitch = 1.30;
+                              });
+                              setState(() {});
+                              _applyVoiceSettings();
+                            }
+                          },
+                        ),
+                        const SizedBox(width: 8),
+                        ChoiceChip(
+                          avatar: const Icon(Icons.male, size: 18),
+                          label: const Text('Male Voice'),
+                          selected: _voiceGender == 'male',
+                          selectedColor: const Color(0xFF90CAF9),
+                          onSelected: (val) {
+                            if (val) {
+                              setDialogState(() {
+                                _voiceGender = 'male';
+                                _pitch = 0.95;
+                              });
+                              setState(() {});
+                              _applyVoiceSettings();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    const Text('Spoken Language:', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 6),
+                    DropdownButtonFormField<String>(
+                      value: _selectedLanguage,
+                      decoration: const InputDecoration(border: OutlineInputBorder()),
+                      items: const [
+                        DropdownMenuItem(value: 'en-US', child: Text('🇺🇸 English (United States)')),
+                        DropdownMenuItem(value: 'en-GB', child: Text('🇬🇧 English (United Kingdom)')),
+                        DropdownMenuItem(value: 'es-ES', child: Text('🇪🇸 Spanish (Español)')),
+                        DropdownMenuItem(value: 'es-US', child: Text('🇲🇽 Spanish (Latin America)')),
+                        DropdownMenuItem(value: 'fr-FR', child: Text('🇫🇷 French (Français)')),
+                        DropdownMenuItem(value: 'de-DE', child: Text('🇩🇪 German (Deutsch)')),
+                        DropdownMenuItem(value: 'it-IT', child: Text('🇮🇹 Italian (Italiano)')),
+                        DropdownMenuItem(value: 'pt-BR', child: Text('🇧🇷 Portuguese (Brasil)')),
+                      ],
+                      onChanged: (lang) {
+                        if (lang != null) {
+                          setDialogState(() => _selectedLanguage = lang);
+                          setState(() {});
+                          _applyVoiceSettings();
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 16),
+                    Text('Pitch Tone: ${_pitch.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Slider(
+                      value: _pitch,
+                      min: 0.5,
+                      max: 2.0,
+                      divisions: 15,
+                      activeColor: const Color(0xFF4F46E5),
+                      onChanged: (v) {
+                        setDialogState(() => _pitch = v);
+                        setState(() {});
+                        _applyVoiceSettings();
+                      },
+                    ),
+                    Text('Speech Speed: ${_speechRate.toStringAsFixed(2)}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                    Slider(
+                      value: _speechRate,
+                      min: 0.2,
+                      max: 1.0,
+                      divisions: 8,
+                      activeColor: const Color(0xFF4F46E5),
+                      onChanged: (v) {
+                        setDialogState(() => _speechRate = v);
+                        setState(() {});
+                        _applyVoiceSettings();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                ElevatedButton.icon(
+                  onPressed: () => _speakText("Hello! This is how my voice sounds on Genesis Speech Tab."),
+                  icon: const Icon(Icons.volume_up),
+                  label: const Text('Test Voice'),
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF16A34A), foregroundColor: Colors.white),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Done', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // ==========================================
+  // IN-APP BUTTON & IMAGE CUSTOMIZER / EDITOR
+  // ==========================================
+  void _showEditButtonDialog(SymbolItem item) {
+    final labelCtrl = TextEditingController(text: item.label);
+    final speechCtrl = TextEditingController(text: item.spokenText);
+    String? currentAsset = item.assetName;
+    WordType currentType = item.type;
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              title: Row(
+                children: [
+                  const Icon(Icons.edit_note_rounded, color: Color(0xFF4F46E5)),
+                  const SizedBox(width: 8),
+                  Text('Customize: ${item.label}', style: const TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+              content: SizedBox(
+                width: 480,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextField(
+                        controller: labelCtrl,
+                        decoration: const InputDecoration(labelText: 'Display Label', border: OutlineInputBorder()),
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: speechCtrl,
+                        decoration: const InputDecoration(labelText: 'What it Speaks', border: OutlineInputBorder()),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text('Choose Symbol Image:', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 6),
+                      Container(
+                        height: 160,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey.shade50,
+                        ),
+                        child: GridView.builder(
+                          padding: const EdgeInsets.all(6),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5,
+                            crossAxisSpacing: 6,
+                            mainAxisSpacing: 6,
+                          ),
+                          itemCount: availableSymbolAssets.length,
+                          itemBuilder: (context, idx) {
+                            final asset = availableSymbolAssets[idx];
+                            final isSelected = currentAsset == asset;
+
+                            return InkWell(
+                              onTap: () {
+                                setDialogState(() => currentAsset = asset);
+                              },
+                              borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: isSelected ? const Color(0xFFC7D2FE) : Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: isSelected ? const Color(0xFF4F46E5) : Colors.black12,
+                                    width: isSelected ? 2.5 : 1,
+                                  ),
+                                ),
+                                child: Image.asset('assets/symbols/$asset', fit: BoxFit.contain),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text('Fitzgerald Color Type:', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 6),
+                      Wrap(
+                        spacing: 6,
+                        runSpacing: 6,
+                        children: [
+                          ChoiceChip(
+                            label: const Text('Noun (Orange)'),
+                            selected: currentType == WordType.noun,
+                            selectedColor: const Color(0xFFFFCC80),
+                            onSelected: (_) => setDialogState(() => currentType = WordType.noun),
+                          ),
+                          ChoiceChip(
+                            label: const Text('Verb (Green)'),
+                            selected: currentType == WordType.verb,
+                            selectedColor: const Color(0xFFA5D6A7),
+                            onSelected: (_) => setDialogState(() => currentType = WordType.verb),
+                          ),
+                          ChoiceChip(
+                            label: const Text('Social (Pink)'),
+                            selected: currentType == WordType.social,
+                            selectedColor: const Color(0xFFF48FB1),
+                            onSelected: (_) => setDialogState(() => currentType = WordType.social),
+                          ),
+                          ChoiceChip(
+                            label: const Text('Adjective (Blue)'),
+                            selected: currentType == WordType.adjective,
+                            selectedColor: const Color(0xFF90CAF9),
+                            onSelected: (_) => setDialogState(() => currentType = WordType.adjective),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      item.label = labelCtrl.text.trim();
+                      item.spokenText = speechCtrl.text.trim();
+                      item.assetName = currentAsset;
+                      item.type = currentType;
+                    });
+                    Navigator.pop(ctx);
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF4F46E5), foregroundColor: Colors.white),
+                  child: const Text('Save Changes'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = widget.isDarkMode;
@@ -328,7 +664,7 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
     );
   }
 
-  // 1. TOP SENTENCE BAR (Always visible across tabs)
+  // 1. TOP SENTENCE BAR
   Widget _buildSentenceBar(bool isDark) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
@@ -348,11 +684,15 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
                 children: [
                   if (_sentenceBuffer.isEmpty && _typingBuffer.isEmpty)
                     Text(
-                      "Tap symbols or letters to speak...",
+                      _isEditMode
+                          ? "🔧 Edit Mode ON: Tap any button to change its image or label!"
+                          : "Tap symbols or letters to speak...",
                       style: TextStyle(
                         fontSize: 18,
-                        color: isDark ? Colors.white38 : Colors.grey.shade500,
-                        fontWeight: FontWeight.w600,
+                        color: _isEditMode
+                            ? Colors.blueAccent
+                            : (isDark ? Colors.white38 : Colors.grey.shade500),
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                   ..._sentenceBuffer.map((w) => Padding(
@@ -383,7 +723,7 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
             ),
           ),
           const SizedBox(width: 8),
-          // Speak Full Sentence Button
+          // Speak Full Sentence
           ElevatedButton.icon(
             icon: const Icon(Icons.volume_up_rounded, size: 28),
             label: const Text('Speak', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
@@ -419,6 +759,24 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
                 _sentenceBuffer.clear();
                 _typingBuffer = "";
               });
+            },
+          ),
+          // Voice & Language Settings Dialog
+          IconButton(
+            icon: const Icon(Icons.record_voice_over_rounded, size: 26, color: Color(0xFF4F46E5)),
+            tooltip: "Voice & Language Settings",
+            onPressed: _showVoiceSettingsDialog,
+          ),
+          // Image / Button Edit Mode Toggle
+          IconButton(
+            icon: Icon(
+              _isEditMode ? Icons.check_circle_rounded : Icons.edit_note_rounded,
+              size: 28,
+              color: _isEditMode ? const Color(0xFF16A34A) : const Color(0xFF0284C7),
+            ),
+            tooltip: _isEditMode ? "Done Editing" : "Edit Images & Words",
+            onPressed: () {
+              setState(() => _isEditMode = !_isEditMode);
             },
           ),
           // Dark Mode Toggle
@@ -487,7 +845,7 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
     );
   }
 
-  // 3. SYMBOL GRID (Real ARASAAC PNGs with Fallback Icons)
+  // 3. SYMBOL GRID (Real ARASAAC PNGs with Fallback Icons + Edit Mode)
   Widget _buildSymbolGrid(bool isDark) {
     final items = _vocabulary.where((item) => item.category == _selectedCategory).toList();
 
@@ -504,52 +862,78 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
         final item = items[index];
 
         return InkWell(
-          onTap: () => _addWord(item.spokenText),
+          onTap: () {
+            if (_isEditMode) {
+              _showEditButtonDialog(item);
+            } else {
+              _addWord(item.spokenText);
+            }
+          },
+          onLongPress: () => _showEditButtonDialog(item),
           borderRadius: BorderRadius.circular(16),
           child: Ink(
             decoration: BoxDecoration(
               color: item.getColor(isDark),
               borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: item.getBorderColor(isDark), width: 2),
+              border: Border.all(
+                color: _isEditMode ? const Color(0xFF0284C7) : item.getBorderColor(isDark),
+                width: _isEditMode ? 3 : 2,
+              ),
               boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 3, offset: Offset(0, 2))],
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            child: Stack(
               children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
-                    child: item.assetName != null
-                        ? Image.asset(
-                            'assets/symbols/${item.assetName}',
-                            fit: BoxFit.contain,
-                            errorBuilder: (_, __, ___) => Icon(
-                              item.fallbackIcon ?? Icons.record_voice_over,
-                              size: 44,
-                              color: isDark ? Colors.white70 : Colors.black87,
-                            ),
-                          )
-                        : Icon(
-                            item.fallbackIcon ?? Icons.record_voice_over,
-                            size: 44,
-                            color: isDark ? Colors.white70 : Colors.black87,
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 6.0),
+                          child: item.assetName != null
+                              ? Image.asset(
+                                  'assets/symbols/${item.assetName}',
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (_, __, ___) => Icon(
+                                    item.fallbackIcon ?? Icons.record_voice_over,
+                                    size: 44,
+                                    color: isDark ? Colors.white70 : Colors.black87,
+                                  ),
+                                )
+                              : Icon(
+                                  item.fallbackIcon ?? Icons.record_voice_over,
+                                  size: 44,
+                                  color: isDark ? Colors.white70 : Colors.black87,
+                                ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 8, left: 4, right: 4),
+                        child: Text(
+                          item.label.toUpperCase(),
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w900,
+                            color: isDark ? Colors.white : Colors.black87,
                           ),
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 8, left: 4, right: 4),
-                  child: Text(
-                    item.label.toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w900,
-                      color: isDark ? Colors.white : Colors.black87,
+                if (_isEditMode)
+                  const Positioned(
+                    top: 6,
+                    right: 6,
+                    child: CircleAvatar(
+                      radius: 11,
+                      backgroundColor: Colors.white,
+                      child: Icon(Icons.edit, size: 14, color: Color(0xFF0284C7)),
                     ),
-                    textAlign: TextAlign.center,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
                   ),
-                ),
               ],
             ),
           ),
@@ -565,7 +949,6 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
     const numbers = "1234567890";
     final letters = (_useQwerty ? qwertyOrder : abcOrder).split('');
 
-    // Phonics sound map for early literacy / speech practice
     const Map<String, String> phonicsMap = {
       'A': 'ah', 'B': 'buh', 'C': 'kuh', 'D': 'duh', 'E': 'eh', 'F': 'fff',
       'G': 'guh', 'H': 'huh', 'I': 'ih', 'J': 'juh', 'K': 'kuh', 'L': 'lll',
@@ -574,9 +957,8 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
       'Y': 'yuh', 'Z': 'zzz'
     };
 
-    // Predictive words based on typing buffer
     final predictions = _typingBuffer.isEmpty
-        ? ["I", "want", "need", "help", "please", "water"]
+        ? ["I", "want", "need", "help", "please", "banana"]
         : _dictionary
             .where((w) => w.toLowerCase().startsWith(_typingBuffer.toLowerCase()))
             .take(6)
@@ -586,7 +968,6 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
       padding: const EdgeInsets.all(10),
       child: Column(
         children: [
-          // Word Prediction & Mode Toggles
           Row(
             children: [
               Expanded(
@@ -644,8 +1025,6 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
             ],
           ),
           const SizedBox(height: 8),
-
-          // Letters + Numbers Keyboard Grid
           Expanded(
             child: GridView.count(
               crossAxisCount: 9,
