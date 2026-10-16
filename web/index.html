@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Genesis Speech Tab - Free AAC for Autism</title>
-  <meta name="theme-color" content="#0284c7">
+  <title>Genesis Speech Tab - Professional AAC Communicator</title>
+  <meta name="theme-color" content="#4f46e5">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <style>
@@ -19,115 +19,224 @@
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background: #f1f5f9;
+      color: #0f172a;
       height: 100vh;
       display: flex;
       flex-direction: column;
       overflow: hidden;
     }
 
-    /* TOP HEADER & NAVBAR */
+    /* 1. CLINICAL HEADER BAR */
     header {
       background: #ffffff;
-      border-bottom: 2px solid #e2e8f0;
-      padding: 6px 14px;
+      border-bottom: 1.5px solid #e2e8f0;
+      padding: 8px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      height: 60px;
-      gap: 8px;
+      height: 62px;
+      gap: 10px;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
     }
-    .nav-left {
+    .nav-left, .nav-right {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: nowrap;
       overflow-x: auto;
     }
-    .brand-title {
-      font-weight: 900;
-      font-size: 1.15rem;
-      color: #0f172a;
+    .brand-badge {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 9px;
+      font-weight: 900;
+      font-size: 1.15rem;
+      letter-spacing: -0.3px;
+      color: #0f172a;
       white-space: nowrap;
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #4f46e5, #7c3aed);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.3);
     }
     .profile-badge {
       background: #fdf2f8;
       border: 1.5px solid #f472b6;
-      color: #db2777;
+      color: #be185d;
       font-weight: 800;
       font-size: 0.85rem;
-      padding: 4px 10px;
-      border-radius: 20px;
+      padding: 5px 12px;
+      border-radius: 999px;
       white-space: nowrap;
       cursor: pointer;
     }
-
-    .btn-icon {
-      background: #e0f2fe;
-      color: #0284c7;
-      border: 1.5px solid #bae6fd;
-      padding: 6px 12px;
-      border-radius: 8px;
-      font-weight: 700;
+    .btn-pill {
+      background: #f8fafc;
+      color: #334155;
+      border: 1.5px solid #cbd5e1;
+      padding: 6px 13px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.85rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       white-space: nowrap;
-      font-size: 0.85rem;
+      transition: all 0.15s ease;
     }
-    .btn-icon:active {
-      background: #bae6fd;
+    .btn-pill:hover {
+      background: #f1f5f9;
     }
-
-    /* EMERGENCY SENSORY OVERLOAD BUTTON */
+    .btn-primary-add {
+      background: #4f46e5;
+      color: #ffffff;
+      border: 1.5px solid #4338ca;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
+    }
+    .btn-primary-add:hover {
+      background: #4338ca;
+    }
     .btn-emergency {
       background: #fee2e2;
       color: #b91c1c;
       border: 2px solid #f87171;
       padding: 6px 14px;
-      border-radius: 20px;
+      border-radius: 999px;
       font-weight: 900;
       font-size: 0.85rem;
       cursor: pointer;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       gap: 6px;
       white-space: nowrap;
-      animation: pulse-soft 2s infinite;
+      animation: pulse-soft 2.2s infinite;
     }
     @keyframes pulse-soft {
-      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); }
+      0%, 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.35); }
       50% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); }
     }
+    .mode-toggle.active {
+      background: #dbeafe;
+      border-color: #2563eb;
+      color: #1d4ed8;
+    }
 
-    /* MODE TOGGLE */
-    .mode-toggle {
+    /* 2. VISUAL SENTENCE STRIP BAR */
+    .sentence-strip-container {
+      background: #ffffff;
+      margin: 8px 14px 6px 14px;
+      padding: 8px 12px;
+      border-radius: 20px;
+      border: 2px solid #cbd5e1;
       display: flex;
       align-items: center;
-      gap: 6px;
-      background: #f1f5f9;
-      padding: 5px 12px;
-      border-radius: 20px;
-      border: 1.5px solid #cbd5e1;
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: 800;
-      white-space: nowrap;
+      gap: 10px;
+      height: 92px;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
     }
-    .mode-toggle.active {
-      background: #fef08a;
-      border-color: #ca8a04;
-      color: #854d0e;
+    .sentence-strip {
+      flex: 1;
+      height: 100%;
+      background: #f8fafc;
+      border: 1.5px dashed #cbd5e1;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      padding: 4px 10px;
+      gap: 8px;
+      overflow-x: auto;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .strip-placeholder {
+      color: #64748b;
+      font-weight: 700;
+      font-size: 0.98rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .strip-item {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 4px 6px;
+      border-radius: 12px;
+      border: 2px solid rgba(0,0,0,0.18);
+      font-weight: 900;
+      font-size: 0.72rem;
+      min-width: 68px;
+      height: 66px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .strip-item-well {
+      background: #ffffff;
+      border-radius: 8px;
+      width: 100%;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2px;
+    }
+    .strip-item-well img {
+      max-width: 100%;
+      max-height: 34px;
+      object-fit: contain;
+    }
+    .strip-item-well .emoji {
+      font-size: 1.35rem;
     }
 
-    /* CATEGORY TABS BAR (ONE-TOUCH ACCESS) */
-    .tabs-bar {
+    .btn-speak {
+      background: linear-gradient(135deg, #16a34a, #15803d);
+      color: #ffffff;
+      border: none;
+      border-radius: 14px;
+      padding: 0 22px;
+      height: 66px;
+      font-size: 1.1rem;
+      font-weight: 900;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(22, 163, 74, 0.3);
+    }
+    .btn-speak:active {
+      transform: scale(0.97);
+    }
+    .btn-action {
       background: #f8fafc;
-      border-bottom: 2px solid #e2e8f0;
-      padding: 6px 12px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 14px;
+      height: 66px;
+      width: 52px;
+      font-size: 1.25rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #334155;
+    }
+    .btn-action:hover {
+      background: #e2e8f0;
+    }
+
+    /* 3. CATEGORY TABS BAR */
+    .tabs-bar {
+      padding: 4px 14px 8px 14px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -135,382 +244,301 @@
       white-space: nowrap;
     }
     .tab-chip {
-      padding: 6px 14px;
-      border-radius: 20px;
+      padding: 8px 16px;
+      border-radius: 14px;
       background: #ffffff;
       border: 1.5px solid #cbd5e1;
-      color: #334155;
+      color: #1e293b;
       font-weight: 800;
-      font-size: 0.9rem;
+      font-size: 0.92rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
       transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
     }
     .tab-chip.active {
-      background: #0284c7;
+      background: #4f46e5;
       color: #ffffff;
-      border-color: #0284c7;
-      box-shadow: 0 2px 4px rgba(2, 132, 199, 0.3);
+      border-color: #4f46e5;
+      box-shadow: 0 3px 8px rgba(79, 70, 229, 0.3);
     }
     .tab-chip-add {
-      background: #f0fdf4;
-      border: 1.5px dashed #22c55e;
-      color: #15803d;
+      background: #eef2ff;
+      border: 1.5px dashed #4f46e5;
+      color: #4f46e5;
     }
 
-    /* SENTENCE STRIP */
-    .sentence-strip-container {
-      background: #ffffff;
-      padding: 6px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      height: 80px;
-      border-bottom: 2px solid #cbd5e1;
-    }
-    .sentence-strip {
-      flex: 1;
-      height: 100%;
-      background: #f8fafc;
-      border: 2px dashed #94a3b8;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      padding: 4px 10px;
-      gap: 8px;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-    .strip-placeholder {
-      color: #94a3b8;
-      font-style: italic;
-      font-size: 0.95rem;
-    }
-    .strip-item {
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 4px 8px;
-      border-radius: 8px;
-      border: 1.5px solid rgba(0,0,0,0.2);
-      font-weight: 800;
-      font-size: 0.8rem;
-      min-width: 58px;
-      height: 58px;
-    }
-    .strip-item .emoji {
-      font-size: 1.3rem;
-    }
-    .strip-item img {
-      width: 26px;
-      height: 26px;
-      object-fit: cover;
-      border-radius: 4px;
-    }
-
-    .btn-speak {
-      background: #16a34a;
-      color: #ffffff;
-      border: none;
-      border-radius: 12px;
-      padding: 0 20px;
-      height: 100%;
-      font-size: 1.2rem;
-      font-weight: 900;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 4px 6px -1px rgba(22, 163, 74, 0.4);
-    }
-    .btn-speak:active {
-      transform: scale(0.97);
-    }
-    .btn-action {
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 12px;
-      height: 100%;
-      width: 50px;
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .btn-action:active {
-      background: #f1f5f9;
-    }
-
-    /* MOTOR PLANNING 5x7 GRID */
+    /* 4. CLINICAL SYMBOL GRID */
     .grid-container {
       flex: 1;
-      padding: 8px;
+      padding: 6px 14px 14px 14px;
       display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      grid-template-rows: repeat(5, 1fr);
-      gap: 8px;
-      overflow: hidden;
+      grid-template-columns: repeat(auto-fill, minmax(138px, 1fr));
+      grid-auto-rows: 142px;
+      gap: 12px;
+      overflow-y: auto;
     }
 
-    /* FITZGERALD BUTTONS */
     .aac-tile {
-      border-radius: 12px;
-      border: 2px solid rgba(0,0,0,0.15);
+      border-radius: 20px;
+      border: 2.5px solid rgba(0,0,0,0.15);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-weight: 800;
-      font-size: 1.05rem;
+      align-items: stretch;
+      justify-content: space-between;
+      font-weight: 900;
+      font-size: 0.92rem;
       cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.06);
-      transition: transform 0.05s ease;
+      box-shadow: 0 3px 6px rgba(15, 23, 42, 0.06);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
       position: relative;
       text-align: center;
-      padding: 4px;
+      padding: 8px 8px 6px 8px;
     }
     .aac-tile:active {
       transform: scale(0.95);
-      filter: brightness(0.92);
     }
-    .aac-tile .tile-icon {
-      font-size: 2rem;
-      margin-bottom: 2px;
+    .tile-well {
+      flex: 1;
+      background: #ffffff;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      margin-bottom: 6px;
+      overflow: hidden;
     }
-    .aac-tile img.custom-photo {
-      width: 44px;
-      height: 44px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 2px;
-      border: 1px solid rgba(0,0,0,0.2);
+    .tile-well img {
+      max-width: 100%;
+      max-height: 76px;
+      object-fit: contain;
     }
-    .aac-tile .tile-label {
-      line-height: 1.1;
-      word-break: break-word;
+    .tile-well .tile-icon {
+      font-size: 2.6rem;
     }
-    .aac-tile .nav-indicator {
+    .tile-label {
+      line-height: 1.15;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      padding: 0 2px;
+      letter-spacing: -0.2px;
+    }
+    .add-word-card {
+      background: #ffffff;
+      border: 2.5px dashed #4f46e5;
+      color: #4f46e5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 0.85rem;
+    }
+    .add-word-card:hover {
+      background: #eef2ff;
+    }
+
+    /* FITZGERALD CLINICAL COLOR THEMES */
+    .pos-pronoun { background: #fef9c3; border-color: #eab308; color: #713f12; }
+    .pos-verb { background: #dcfce7; border-color: #22c55e; color: #14532d; }
+    .pos-noun { background: #ffedd5; border-color: #f97316; color: #7c2d12; }
+    .pos-adjective { background: #e0f2fe; border-color: #0ea5e9; color: #0c4a6e; }
+    .pos-social { background: #fce7f3; border-color: #ec4899; color: #831843; }
+    .pos-slang { background: #fae8ff; border-color: #c026d3; color: #581c87; }
+    .pos-sensory { background: #ccfbf1; border-color: #0d9488; color: #134e4a; }
+    .pos-strawberry { background: #fee2e2; border-color: #ef4444; color: #7f1d1d; }
+    .pos-preposition { background: #f1f5f9; border-color: #94a3b8; color: #1e293b; }
+
+    /* EDIT MODE BADGE */
+    .edit-mode .aac-tile {
+      border-color: #2563eb !important;
+      box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+    }
+    .edit-mode .aac-tile::after {
+      content: "✏️";
       position: absolute;
-      top: 4px;
+      top: 6px;
       right: 6px;
-      font-size: 0.8rem;
-      opacity: 0.6;
+      font-size: 0.78rem;
+      background: #2563eb;
+      color: white;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    /* FITZGERALD COLOR THEMES */
-    .pos-pronoun { background: #fef08a; border-color: #ca8a04; color: #713f12; }
-    .pos-verb { background: #bbf7d0; border-color: #16a34a; color: #14532d; }
-    .pos-noun { background: #fed7aa; border-color: #ea580c; color: #7c2d12; }
-    .pos-adjective { background: #bae6fd; border-color: #0284c7; color: #0c4a6e; }
-    .pos-social { background: #fbcfe8; border-color: #db2777; color: #831843; }
-    .pos-slang { background: #e9d5ff; border-color: #9333ea; color: #581c87; }
-    .pos-sensory { background: #c7d2fe; border-color: #4f46e5; color: #312e81; }
-    .pos-strawberry { background: #fecdd3; border-color: #e11d48; color: #881337; }
-    .pos-preposition { background: #e2e8f0; border-color: #94a3b8; color: #334155; }
-
-    /* ==========================================
-       SENSORY DARK MODE (Low-Stimulation Theme)
-       ========================================== */
+    /* SENSORY DARK MODE */
     body.dark-theme {
-      background: #090d16;
-      color: #e2e8f0;
-    }
-    body.dark-theme header {
-      background: #0f172a;
-      border-bottom-color: #1e293b;
-    }
-    body.dark-theme .brand-title {
+      background: #0b0f19;
       color: #f8fafc;
     }
-    body.dark-theme .tabs-bar {
-      background: #0b1120;
-      border-bottom-color: #1e293b;
+    body.dark-theme header {
+      background: #111827;
+      border-bottom-color: #1f2937;
     }
-    body.dark-theme .tab-chip {
+    body.dark-theme .brand-badge {
+      color: #f8fafc;
+    }
+    body.dark-theme .btn-pill {
       background: #1e293b;
       border-color: #334155;
-      color: #cbd5e1;
-    }
-    body.dark-theme .tab-chip.active {
-      background: #0284c7;
-      color: #ffffff;
-      border-color: #38bdf8;
+      color: #e2e8f0;
     }
     body.dark-theme .sentence-strip-container {
-      background: #0f172a;
-      border-bottom-color: #1e293b;
+      background: #111827;
+      border-color: #334155;
     }
     body.dark-theme .sentence-strip {
       background: #1e293b;
       border-color: #475569;
     }
-    body.dark-theme .strip-placeholder {
-      color: #64748b;
-    }
     body.dark-theme .btn-action {
       background: #1e293b;
       border-color: #334155;
-      color: #cbd5e1;
+      color: #e2e8f0;
     }
-    body.dark-theme .btn-icon {
+    body.dark-theme .tab-chip {
       background: #1e293b;
       border-color: #334155;
-      color: #38bdf8;
+      color: #e2e8f0;
     }
-    body.dark-theme .mode-toggle {
+    body.dark-theme .tab-chip.active {
+      background: #4f46e5;
+      border-color: #6366f1;
+      color: #ffffff;
+    }
+    body.dark-theme .add-word-card {
       background: #1e293b;
-      border-color: #334155;
-      color: #cbd5e1;
+      color: #a5b4fc;
+      border-color: #6366f1;
     }
-    body.dark-theme .mode-toggle.active {
-      background: #713f12;
-      border-color: #ca8a04;
-      color: #fef08a;
-    }
-    body.dark-theme .empty-slot {
-      background: rgba(30, 41, 59, 0.4);
-      border-color: #334155;
-    }
-    body.dark-theme .edit-mode .empty-slot {
-      background: rgba(2, 132, 199, 0.2);
-      border-color: #38bdf8;
-      color: #38bdf8;
-    }
-
-    /* Soft, non-glare, matte sensory dark button colors */
-    body.dark-theme .pos-pronoun { background: #713f12; border-color: #a16207; color: #fef08a; }
-    body.dark-theme .pos-verb { background: #14532d; border-color: #15803d; color: #bbf7d0; }
-    body.dark-theme .pos-noun { background: #7c2d12; border-color: #c2410c; color: #fed7aa; }
-    body.dark-theme .pos-adjective { background: #0c4a6e; border-color: #0369a1; color: #bae6fd; }
-    body.dark-theme .pos-social { background: #831843; border-color: #be185d; color: #fbcfe8; }
-    body.dark-theme .pos-slang { background: #581c87; border-color: #7e22ce; color: #e9d5ff; }
-    body.dark-theme .pos-sensory { background: #312e81; border-color: #4338ca; color: #c7d2fe; }
-    body.dark-theme .pos-strawberry { background: #881337; border-color: #be123c; color: #fecdd3; }
-    body.dark-theme .pos-preposition { background: #1e293b; border-color: #475569; color: #e2e8f0; }
-
+    body.dark-theme .pos-pronoun { background: #422006; border-color: #eab308; color: #fef08a; }
+    body.dark-theme .pos-verb { background: #052e16; border-color: #22c55e; color: #bbf7d0; }
+    body.dark-theme .pos-noun { background: #431407; border-color: #f97316; color: #fed7aa; }
+    body.dark-theme .pos-adjective { background: #082f49; border-color: #38bdf8; color: #bae6fd; }
+    body.dark-theme .pos-social { background: #500724; border-color: #ec4899; color: #fbcfe8; }
+    body.dark-theme .pos-slang { background: #3b0764; border-color: #c026d3; color: #f5d0fe; }
+    body.dark-theme .pos-sensory { background: #134e4a; border-color: #2dd4bf; color: #ccfbf1; }
+    body.dark-theme .pos-strawberry { background: #450a0a; border-color: #ef4444; color: #fecaca; }
+    body.dark-theme .pos-preposition { background: #1e293b; border-color: #64748b; color: #f1f5f9; }
     body.dark-theme .modal-box {
-      background: #0f172a;
+      background: #111827;
       color: #f8fafc;
       border: 1px solid #334155;
-    }
-    body.dark-theme .modal-box h3 {
-      color: #f8fafc;
-    }
-    body.dark-theme .form-group label {
-      color: #94a3b8;
     }
     body.dark-theme .form-group input, body.dark-theme .form-group select {
       background: #1e293b;
       border-color: #334155;
       color: #f8fafc;
     }
-    body.dark-theme .btn-cancel {
-      background: #1e293b;
-      color: #cbd5e1;
-    }
 
-    /* EMPTY SLOT (LOCKED COORDINATES) */
-    .empty-slot {
-      background: rgba(255, 255, 255, 0.4);
-      border: 1px dashed #cbd5e1;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: default;
-    }
-    .edit-mode .empty-slot {
-      background: rgba(186, 230, 253, 0.3);
-      border: 2px dashed #0284c7;
-      cursor: pointer;
-      color: #0284c7;
-      font-size: 1.6rem;
-    }
-    .edit-mode .aac-tile {
-      box-shadow: 0 0 0 2px #0284c7;
-    }
-    .edit-mode .aac-tile::after {
-      content: "✏️";
-      position: absolute;
-      top: 3px;
-      right: 3px;
-      font-size: 0.8rem;
-      background: white;
-      border-radius: 50%;
-      padding: 2px;
-    }
-
-    /* MODAL POPUPS */
+    /* MODALS */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.6);
+      background: rgba(15, 23, 42, 0.72);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      backdrop-filter: blur(2px);
+      backdrop-filter: blur(3px);
     }
     .modal-overlay.open {
       display: flex;
     }
     .modal-box {
-      background: white;
-      border-radius: 18px;
-      width: 92%;
-      max-width: 500px;
-      max-height: 90vh;
+      background: #ffffff;
+      border-radius: 24px;
+      width: 94%;
+      max-width: 600px;
+      max-height: 92vh;
       overflow-y: auto;
       padding: 22px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    }
-    .modal-box h3 {
-      margin-bottom: 14px;
-      color: #0f172a;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
     }
     .form-group {
       margin-bottom: 12px;
     }
     .form-group label {
       display: block;
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       font-weight: 800;
       color: #475569;
       margin-bottom: 4px;
     }
     .form-group input, .form-group select {
       width: 100%;
-      padding: 10px;
+      padding: 9px 12px;
       border: 1.5px solid #cbd5e1;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: 10px;
+      font-size: 0.95rem;
       outline: none;
+    }
+    .builtin-symbol-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 8px;
+      max-height: 170px;
+      overflow-y: auto;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 8px;
+    }
+    .builtin-sym-item {
+      background: #ffffff;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 4px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      cursor: pointer;
+      font-size: 0.65rem;
+      font-weight: 800;
+      color: #1e293b;
+      text-align: center;
+    }
+    .builtin-sym-item.selected {
+      border-color: #4f46e5;
+      background: #e0e7ff;
+    }
+    .builtin-sym-item img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
     }
     .modal-actions {
       display: flex;
       justify-content: flex-end;
       gap: 10px;
-      margin-top: 18px;
+      margin-top: 16px;
     }
     .btn-save {
       background: #16a34a;
       color: white;
       border: none;
       padding: 10px 20px;
-      border-radius: 8px;
+      border-radius: 12px;
       font-weight: 800;
       cursor: pointer;
     }
     .btn-cancel {
-      background: #f1f5f9;
-      color: #475569;
+      background: #e2e8f0;
+      color: #334155;
       border: none;
       padding: 10px 18px;
-      border-radius: 8px;
+      border-radius: 12px;
       font-weight: 800;
       cursor: pointer;
     }
@@ -518,535 +546,382 @@
       background: #fee2e2;
       color: #dc2626;
       border: none;
-      padding: 10px 18px;
-      border-radius: 8px;
+      padding: 10px 16px;
+      border-radius: 12px;
       font-weight: 800;
       cursor: pointer;
       margin-right: auto;
-    }
-
-    /* SENSORY OVERLOAD CALM CARD */
-    .overload-box {
-      background: #0f172a;
-      color: #f8fafc;
-      border: 3px solid #38bdf8;
-      border-radius: 24px;
-      width: 95%;
-      max-width: 580px;
-      padding: 28px;
-      text-align: center;
-    }
-    .overload-box h2 {
-      color: #38bdf8;
-      font-size: 1.8rem;
-      margin-bottom: 12px;
-    }
-    .overload-message {
-      font-size: 1.3rem;
-      line-height: 1.5;
-      margin-bottom: 24px;
-      background: #1e293b;
-      padding: 18px;
-      border-radius: 16px;
-      border: 1px solid #334155;
-    }
-    .overload-buttons {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-    .btn-overload-action {
-      background: #334155;
-      color: white;
-      border: 1px solid #475569;
-      padding: 14px;
-      border-radius: 12px;
-      font-size: 1.05rem;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .btn-overload-close {
-      background: #38bdf8;
-      color: #0f172a;
-      border: none;
-      padding: 12px 28px;
-      border-radius: 20px;
-      font-weight: 900;
-      font-size: 1.1rem;
-      cursor: pointer;
-    }
-
-    /* EMOJI / ICON SELECTOR ROW */
-    .icon-palette {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding: 6px 0;
-    }
-    .icon-opt {
-      font-size: 1.6rem;
-      padding: 6px;
-      background: #f1f5f9;
-      border-radius: 8px;
-      cursor: pointer;
-      border: 1.5px solid transparent;
-      flex-shrink: 0;
-    }
-    .icon-opt.selected {
-      background: #bae6fd;
-      border-color: #0284c7;
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER & NAVIGATION -->
+  <!-- 1. TOP CLINICAL HEADER BAR -->
   <header>
     <div class="nav-left">
-      <span class="brand-title">🗣️ Genesis Speech Tab</span>
+      <div class="brand-badge">
+        <div class="brand-icon">🗣️</div>
+        <span>Genesis Speech Tab</span>
+      </div>
       <div id="profileBadge" class="profile-badge" onclick="switchProfilePrompt()" title="Switch Child Profile">
         🌸 Genesis
       </div>
-      <button class="btn-emergency" onclick="openEmergencyOverloadModal()" title="Sensory Overload Card">
+      <button class="btn-emergency" onclick="openEmergencyOverloadModal()" title="1-Tap Sensory Overload Alert">
         <span>🆘</span> Overload Card
       </button>
-      <button class="btn-icon" onclick="testSound()" title="Click to test tablet speech">
-        <span>🔊</span> Test Sound
-      </button>
-      <select id="voiceSelect" class="btn-icon" onchange="changeVoice(this.value)" style="max-width: 150px; font-size: 0.8rem; background: #f8fafc;" title="Select voice">
-        <option value="">Default Voice</option>
-      </select>
     </div>
 
-    <div style="display: flex; align-items: center; gap: 8px;">
-      <button class="btn-icon" onclick="quickAddWordToCurrentBoard()" title="Quickly add a new word or photo to this board" style="background: #4f46e5; color: #ffffff; border-color: #4338ca; border-radius: 20px; padding: 6px 14px;">
+    <div class="nav-right">
+      <button class="btn-pill btn-primary-add" onclick="openAddWordModal()">
         <span>➕</span> Add Word / Photo
       </button>
-
-      <button class="btn-icon" id="themeToggleBtn" onclick="toggleSensoryTheme()" title="Toggle Sensory Dark / Low-Stim Mode" style="font-size: 0.85rem; padding: 5px 12px; border-radius: 20px;">
-        <span id="themeIcon">🌙</span> <span id="themeText">Sensory Dark</span>
-      </button>
-
-      <div id="modeToggle" class="mode-toggle" onclick="toggleEditMode()">
-        <span id="modeIcon">🔒</span>
-        <span id="modeText">Child Mode</span>
+      <div id="modeToggle" class="btn-pill mode-toggle" onclick="toggleEditMode()" title="Customize or edit any button">
+        <span id="modeIcon">✏️</span>
+        <span id="modeText">Customize</span>
       </div>
+      <select id="voiceSelect" class="btn-pill" onchange="changeVoice(this.value)" title="Select Voice & Language">
+        <option value="en_female">🇺🇸 Female Voice</option>
+      </select>
+      <button class="btn-pill" id="themeToggleBtn" onclick="toggleSensoryTheme()" title="Toggle Sensory Dark Mode">
+        <span id="themeIcon">🌙</span> <span id="themeText">Dark</span>
+      </button>
     </div>
   </header>
 
-  <!-- QUICK ACCESS CATEGORY TABS -->
-  <div class="tabs-bar" id="tabsBar">
-    <!-- Populated by JS -->
-  </div>
-
-  <!-- SENTENCE STRIP (MESSAGE BAR) -->
+  <!-- 2. VISUAL SENTENCE STRIP BAR -->
   <div class="sentence-strip-container">
-    <div id="sentenceStrip" class="sentence-strip" onclick="speakFullSentence()" style="cursor: pointer;" title="Tap this bar to speak all words together!">
-      <span id="stripPlaceholder" class="strip-placeholder">Tap buttons to speak & build sentences...</span>
+    <div id="sentenceStrip" class="sentence-strip" onclick="speakFullSentence()" title="Tap to speak full sentence">
+      <span class="strip-placeholder">👆 Tap any symbol card below to speak & build a sentence...</span>
     </div>
+    <button class="btn-action" onclick="openShowOrderModal()" title="Show Big Card (Great for Restaurants!)">
+      <span>🔍</span>
+    </button>
     <button class="btn-speak" onclick="speakFullSentence()">
       <span>🔊</span> Speak
     </button>
-    <button class="btn-action" onclick="deleteLastWord()" title="Delete last word">
+    <button class="btn-action" onclick="deleteLastWord()" title="Backspace">
       <span>⌫</span>
     </button>
-    <button class="btn-action" onclick="clearSentence()" title="Clear bar">
+    <button class="btn-action" onclick="clearSentence()" title="Clear All">
       <span>🗑️</span>
     </button>
   </div>
 
-  <!-- 5x7 MOTOR PLANNING GRID -->
-  <main id="gridContainer" class="grid-container">
-    <!-- 35 fixed cells injected by JS -->
-  </main>
+  <!-- 3. CATEGORY TABS BAR -->
+  <div class="tabs-bar" id="tabsBar"></div>
 
-  <!-- ADD / EDIT BUTTON MODAL -->
+  <!-- 4. SYMBOL GRID -->
+  <main id="gridContainer" class="grid-container"></main>
+
+  <!-- ADD / CUSTOMIZE WORD & PHOTO STUDIO MODAL -->
   <div id="btnModal" class="modal-overlay">
     <div class="modal-box">
-      <h3 id="modalTitle">Edit Word Tile</h3>
-      
-      <div class="form-group">
-        <label>Display Label (Button Text)</label>
-        <input type="text" id="tileLabel" placeholder="e.g. McDonald's, Nuggets, Dolphin, Grandma">
+      <h3 id="modalTitle" style="font-size: 1.25rem; font-weight: 900; margin-bottom: 12px;">➕ Add Word / Photo</h3>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div class="form-group">
+          <label>Button Label (Shown on Card)</label>
+          <input type="text" id="tileLabel" placeholder="e.g. McDonald's, Dolphin, Grandma" oninput="if(!editingKey) document.getElementById('tileSpeech').value = this.value">
+        </div>
+        <div class="form-group">
+          <label>Spoken Phrase (What it Says)</label>
+          <input type="text" id="tileSpeech" placeholder="e.g. I want McDonald's please">
+        </div>
+      </div>
+
+      <div class="form-group" style="background: #f8fafc; padding: 10px; border-radius: 12px; border: 1px solid #cbd5e1; display: flex; align-items: center; gap: 14px;">
+        <div style="width: 68px; height: 68px; background: #fff; border: 2px solid #4f46e5; border-radius: 14px; display: flex; align-items: center; justify-content: center; padding: 4px; flex-shrink: 0;">
+          <img id="imagePreview" src="assets/symbols/happy.png" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+        </div>
+        <div style="flex: 1;">
+          <label style="margin-bottom: 6px;">📸 Option 1: Take Camera Photo or Upload Picture from Device</label>
+          <input type="file" id="tileImageInput" accept="image/*" onchange="handleImageUpload(event)" style="font-size: 0.85rem;">
+        </div>
       </div>
 
       <div class="form-group">
-        <label>What the Tablet Speaks</label>
-        <input type="text" id="tileSpeech" placeholder="e.g. I want McDonald's please">
+        <label>🌐 Option 2: Search 35,000+ Online AAC Symbols (Type Any Word)</label>
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="arasaacSearchInput" placeholder="e.g. trampoline, grandma, waffles, unicorn..." onkeydown="if(event.key==='Enter') searchArasaacSymbols()">
+          <button type="button" class="btn-save" style="background: #0d9488; white-space: nowrap;" onclick="searchArasaacSymbols()">Search Web</button>
+        </div>
+        <div id="arasaacResults" style="display: flex; gap: 8px; overflow-x: auto; padding: 6px 0;"></div>
       </div>
 
       <div class="form-group">
-        <label>Color / Category (Fitzgerald Standard)</label>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <label style="margin: 0;">🎨 Option 3: Pick from 111 Built-In Symbols & Restaurant Logos</label>
+          <input type="text" id="builtinFilterInput" placeholder="Filter built-in..." oninput="renderBuiltinSymbolPicker(this.value)" style="width: 170px; padding: 4px 8px; font-size: 0.82rem;">
+        </div>
+        <div id="builtinSymbolGrid" class="builtin-symbol-grid"></div>
+      </div>
+
+      <div class="form-group">
+        <label>Card Color Style (FitzGerald Key)</label>
         <select id="tilePos">
-          <option value="pos-strawberry">🍔/🍓 Red/Pink - Restaurants, Characters & Treats</option>
-          <option value="pos-noun">Orange - Noun / Animals, Food & Things</option>
-          <option value="pos-sensory">Indigo - Sensory & Body Regulation</option>
-          <option value="pos-slang">Purple - Slang / Vibes & Banter</option>
-          <option value="pos-pronoun">Yellow - Pronoun (I, You, Mom)</option>
-          <option value="pos-verb">Green - Verb / Action (Want, Go, Play)</option>
-          <option value="pos-adjective">Blue - Descriptor (More, Finished, Soft)</option>
-          <option value="pos-social">Pink - Social (Please, Thank you, Help)</option>
-          <option value="pos-preposition">Grey - Navigation / Preposition</option>
+          <option value="pos-noun">🟧 Orange - Noun / Animals, Food & Things</option>
+          <option value="pos-strawberry">🟥 Red / Coral - Restaurants, Characters & Treats</option>
+          <option value="pos-verb">🟩 Green - Action / Verb (Want, Go, Eat, Play)</option>
+          <option value="pos-social">🩷 Pink - Social & Polite (Please, Help, Hug)</option>
+          <option value="pos-sensory">🩵 Teal - Sensory & Body Regulation</option>
+          <option value="pos-adjective">🟦 Blue - Feelings & Descriptors</option>
+          <option value="pos-pronoun">🟨 Yellow - People & Pronouns (I, You, Mom, Dad)</option>
+          <option value="pos-slang">🟪 Purple - Vibes & Slang</option>
         </select>
       </div>
 
-      <div class="form-group">
-        <label>📸 Snap Camera Photo / Upload Custom Image</label>
-        <input type="file" id="tileImageInput" accept="image/*" onchange="handleImageUpload(event)" style="font-size: 0.9rem;">
-        <div id="imagePreviewContainer" style="margin-top: 8px; display: none; align-items: center; gap: 8px;">
-          <img id="imagePreview" style="width: 56px; height: 56px; object-fit: contain; background: #fff; border-radius: 8px; border: 2px solid #4f46e5; padding: 2px;">
-          <button type="button" class="btn-cancel" style="padding: 4px 10px; font-size: 0.8rem;" onclick="removeCustomImage()">Remove Image</button>
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>🌐 Or Search 35,000+ Online AAC Symbols</label>
-        <div style="display: flex; gap: 6px;">
-          <input type="text" id="arasaacSearchInput" placeholder="Type any word (e.g. nuggets, dolphin, grandma)..." style="flex: 1;">
-          <button type="button" class="btn-save" style="background: #0d9488; padding: 8px 14px;" onclick="searchArasaacSymbols()">Search</button>
-        </div>
-        <div id="arasaacResults" style="display: flex; gap: 8px; overflow-x: auto; padding: 8px 0; min-height: 10px;"></div>
-      </div>
-
-      <div class="form-group">
-        <label>😊 Or Choose an Icon / Emoji</label>
-        <div class="icon-palette" id="iconPalette">
-          <!-- Icons injected by JS -->
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Voice Energy / Pitch</label>
-        <div style="display: flex; align-items: center; gap: 10px;">
-          <input type="range" id="tilePitch" min="0.7" max="1.5" step="0.1" value="1.1">
-          <button type="button" class="btn-icon" onclick="previewCurrentSpeech()">Test 🔊</button>
-        </div>
-      </div>
-
       <div class="modal-actions">
-        <button id="btnDeleteTile" class="btn-delete" onclick="deleteCurrentTile()">Delete Tile</button>
+        <button id="btnDeleteTile" class="btn-delete" onclick="deleteCurrentTile()">Delete Button</button>
         <button class="btn-cancel" onclick="closeTileModal()">Cancel</button>
-        <button class="btn-save" onclick="saveTileModal()">Save Tile</button>
+        <button class="btn-save" onclick="saveTileModal()">Save Word</button>
       </div>
     </div>
   </div>
 
-  <!-- ADD TAB MODAL -->
+  <!-- ADD NEW TAB MODAL -->
   <div id="tabModal" class="modal-overlay">
-    <div class="modal-box">
-      <h3>➕ Create New Category Tab</h3>
+    <div class="modal-box" style="max-width: 420px;">
+      <h3 style="margin-bottom: 12px; font-weight: 900;">➕ Create New Category Tab</h3>
       <div class="form-group">
-        <label>Category Name</label>
-        <input type="text" id="newTabName" placeholder="e.g. School, Sensory Toys, Roblox, Park">
+        <label>Tab Name (e.g. Toys, Family, Grandma's House, Park)</label>
+        <input type="text" id="newTabName" placeholder="e.g. Toys">
       </div>
       <div class="modal-actions">
-        <button class="btn-cancel" onclick="closeNewTabModal()">Cancel</button>
+        <button class="btn-cancel" onclick="document.getElementById('tabModal').classList.remove('open')">Cancel</button>
         <button class="btn-save" onclick="saveNewTab()">Create Tab</button>
       </div>
     </div>
   </div>
 
-  <!-- EMERGENCY SENSORY OVERLOAD MODAL -->
+  <!-- 🔍 FULL-SCREEN "SHOW WHAT I WANT" ORDER / SENTENCE MODAL -->
+  <div id="showOrderModal" class="modal-overlay">
+    <div class="modal-box" style="max-width: 680px; text-align: center;">
+      <h2 style="font-weight: 900; margin-bottom: 14px;">👁️ Show What I Want</h2>
+      <div id="showOrderCards" style="display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin-bottom: 18px;"></div>
+      <div id="showOrderText" style="font-size: 1.5rem; font-weight: 900; margin-bottom: 18px;"></div>
+      <div style="display: flex; justify-content: center; gap: 12px;">
+        <button class="btn-save" style="font-size: 1.1rem; padding: 12px 24px;" onclick="speakFullSentence()">🔊 Speak Aloud</button>
+        <button class="btn-cancel" style="font-size: 1.1rem; padding: 12px 24px;" onclick="document.getElementById('showOrderModal').classList.remove('open')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🆘 EMERGENCY SENSORY OVERLOAD MODAL -->
   <div id="overloadModal" class="modal-overlay">
-    <div class="overload-box">
-      <h2>🛑 SENSORY OVERLOAD</h2>
-      <div class="overload-message">
-        "I am having sensory overload right now. I cannot process words or speak. Please dim the lights, do not touch me, and give me safe, quiet space."
+    <div class="modal-box" style="background: #0f172a; color: #f8fafc; border: 3px solid #ef4444; text-align: center; max-width: 580px;">
+      <div style="font-size: 3rem; margin-bottom: 6px;">🛑 🎧 🫂</div>
+      <h2 style="color: #fca5a5; font-size: 1.75rem; font-weight: 900; margin-bottom: 10px;">SENSORY OVERLOAD</h2>
+      <p style="font-size: 1.15rem; line-height: 1.5; background: #1e293b; padding: 16px; border-radius: 16px; margin-bottom: 16px;">
+        "I am having sensory overload right now. Please lower voices, stop loud noises (like dishes), and give me quiet space."
+      </p>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px;">
+        <button class="btn-pill" style="background:#334155;color:#fff;justify-content:center;padding:12px;" onclick="speakText('The dishes clanging hurt my ears! Please stop.')">🍽️ Dishes Hurt Ears</button>
+        <button class="btn-pill" style="background:#334155;color:#fff;justify-content:center;padding:12px;" onclick="speakText('Please take me to my quiet bedroom.')">🚪 Quiet Bedroom</button>
+        <button class="btn-pill" style="background:#334155;color:#fff;justify-content:center;padding:12px;" onclick="speakText('I need my noise cancelling headphones please.')">🎧 Need Headphones</button>
+        <button class="btn-pill" style="background:#334155;color:#fff;justify-content:center;padding:12px;" onclick="speakText('I need a tight hug and deep pressure please.')">🫂 Squeeze / Hug</button>
       </div>
-      <div class="overload-buttons">
-        <button class="btn-overload-action" onclick="speakText('The dishes clattering is hurting my ears! Please give me my headphones.')">🍽️ Dishes Hurt Ears</button>
-        <button class="btn-overload-action" onclick="speakText('Please take me to my quiet bedroom.')">🚪 Go to My Room</button>
-        <button class="btn-overload-action" onclick="speakText('Please put my headphones on my ears right now.')">🎧 Need Headphones</button>
-        <button class="btn-overload-action" onclick="speakText('Please turn off the bright lights.')">💡 Too Bright</button>
-        <button class="btn-overload-action" onclick="speakText('Please give me deep pressure or a tight hug.')">🫂 Deep Pressure</button>
-        <button class="btn-overload-action" onclick="speakText('I just need to sit quietly.')">🤫 Quiet Space</button>
-      </div>
-      <button class="btn-overload-close" onclick="closeEmergencyOverloadModal()">I Feel Regulated (Close)</button>
+      <button class="btn-save" style="font-size: 1.05rem; padding: 12px 28px;" onclick="closeEmergencyOverloadModal()">I Feel Better (Close)</button>
     </div>
   </div>
 
   <script>
-    // ==========================================
-    // DEFAULT RICH VOCABULARY BOARDS
-    // ==========================================
+    // All 111 Built-In Offline PNG Symbols
+    const BUILTIN_ASSETS = [
+      'mcdonalds.png','happy_meal.png','chickfila.png','wendys.png','burgerking.png','tacobell.png','pizzahut.png','subway.png','starbucks.png','dunkin.png','dairyqueen.png','ihop.png','pandaexpress.png',
+      'nuggets.png','fries.png','burger.png','pizza.png','taco.png','hotdog.png','pancakes.png','pasta.png','sandwich.png','ice_cream.png','milkshake.png','donut.png','soda.png','ketchup.png','cheese.png','chicken.png',
+      'apple.png','banana.png','strawberry.png','blueberry.png','lemon.png','orange_fruit.png','cracker.png','snack.png','cookie.png','cupcake.png','cake.png','eat.png','drink.png','water.png','juice.png','milk.png',
+      'dog.png','cat.png','rabbit.png','horse.png','bird.png','fish.png','dolphin.png','duck.png','cow.png','pig.png','sheep.png','chicken_animal.png','frog.png','monkey.png','lion.png','tiger.png','elephant.png','bear.png','giraffe.png','dinosaur.png','butterfly.png','turtle.png',
+      'dishes.png','loud.png','quiet.png','headphones.png','bright.png','blanket.png','swing.png','happy.png','sad.png','tired.png','angry.png','scared.png','sick.png','hurt.png','good.png','bad.png','hug.png',
+      'help.png','please.png','thank_you.png','stop.png','go.png','play.png','like.png','see.png','want.png','yes.png','no.png','more.png','i.png','you.png','mom.png','dad.png','toilet.png','tablet.png','tv.png','book.png','pencil.png','draw.png','music.png','home.png','school.png','car.png','bed.png'
+    ];
+
     const DEFAULT_BOARDS = {
-      home: {
-        id: "home",
-        name: "🏠 Home",
-        tiles: {
-          "0_0": { label: "I", speech: "I", icon: "🙋", pos: "pos-pronoun", pitch: 1.1 },
-          "0_1": { label: "You", speech: "You", icon: "👉", pos: "pos-pronoun", pitch: 1.1 },
-          "0_2": { label: "🍓 Strawberry", speech: "Strawberry Shortcake", icon: "🍓", pos: "pos-strawberry", targetBoard: "strawberry" },
-          "0_3": { label: "🐾 Animals", speech: "Animals", icon: "🐾", pos: "pos-noun", targetBoard: "animals" },
-          "0_4": { label: "🧠 Sensory", speech: "My sensory needs", icon: "🧠", pos: "pos-sensory", targetBoard: "sensory" },
-          "0_5": { label: "Yes", speech: "Yes", icon: "👍", pos: "pos-social", pitch: 1.15 },
-          "0_6": { label: "No Way", speech: "No way!", icon: "👎", pos: "pos-social", pitch: 1.3 },
-
-          "1_0": { label: "Want", speech: "Want", icon: "🤲", pos: "pos-verb", pitch: 1.1 },
-          "1_1": { label: "Like", speech: "Like", icon: "❤️", pos: "pos-verb", pitch: 1.1 },
-          "1_2": { label: "Go", speech: "Go", icon: "🏃", pos: "pos-verb", pitch: 1.1 },
-          "1_3": { label: "Stop", speech: "Stop!", icon: "🛑", pos: "pos-verb", pitch: 1.25 },
-          "1_4": { label: "Help", speech: "Help me please", icon: "🆘", pos: "pos-social", pitch: 1.2 },
-          "1_5": { label: "Eat", speech: "Eat", icon: "🍽️", pos: "pos-verb", targetBoard: "food" },
-          "1_6": { label: "Drink", speech: "Drink", icon: "🥤", pos: "pos-verb", pitch: 1.1 },
-
-          "2_0": { label: "See", speech: "See", icon: "👀", pos: "pos-verb", pitch: 1.1 },
-          "2_1": { label: "Play", speech: "Play", icon: "🎮", pos: "pos-verb", pitch: 1.1 },
-          "2_2": { label: "More", speech: "More", icon: "➕", pos: "pos-adjective", pitch: 1.1 },
-          "2_3": { label: "All Done", speech: "I am all done", icon: "✅", pos: "pos-adjective", pitch: 1.1 },
-          "2_4": { label: "⚡ Slang", speech: "", icon: "⚡", pos: "pos-slang", targetBoard: "slang" },
-          "2_5": { label: "Chill", speech: "Chill out", icon: "🧊", pos: "pos-slang", pitch: 1.0 },
-          "2_6": { label: "Bruh", speech: "Bruh...", icon: "😐", pos: "pos-slang", pitch: 0.85 },
-
-          "3_0": { label: "Happy", speech: "Happy", icon: "😄", pos: "pos-adjective", pitch: 1.2 },
-          "3_1": { label: "Mad", speech: "I am mad", icon: "😠", pos: "pos-adjective", pitch: 0.95 },
-          "3_2": { label: "Tired", speech: "I am tired", icon: "😴", pos: "pos-adjective", pitch: 0.9 },
-          "3_3": { label: "Dishes Hurt", speech: "The dishes clattering is hurting my ears! Please give me my headphones.", icon: "🍽️", pos: "pos-sensory", pitch: 1.25 },
-          "3_4": { label: "My Space", speech: "Please give me space", icon: "🛑", pos: "pos-social", pitch: 1.1 },
-          "3_5": { label: "Funny", speech: "That is hilarious!", icon: "🤣", pos: "pos-slang", pitch: 1.3 },
-          "3_6": { label: "Gross", speech: "Eww, that is so gross!", icon: "🤢", pos: "pos-slang", pitch: 1.25 },
-
-          "4_0": { label: "Tablet", speech: "Tablet", icon: "📱", pos: "pos-noun", pitch: 1.1 },
-          "4_1": { label: "Music", speech: "Music", icon: "🎵", pos: "pos-noun", pitch: 1.1 },
-          "4_2": { label: "Toy", speech: "Toy", icon: "🧸", pos: "pos-noun", pitch: 1.1 },
-          "4_3": { label: "Outside", speech: "Outside", icon: "🌳", pos: "pos-noun", pitch: 1.1 },
-          "4_4": { label: "Please", speech: "Please", icon: "🙏", pos: "pos-social", pitch: 1.1 },
-          "4_5": { label: "Thanks", speech: "Thank you", icon: "🤝", pos: "pos-social", pitch: 1.1 },
-          "4_6": { label: "Bathroom", speech: "I need to use the bathroom", icon: "🚻", pos: "pos-noun", pitch: 1.1 }
-        }
+      core: {
+        id: "core",
+        name: "🗣️ Core Words",
+        items: [
+          { id: "i", label: "I", speech: "I", photo: "assets/symbols/i.png", pos: "pos-pronoun" },
+          { id: "want", label: "Want", speech: "want", photo: "assets/symbols/want.png", pos: "pos-verb" },
+          { id: "you", label: "You", speech: "you", photo: "assets/symbols/you.png", pos: "pos-pronoun" },
+          { id: "please", label: "Please", speech: "please", photo: "assets/symbols/please.png", pos: "pos-social" },
+          { id: "help", label: "Help", speech: "Help me please", photo: "assets/symbols/help.png", pos: "pos-social" },
+          { id: "more", label: "More", speech: "more", photo: "assets/symbols/more.png", pos: "pos-adjective" },
+          { id: "eat", label: "Eat", speech: "eat", photo: "assets/symbols/eat.png", pos: "pos-verb" },
+          { id: "drink", label: "Drink", speech: "drink", photo: "assets/symbols/drink.png", pos: "pos-verb" },
+          { id: "go", label: "Go", speech: "go", photo: "assets/symbols/go.png", pos: "pos-verb" },
+          { id: "stop", label: "Stop", speech: "Stop please", photo: "assets/symbols/stop.png", pos: "pos-social" },
+          { id: "yes", label: "Yes", speech: "Yes", photo: "assets/symbols/yes.png", pos: "pos-social" },
+          { id: "no", label: "No", speech: "No", photo: "assets/symbols/no.png", pos: "pos-social" },
+          { id: "like", label: "Like", speech: "like", photo: "assets/symbols/like.png", pos: "pos-verb" },
+          { id: "see", label: "See", speech: "see", photo: "assets/symbols/see.png", pos: "pos-verb" },
+          { id: "play", label: "Play", speech: "play", photo: "assets/symbols/play.png", pos: "pos-verb" },
+          { id: "toilet", label: "Bathroom", speech: "I need the bathroom", photo: "assets/symbols/toilet.png", pos: "pos-noun" },
+          { id: "mom", label: "Mom", speech: "Mom", photo: "assets/symbols/mom.png", pos: "pos-pronoun" },
+          { id: "dad", label: "Dad", speech: "Dad", photo: "assets/symbols/dad.png", pos: "pos-pronoun" },
+          { id: "hug", label: "Hug", speech: "I want a hug", photo: "assets/symbols/hug.png", pos: "pos-social" },
+          { id: "thank_you", label: "Thank You", speech: "Thank you", photo: "assets/symbols/thank_you.png", pos: "pos-social" },
+          { id: "home", label: "Home", speech: "I want to go home", photo: "assets/symbols/home.png", pos: "pos-noun" },
+          { id: "car", label: "Car Ride", speech: "Go for a car ride", photo: "assets/symbols/car.png", pos: "pos-noun" },
+          { id: "tablet", label: "Tablet", speech: "My tablet please", photo: "assets/symbols/tablet.png", pos: "pos-noun" },
+          { id: "bed", label: "Sleep / Bed", speech: "I am ready for bed", photo: "assets/symbols/bed.png", pos: "pos-noun" }
+        ]
       },
 
-      // STRAWBERRY SHORTCAKE CARTOON BOARD
-      strawberry: {
-        id: "strawberry",
-        name: "🍓 Strawberry Cartoon",
-        tiles: {
-          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
-          "0_1": { label: "Strawberry", speech: "I love Strawberry Shortcake!", icon: "🍓", pos: "pos-strawberry", pitch: 1.3 },
-          "0_2": { label: "Custard Cat", speech: "Meow! Custard the pink kitty is so cute!", icon: "🐱", pos: "pos-strawberry", pitch: 1.35 },
-          "0_3": { label: "Pupcake Dog", speech: "Woof! Pupcake the puppy is my favorite!", icon: "🐶", pos: "pos-strawberry", pitch: 1.25 },
-          "0_4": { label: "Watch Cartoon", speech: "Can we please watch the Strawberry Shortcake cartoon show?", icon: "📺", pos: "pos-strawberry", pitch: 1.25 },
-          "0_5": { label: "Sing Theme", speech: "Let's sing the Strawberry Shortcake cartoon song!", icon: "🎶", pos: "pos-strawberry", pitch: 1.35 },
-          "0_6": { label: "Next Episode", speech: "Can you play the next cartoon episode please?", icon: "⏭️", pos: "pos-strawberry", pitch: 1.2 },
-
-          "1_0": { label: "Blueberry", speech: "Blueberry Muffin loves reading books!", icon: "🫐", pos: "pos-strawberry", pitch: 1.2 },
-          "1_1": { label: "Raspberry", speech: "Raspberry Torte is so fashionable and cool!", icon: "🧁", pos: "pos-strawberry", pitch: 1.25 },
-          "1_2": { label: "Lemon", speech: "Lemon Meringue loves doing hair!", icon: "🍋", pos: "pos-strawberry", pitch: 1.2 },
-          "1_3": { label: "Orange", speech: "Orange Blossom is so kind!", icon: "🍊", pos: "pos-strawberry", pitch: 1.2 },
-          "1_4": { label: "Plum", speech: "Plum Pudding loves dancing!", icon: "💃", pos: "pos-strawberry", pitch: 1.25 },
-          "1_5": { label: "Cherry Jam", speech: "Cherry Jam is a singing pop star!", icon: "🎤", pos: "pos-strawberry", pitch: 1.3 },
-          "1_6": { label: "Huckleberry", speech: "Huckleberry Pie and his puppy!", icon: "🥧", pos: "pos-strawberry", pitch: 1.15 },
-
-          "2_0": { label: "Berry Bitty", speech: "Berry Bitty City is so magical!", icon: "🏡", pos: "pos-strawberry", pitch: 1.25 },
-          "2_1": { label: "The Café", speech: "Let's go to the Strawberry Shortcake berry café!", icon: "☕", pos: "pos-strawberry", pitch: 1.2 },
-          "2_2": { label: "Bake Treats", speech: "Let's bake sweet berry treats together!", icon: "🎂", pos: "pos-verb", pitch: 1.25 },
-          "2_3": { label: "Cute Hat", speech: "I love her big strawberry hat!", icon: "👒", pos: "pos-noun", pitch: 1.2 },
-          "2_4": { label: "Purple Pieman", speech: "The Peculiar Purple Pieman is so silly!", icon: "🥸", pos: "pos-slang", pitch: 1.1 },
-          "2_5": { label: "Rewind Show", speech: "Please rewind the show, I want to watch that part again!", icon: "⏪", pos: "pos-verb", pitch: 1.2 },
-          "2_6": { label: "Berry Sweet", speech: "That is berry sweet and awesome!", icon: "💖", pos: "pos-strawberry", pitch: 1.35 }
-        }
-      },
-
-      // RESTAURANTS & FAST FOOD BOARD
       restaurants: {
         id: "restaurants",
         name: "🍔 Restaurants",
-        tiles: {
-          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
-          "0_1": { label: "McDonald's", speech: "I want McDonald's please", photo: "assets/symbols/mcdonalds.png", icon: "🍟", pos: "pos-strawberry", pitch: 1.2 },
-          "0_2": { label: "Happy Meal", speech: "I want a McDonald's Happy Meal", photo: "assets/symbols/happy_meal.png", icon: "🎁", pos: "pos-strawberry", pitch: 1.25 },
-          "0_3": { label: "Chick-fil-A", speech: "I want Chick-fil-A please", photo: "assets/symbols/chickfila.png", icon: "🐔", pos: "pos-strawberry", pitch: 1.2 },
-          "0_4": { label: "Wendy's", speech: "I want Wendy's please", photo: "assets/symbols/wendys.png", icon: "🍔", pos: "pos-strawberry", pitch: 1.2 },
-          "0_5": { label: "Burger King", speech: "I want Burger King please", photo: "assets/symbols/burgerking.png", icon: "👑", pos: "pos-strawberry", pitch: 1.15 },
-          "0_6": { label: "Taco Bell", speech: "I want Taco Bell please", photo: "assets/symbols/tacobell.png", icon: "🌮", pos: "pos-slang", pitch: 1.2 },
-
-          "1_0": { label: "Pizza Hut", speech: "I want Pizza Hut please", photo: "assets/symbols/pizzahut.png", icon: "🍕", pos: "pos-strawberry", pitch: 1.2 },
-          "1_1": { label: "Subway", speech: "I want Subway please", photo: "assets/symbols/subway.png", icon: "🥪", pos: "pos-verb", pitch: 1.15 },
-          "1_2": { label: "Starbucks", speech: "I want Starbucks please", photo: "assets/symbols/starbucks.png", icon: "☕", pos: "pos-verb", pitch: 1.2 },
-          "1_3": { label: "Dunkin'", speech: "I want Dunkin' Donuts please", photo: "assets/symbols/dunkin.png", icon: "🍩", pos: "pos-noun", pitch: 1.2 },
-          "1_4": { label: "Dairy Queen", speech: "I want Dairy Queen ice cream please", photo: "assets/symbols/dairyqueen.png", icon: "🍦", pos: "pos-adjective", pitch: 1.25 },
-          "1_5": { label: "IHOP", speech: "I want IHOP pancakes please", photo: "assets/symbols/ihop.png", icon: "🥞", pos: "pos-adjective", pitch: 1.2 },
-          "1_6": { label: "Panda Express", speech: "I want Panda Express please", photo: "assets/symbols/pandaexpress.png", icon: "🐼", pos: "pos-strawberry", pitch: 1.2 },
-
-          "2_0": { label: "Nuggets", speech: "Chicken nuggets please", photo: "assets/symbols/nuggets.png", icon: "🍗", pos: "pos-noun", pitch: 1.2 },
-          "2_1": { label: "French Fries", speech: "French fries please", photo: "assets/symbols/fries.png", icon: "🍟", pos: "pos-noun", pitch: 1.2 },
-          "2_2": { label: "Cheeseburger", speech: "Cheeseburger please", photo: "assets/symbols/burger.png", icon: "🍔", pos: "pos-noun", pitch: 1.15 },
-          "2_3": { label: "Pizza", speech: "Pizza slice please", photo: "assets/symbols/pizza.png", icon: "🍕", pos: "pos-noun", pitch: 1.2 },
-          "2_4": { label: "Taco", speech: "Taco please", photo: "assets/symbols/taco.png", icon: "🌮", pos: "pos-noun", pitch: 1.2 },
-          "2_5": { label: "Hot Dog", speech: "Hot dog please", photo: "assets/symbols/hotdog.png", icon: "🌭", pos: "pos-noun", pitch: 1.2 },
-          "2_6": { label: "Pancakes", speech: "Pancakes please", photo: "assets/symbols/pancakes.png", icon: "🥞", pos: "pos-noun", pitch: 1.2 },
-
-          "3_0": { label: "Mac & Cheese", speech: "Macaroni and cheese please", photo: "assets/symbols/pasta.png", icon: "🧀", pos: "pos-noun", pitch: 1.2 },
-          "3_1": { label: "Sandwich", speech: "Sandwich please", photo: "assets/symbols/sandwich.png", icon: "🥪", pos: "pos-noun", pitch: 1.15 },
-          "3_2": { label: "Ice Cream", speech: "Ice cream please", photo: "assets/symbols/ice_cream.png", icon: "🍦", pos: "pos-noun", pitch: 1.25 },
-          "3_3": { label: "Milkshake", speech: "Milkshake please", photo: "assets/symbols/milkshake.png", icon: "🥤", pos: "pos-noun", pitch: 1.2 },
-          "3_4": { label: "Donut", speech: "Donut please", photo: "assets/symbols/donut.png", icon: "🍩", pos: "pos-noun", pitch: 1.2 },
-          "3_5": { label: "Soda", speech: "Soda please", photo: "assets/symbols/soda.png", icon: "🥤", pos: "pos-noun", pitch: 1.15 },
-          "3_6": { label: "Ketchup", speech: "Ketchup for dipping please", photo: "assets/symbols/ketchup.png", icon: "🍅", pos: "pos-noun", pitch: 1.15 }
-        }
+        items: [
+          { id: "r_mcd", label: "McDonald's", speech: "I want McDonald's please", photo: "assets/symbols/mcdonalds.png", pos: "pos-strawberry" },
+          { id: "r_hm", label: "Happy Meal", speech: "I want a McDonald's Happy Meal", photo: "assets/symbols/happy_meal.png", pos: "pos-strawberry" },
+          { id: "r_cfa", label: "Chick-fil-A", speech: "I want Chick-fil-A please", photo: "assets/symbols/chickfila.png", pos: "pos-strawberry" },
+          { id: "r_wen", label: "Wendy's", speech: "I want Wendy's please", photo: "assets/symbols/wendys.png", pos: "pos-strawberry" },
+          { id: "r_bk", label: "Burger King", speech: "I want Burger King please", photo: "assets/symbols/burgerking.png", pos: "pos-strawberry" },
+          { id: "r_tb", label: "Taco Bell", speech: "I want Taco Bell please", photo: "assets/symbols/tacobell.png", pos: "pos-slang" },
+          { id: "r_ph", label: "Pizza Hut", speech: "I want Pizza Hut please", photo: "assets/symbols/pizzahut.png", pos: "pos-strawberry" },
+          { id: "r_sub", label: "Subway", speech: "I want Subway please", photo: "assets/symbols/subway.png", pos: "pos-verb" },
+          { id: "r_sbx", label: "Starbucks", speech: "I want Starbucks please", photo: "assets/symbols/starbucks.png", pos: "pos-verb" },
+          { id: "r_dnk", label: "Dunkin'", speech: "I want Dunkin' Donuts please", photo: "assets/symbols/dunkin.png", pos: "pos-noun" },
+          { id: "r_dq", label: "Dairy Queen", speech: "I want Dairy Queen ice cream please", photo: "assets/symbols/dairyqueen.png", pos: "pos-adjective" },
+          { id: "r_ihop", label: "IHOP", speech: "I want IHOP pancakes please", photo: "assets/symbols/ihop.png", pos: "pos-adjective" },
+          { id: "r_panda", label: "Panda Express", speech: "I want Panda Express please", photo: "assets/symbols/pandaexpress.png", pos: "pos-strawberry" },
+          { id: "o_nug", label: "Chicken Nuggets", speech: "Chicken nuggets please", photo: "assets/symbols/nuggets.png", pos: "pos-noun" },
+          { id: "o_fri", label: "French Fries", speech: "French fries please", photo: "assets/symbols/fries.png", pos: "pos-noun" },
+          { id: "o_brg", label: "Cheeseburger", speech: "Cheeseburger please", photo: "assets/symbols/burger.png", pos: "pos-noun" },
+          { id: "o_piz", label: "Pizza", speech: "Pizza slice please", photo: "assets/symbols/pizza.png", pos: "pos-noun" },
+          { id: "o_tac", label: "Taco", speech: "Taco please", photo: "assets/symbols/taco.png", pos: "pos-noun" },
+          { id: "o_hd", label: "Hot Dog", speech: "Hot dog please", photo: "assets/symbols/hotdog.png", pos: "pos-noun" },
+          { id: "o_pan", label: "Pancakes", speech: "Pancakes please", photo: "assets/symbols/pancakes.png", pos: "pos-noun" },
+          { id: "o_mac", label: "Mac & Cheese", speech: "Macaroni and cheese please", photo: "assets/symbols/pasta.png", pos: "pos-noun" },
+          { id: "o_snd", label: "Sandwich", speech: "Sandwich please", photo: "assets/symbols/sandwich.png", pos: "pos-noun" },
+          { id: "o_ice", label: "Ice Cream", speech: "Ice cream cone please", photo: "assets/symbols/ice_cream.png", pos: "pos-noun" },
+          { id: "o_shk", label: "Milkshake", speech: "Milkshake please", photo: "assets/symbols/milkshake.png", pos: "pos-noun" },
+          { id: "o_dnt", label: "Donut", speech: "Donut please", photo: "assets/symbols/donut.png", pos: "pos-noun" },
+          { id: "o_sod", label: "Soda / Drink", speech: "Soda please", photo: "assets/symbols/soda.png", pos: "pos-noun" },
+          { id: "o_ket", label: "Ketchup", speech: "Ketchup for dipping please", photo: "assets/symbols/ketchup.png", pos: "pos-noun" }
+        ]
       },
 
-      // ANIMALS & PETS BOARD (22 Animals!)
-      animals: {
-        id: "animals",
-        name: "🐾 Animals & Pets",
-        tiles: {
-          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
-          "0_1": { label: "Dog / Puppy", speech: "Woof woof! Dog!", photo: "assets/symbols/dog.png", icon: "🐶", pos: "pos-noun", pitch: 1.25 },
-          "0_2": { label: "Cat / Kitty", speech: "Meow! Cute kitty cat!", photo: "assets/symbols/cat.png", icon: "🐱", pos: "pos-noun", pitch: 1.3 },
-          "0_3": { label: "Bunny Rabbit", speech: "Hop hop! Fluffy bunny rabbit!", photo: "assets/symbols/rabbit.png", icon: "🐰", pos: "pos-noun", pitch: 1.3 },
-          "0_4": { label: "Horse", speech: "Neigh! Horse!", photo: "assets/symbols/horse.png", icon: "🐴", pos: "pos-noun", pitch: 1.1 },
-          "0_5": { label: "Dolphin", speech: "Look at the swimming dolphin!", photo: "assets/symbols/dolphin.png", icon: "🐬", pos: "pos-noun", pitch: 1.25 },
-          "0_6": { label: "Bird", speech: "Chirp chirp! Bird!", photo: "assets/symbols/bird.png", icon: "🐦", pos: "pos-noun", pitch: 1.3 },
-
-          "1_0": { label: "Fish", speech: "Swimming fish!", photo: "assets/symbols/fish.png", icon: "🐟", pos: "pos-noun", pitch: 1.2 },
-          "1_1": { label: "Duck", speech: "Quack quack! Duck!", photo: "assets/symbols/duck.png", icon: "🦆", pos: "pos-noun", pitch: 1.3 },
-          "1_2": { label: "Cow", speech: "Moo! Cow!", photo: "assets/symbols/cow.png", icon: "🐮", pos: "pos-noun", pitch: 1.05 },
-          "1_3": { label: "Pig", speech: "Oink oink! Pig!", photo: "assets/symbols/pig.png", icon: "🐷", pos: "pos-noun", pitch: 1.2 },
-          "1_4": { label: "Sheep", speech: "Baa! Sheep!", photo: "assets/symbols/sheep.png", icon: "🐑", pos: "pos-noun", pitch: 1.2 },
-          "1_5": { label: "Chicken", speech: "Cluck cluck! Chicken!", photo: "assets/symbols/chicken_animal.png", icon: "🐔", pos: "pos-noun", pitch: 1.25 },
-          "1_6": { label: "Frog", speech: "Ribbit! Frog!", photo: "assets/symbols/frog.png", icon: "🐸", pos: "pos-noun", pitch: 1.2 },
-
-          "2_0": { label: "Monkey", speech: "Ooh ooh aah aah! Monkey!", photo: "assets/symbols/monkey.png", icon: "🐵", pos: "pos-noun", pitch: 1.25 },
-          "2_1": { label: "Lion", speech: "Roar! Lion!", photo: "assets/symbols/lion.png", icon: "🦁", pos: "pos-noun", pitch: 1.05 },
-          "2_2": { label: "Tiger", speech: "Roar! Tiger!", photo: "assets/symbols/tiger.png", icon: "🐯", pos: "pos-noun", pitch: 1.1 },
-          "2_3": { label: "Elephant", speech: "Big elephant!", photo: "assets/symbols/elephant.png", icon: "🐘", pos: "pos-noun", pitch: 1.05 },
-          "2_4": { label: "Teddy Bear", speech: "Bear!", photo: "assets/symbols/bear.png", icon: "🧸", pos: "pos-noun", pitch: 1.15 },
-          "2_5": { label: "Giraffe", speech: "Tall giraffe!", photo: "assets/symbols/giraffe.png", icon: "🦒", pos: "pos-noun", pitch: 1.15 },
-          "2_6": { label: "Dinosaur", speech: "Dinosaur! Stomp and roar!", photo: "assets/symbols/dinosaur.png", icon: "🦖", pos: "pos-noun", pitch: 1.0 },
-
-          "3_0": { label: "Butterfly", speech: "Pretty butterfly!", photo: "assets/symbols/butterfly.png", icon: "🦋", pos: "pos-noun", pitch: 1.3 },
-          "3_1": { label: "Turtle", speech: "Turtle!", photo: "assets/symbols/turtle.png", icon: "🐢", pos: "pos-noun", pitch: 1.1 },
-          "3_2": { label: "Pet Animal", speech: "I want to pet the animal gently.", icon: "🤲", pos: "pos-verb", pitch: 1.15 }
-        }
-      },
-
-      // SENSORY & BODY REGULATION (INTEROCEPTION)
-      sensory: {
-        id: "sensory",
-        name: "🧠 Sensory & Body",
-        tiles: {
-          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
-          "0_1": { label: "Dishes Hurt", speech: "The dishes clattering is hurting my ears! Please give me headphones.", photo: "assets/symbols/dishes.png", icon: "🍽️", pos: "pos-sensory", pitch: 1.25 },
-          "0_2": { label: "Too Loud", speech: "It is way too loud in here!", photo: "assets/symbols/loud.png", icon: "🔇", pos: "pos-sensory", pitch: 1.2 },
-          "0_3": { label: "Too Bright", speech: "The lights are way too bright for my eyes.", photo: "assets/symbols/bright.png", icon: "💡", pos: "pos-sensory", pitch: 1.1 },
-          "0_4": { label: "Headphones", speech: "Please give me my headphones right now.", photo: "assets/symbols/headphones.png", icon: "🎧", pos: "pos-sensory", pitch: 1.2 },
-          "0_5": { label: "Tummy Hurts", speech: "My tummy hurts.", photo: "assets/symbols/sick.png", icon: "🤢", pos: "pos-sensory", pitch: 1.0 },
-          "0_6": { label: "Need Hug", speech: "I need deep pressure or a tight hug please.", photo: "assets/symbols/hug.png", icon: "🫂", pos: "pos-sensory", pitch: 1.1 },
-
-          "1_1": { label: "Quiet Room", speech: "I need to go to a quiet room.", photo: "assets/symbols/quiet.png", icon: "🤫", pos: "pos-sensory", pitch: 1.0 },
-          "1_2": { label: "Swing / Rock", speech: "Rocking my body helps me calm down.", photo: "assets/symbols/swing.png", icon: "🪑", pos: "pos-sensory", pitch: 1.1 },
-          "1_3": { label: "Cozy Blanket", speech: "I want my cozy blanket please.", photo: "assets/symbols/blanket.png", icon: "🛌", pos: "pos-sensory", pitch: 1.1 },
-          "1_4": { label: "Kitchen Noise", speech: "The kitchen sounds are way too loud for me right now.", icon: "🥄", pos: "pos-sensory", pitch: 1.2 },
-          "1_5": { label: "Take Break", speech: "I really need a break right now.", icon: "⏸️", pos: "pos-sensory", pitch: 1.1 },
-          "1_6": { label: "Itchy Clothes", speech: "My clothes feel too itchy on my skin.", icon: "👕", pos: "pos-sensory", pitch: 1.15 },
-
-          "2_1": { label: "Sharp Sound", speech: "That sharp clinking sound physically hurts my ears!", icon: "👂", pos: "pos-sensory", pitch: 1.25 },
-          "2_2": { label: "Sink Water", speech: "The running sink water and clattering is too loud.", icon: "🚰", pos: "pos-sensory", pitch: 1.15 },
-          "2_3": { label: "Too Hot", speech: "I am feeling too hot.", icon: "🥵", pos: "pos-sensory", pitch: 1.1 },
-          "2_4": { label: "Too Cold", speech: "I am feeling too cold.", icon: "🥶", pos: "pos-sensory", pitch: 1.1 },
-          "2_5": { label: "Chew Toy", speech: "I need my chew toy please.", icon: "🦷", pos: "pos-sensory", pitch: 1.15 }
-        }
-      },
-
-      // SLANG & VIBES BOARD
-      slang: {
-        id: "slang",
-        name: "⚡ Vibes & Slang",
-        tiles: {
-          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
-          "0_1": { label: "Let's Go!", speech: "Let's gooo!", icon: "🚀", pos: "pos-slang", pitch: 1.35 },
-          "0_2": { label: "Bruh", speech: "Bruh...", icon: "😐", pos: "pos-slang", pitch: 0.85 },
-          "0_3": { label: "For Real?", speech: "Are you for real?", icon: "❓", pos: "pos-slang", pitch: 1.2 },
-          "0_4": { label: "No Way!", speech: "No way! You are kidding!", icon: "🤯", pos: "pos-slang", pitch: 1.3 },
-          "0_5": { label: "My Bad", speech: "My bad, sorry about that.", icon: "😅", pos: "pos-slang", pitch: 1.1 },
-          "0_6": { label: "Whatever", speech: "Whatever...", icon: "🙄", pos: "pos-slang", pitch: 0.9 },
-
-          "1_1": { label: "Lit / Fire", speech: "That is fire!", icon: "🔥", pos: "pos-slang", pitch: 1.3 },
-          "1_2": { label: "Cap", speech: "That's cap, you are lying!", icon: "🧢", pos: "pos-slang", pitch: 1.1 },
-          "1_3": { label: "Sus", speech: "That is so sus.", icon: "👀", pos: "pos-slang", pitch: 1.1 },
-          "1_4": { label: "Nailed It", speech: "You totally nailed it!", icon: "✨", pos: "pos-slang", pitch: 1.3 },
-          "1_5": { label: "Chill Out", speech: "Bro, chill out.", icon: "🧊", pos: "pos-slang", pitch: 1.0 },
-
-          "2_1": { label: "Leave Me", speech: "Leave me alone please.", icon: "🚫", pos: "pos-social", pitch: 1.1 },
-          "2_2": { label: "Too Much", speech: "This is too much for me.", icon: "🧠", pos: "pos-social", pitch: 1.0 },
-          "2_3": { label: "I'm Done", speech: "I am completely done with this.", icon: "🛑", pos: "pos-social", pitch: 1.0 },
-          "2_4": { label: "You Rock", speech: "You rock!", icon: "🎸", pos: "pos-slang", pitch: 1.3 }
-        }
-      },
-
-      // FOOD BOARD
       food: {
         id: "food",
         name: "🍎 Food & Drinks",
-        tiles: {
-          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
-          "0_1": { label: "Apple", speech: "Apple", photo: "assets/symbols/apple.png", icon: "🍎", pos: "pos-noun", pitch: 1.1 },
-          "0_2": { label: "Banana", speech: "Banana", photo: "assets/symbols/banana.png", icon: "🍌", pos: "pos-noun", pitch: 1.1 },
-          "0_3": { label: "Strawberries", speech: "Strawberries", photo: "assets/symbols/strawberry.png", icon: "🍓", pos: "pos-noun", pitch: 1.15 },
-          "0_4": { label: "Pizza", speech: "Pizza", photo: "assets/symbols/pizza.png", icon: "🍕", pos: "pos-noun", pitch: 1.1 },
-          "0_5": { label: "Nuggets", speech: "Chicken nuggets", photo: "assets/symbols/nuggets.png", icon: "🍗", pos: "pos-noun", pitch: 1.15 },
-          "0_6": { label: "Fries", speech: "French fries", photo: "assets/symbols/fries.png", icon: "🍟", pos: "pos-noun", pitch: 1.15 },
-          "1_0": { label: "Water", speech: "Water please", photo: "assets/symbols/water.png", icon: "💧", pos: "pos-noun", pitch: 1.1 },
-          "1_1": { label: "Juice", speech: "Juice please", photo: "assets/symbols/juice.png", icon: "🧃", pos: "pos-noun", pitch: 1.1 },
-          "1_2": { label: "Milk", speech: "Milk please", photo: "assets/symbols/milk.png", icon: "🥛", pos: "pos-noun", pitch: 1.1 },
-          "1_3": { label: "Cookie", speech: "Cookie please", photo: "assets/symbols/cookie.png", icon: "🍪", pos: "pos-noun", pitch: 1.15 },
-          "1_4": { label: "Crackers", speech: "Crackers please", photo: "assets/symbols/cracker.png", icon: "🍘", pos: "pos-noun", pitch: 1.15 },
-          "1_5": { label: "Ice Cream", speech: "Ice cream please", photo: "assets/symbols/ice_cream.png", icon: "🍦", pos: "pos-noun", pitch: 1.2 },
-          "1_6": { label: "Pancakes", speech: "Pancakes please", photo: "assets/symbols/pancakes.png", icon: "🥞", pos: "pos-noun", pitch: 1.15 }
-        }
+        items: [
+          { id: "f_app", label: "Apple", speech: "Apple", photo: "assets/symbols/apple.png", pos: "pos-noun" },
+          { id: "f_ban", label: "Banana", speech: "Banana", photo: "assets/symbols/banana.png", pos: "pos-noun" },
+          { id: "f_str", label: "Strawberries", speech: "Strawberries", photo: "assets/symbols/strawberry.png", pos: "pos-noun" },
+          { id: "f_blu", label: "Blueberries", speech: "Blueberries", photo: "assets/symbols/blueberry.png", pos: "pos-noun" },
+          { id: "f_org", label: "Orange", speech: "Orange", photo: "assets/symbols/orange_fruit.png", pos: "pos-noun" },
+          { id: "f_piz", label: "Pizza", speech: "Pizza", photo: "assets/symbols/pizza.png", pos: "pos-noun" },
+          { id: "f_nug", label: "Nuggets", speech: "Chicken nuggets", photo: "assets/symbols/nuggets.png", pos: "pos-noun" },
+          { id: "f_fri", label: "Fries", speech: "French fries", photo: "assets/symbols/fries.png", pos: "pos-noun" },
+          { id: "f_pas", label: "Pasta / Noodles", speech: "Pasta noodles", photo: "assets/symbols/pasta.png", pos: "pos-noun" },
+          { id: "f_pan", label: "Pancakes", speech: "Pancakes", photo: "assets/symbols/pancakes.png", pos: "pos-noun" },
+          { id: "f_snd", label: "Sandwich", speech: "Sandwich", photo: "assets/symbols/sandwich.png", pos: "pos-noun" },
+          { id: "f_chs", label: "Cheese", speech: "Cheese", photo: "assets/symbols/cheese.png", pos: "pos-noun" },
+          { id: "f_crk", label: "Crackers", speech: "Crackers", photo: "assets/symbols/cracker.png", pos: "pos-noun" },
+          { id: "f_snk", label: "Snack", speech: "I want a snack", photo: "assets/symbols/snack.png", pos: "pos-noun" },
+          { id: "f_cok", label: "Cookie", speech: "Cookie", photo: "assets/symbols/cookie.png", pos: "pos-noun" },
+          { id: "f_cup", label: "Cupcake", speech: "Cupcake", photo: "assets/symbols/cupcake.png", pos: "pos-noun" },
+          { id: "f_ice", label: "Ice Cream", speech: "Ice cream", photo: "assets/symbols/ice_cream.png", pos: "pos-noun" },
+          { id: "f_wat", label: "Water", speech: "Water please", photo: "assets/symbols/water.png", pos: "pos-noun" },
+          { id: "f_jui", label: "Juice", speech: "Juice please", photo: "assets/symbols/juice.png", pos: "pos-noun" },
+          { id: "f_mlk", label: "Milk", speech: "Milk please", photo: "assets/symbols/milk.png", pos: "pos-noun" }
+        ]
+      },
+
+      animals: {
+        id: "animals",
+        name: "🐾 Animals",
+        items: [
+          { id: "a_dog", label: "Dog / Puppy", speech: "Dog", photo: "assets/symbols/dog.png", pos: "pos-noun" },
+          { id: "a_cat", label: "Cat / Kitty", speech: "Cat", photo: "assets/symbols/cat.png", pos: "pos-noun" },
+          { id: "a_rab", label: "Bunny Rabbit", speech: "Bunny rabbit", photo: "assets/symbols/rabbit.png", pos: "pos-noun" },
+          { id: "a_hrs", label: "Horse / Pony", speech: "Horse", photo: "assets/symbols/horse.png", pos: "pos-noun" },
+          { id: "a_dol", label: "Dolphin", speech: "Dolphin", photo: "assets/symbols/dolphin.png", pos: "pos-noun" },
+          { id: "a_brd", label: "Bird", speech: "Bird", photo: "assets/symbols/bird.png", pos: "pos-noun" },
+          { id: "a_fsh", label: "Fish", speech: "Fish", photo: "assets/symbols/fish.png", pos: "pos-noun" },
+          { id: "a_dck", label: "Duck", speech: "Duck, quack quack", photo: "assets/symbols/duck.png", pos: "pos-noun" },
+          { id: "a_cow", label: "Cow", speech: "Cow, moo", photo: "assets/symbols/cow.png", pos: "pos-noun" },
+          { id: "a_pig", label: "Pig", speech: "Pig, oink oink", photo: "assets/symbols/pig.png", pos: "pos-noun" },
+          { id: "a_shp", label: "Sheep", speech: "Sheep, baa", photo: "assets/symbols/sheep.png", pos: "pos-noun" },
+          { id: "a_chk", label: "Chicken", speech: "Chicken", photo: "assets/symbols/chicken_animal.png", pos: "pos-noun" },
+          { id: "a_frg", label: "Frog", speech: "Frog, ribbit", photo: "assets/symbols/frog.png", pos: "pos-noun" },
+          { id: "a_mnk", label: "Monkey", speech: "Monkey", photo: "assets/symbols/monkey.png", pos: "pos-noun" },
+          { id: "a_lio", label: "Lion", speech: "Lion, roar!", photo: "assets/symbols/lion.png", pos: "pos-noun" },
+          { id: "a_tig", label: "Tiger", speech: "Tiger", photo: "assets/symbols/tiger.png", pos: "pos-noun" },
+          { id: "a_ele", label: "Elephant", speech: "Elephant", photo: "assets/symbols/elephant.png", pos: "pos-noun" },
+          { id: "a_ber", label: "Teddy Bear", speech: "Bear", photo: "assets/symbols/bear.png", pos: "pos-noun" },
+          { id: "a_gir", label: "Giraffe", speech: "Giraffe", photo: "assets/symbols/giraffe.png", pos: "pos-noun" },
+          { id: "a_din", label: "Dinosaur", speech: "Dinosaur, stomp and roar!", photo: "assets/symbols/dinosaur.png", pos: "pos-noun" },
+          { id: "a_but", label: "Butterfly", speech: "Pretty butterfly", photo: "assets/symbols/butterfly.png", pos: "pos-noun" },
+          { id: "a_trt", label: "Turtle", speech: "Turtle", photo: "assets/symbols/turtle.png", pos: "pos-noun" }
+        ]
+      },
+
+      strawberry: {
+        id: "strawberry",
+        name: "🍓 Cartoons",
+        items: [
+          { id: "s_main", label: "Strawberry Shortcake", speech: "I want Strawberry Shortcake cartoon!", photo: "assets/symbols/strawberry.png", pos: "pos-strawberry" },
+          { id: "s_tv", label: "Watch Cartoon", speech: "Put on Strawberry Shortcake show please", photo: "assets/symbols/tv.png", pos: "pos-verb" },
+          { id: "s_cat", label: "Custard Kitty", speech: "Custard the pink cat", photo: "assets/symbols/cat.png", pos: "pos-strawberry" },
+          { id: "s_dog", label: "Pupcake Dog", speech: "Pupcake the puppy dog", photo: "assets/symbols/dog.png", pos: "pos-strawberry" },
+          { id: "s_blu", label: "Blueberry Muffin", speech: "Blueberry Muffin", photo: "assets/symbols/blueberry.png", pos: "pos-adjective" },
+          { id: "s_lem", label: "Lemon Meringue", speech: "Lemon Meringue", photo: "assets/symbols/lemon.png", pos: "pos-pronoun" },
+          { id: "s_org", label: "Orange Blossom", speech: "Orange Blossom", photo: "assets/symbols/orange_fruit.png", pos: "pos-noun" },
+          { id: "s_rsp", label: "Raspberry Torte", speech: "Raspberry Torte", photo: "assets/symbols/cupcake.png", pos: "pos-social" },
+          { id: "s_sng", label: "Berry Song", speech: "Play the Strawberry Shortcake song please", photo: "assets/symbols/music.png", pos: "pos-verb" },
+          { id: "s_cak", label: "Berry Cake", speech: "Strawberry Shortcake berry cake", photo: "assets/symbols/cake.png", pos: "pos-noun" },
+          { id: "s_nxt", label: "Next Episode", speech: "Next episode please", photo: "assets/symbols/go.png", pos: "pos-verb" },
+          { id: "s_rew", label: "Rewind / Again", speech: "Rewind that part please", photo: "assets/symbols/more.png", pos: "pos-verb" }
+        ]
+      },
+
+      sensory: {
+        id: "sensory",
+        name: "🧠 Sensory & Feelings",
+        items: [
+          { id: "sn_dsh", label: "Dishes Hurt Ears", speech: "The dishes clanging hurt my ears! Please stop.", photo: "assets/symbols/dishes.png", pos: "pos-sensory" },
+          { id: "sn_ld", label: "Too Loud!", speech: "It is too loud in here, my ears hurt", photo: "assets/symbols/loud.png", pos: "pos-sensory" },
+          { id: "sn_qr", label: "Quiet Bedroom", speech: "I need to go to my quiet room right now", photo: "assets/symbols/quiet.png", pos: "pos-sensory" },
+          { id: "sn_hp", label: "Headphones", speech: "I need my noise cancelling headphones please", photo: "assets/symbols/headphones.png", pos: "pos-sensory" },
+          { id: "sn_br", label: "Too Bright", speech: "The lights are too bright, please turn them down", photo: "assets/symbols/bright.png", pos: "pos-sensory" },
+          { id: "sn_hg", label: "Squeeze / Hug", speech: "I need a tight hug and deep pressure please", photo: "assets/symbols/hug.png", pos: "pos-social" },
+          { id: "sn_bl", label: "Cozy Blanket", speech: "I want my cozy blanket please", photo: "assets/symbols/blanket.png", pos: "pos-sensory" },
+          { id: "sn_sw", label: "Swing / Rock", speech: "I want to swing or rock to feel calm", photo: "assets/symbols/swing.png", pos: "pos-sensory" },
+          { id: "sn_hp2", label: "Happy", speech: "I am happy", photo: "assets/symbols/happy.png", pos: "pos-adjective" },
+          { id: "sn_sd", label: "Sad", speech: "I am sad", photo: "assets/symbols/sad.png", pos: "pos-adjective" },
+          { id: "sn_an", label: "Angry / Mad", speech: "I feel frustrated and mad", photo: "assets/symbols/angry.png", pos: "pos-adjective" },
+          { id: "sn_sc", label: "Scared", speech: "I am scared, please comfort me", photo: "assets/symbols/scared.png", pos: "pos-adjective" },
+          { id: "sn_tr", label: "Tired", speech: "I am tired and need rest", photo: "assets/symbols/tired.png", pos: "pos-adjective" },
+          { id: "sn_sk", label: "Tummy Sick", speech: "My tummy feels sick", photo: "assets/symbols/sick.png", pos: "pos-social" },
+          { id: "sn_ht", label: "Something Hurts", speech: "Ouch, something hurts me", photo: "assets/symbols/hurt.png", pos: "pos-social" }
+        ]
       }
     };
 
-    // Profile Management (Genesis vs Sibling)
     let currentProfile = localStorage.getItem('open_aac_active_profile') || 'Genesis';
-    let storageKey = `open_aac_boards_${currentProfile}`;
+    let storageKey = `open_aac_v3_boards_${currentProfile}`;
     let stored = JSON.parse(localStorage.getItem(storageKey) || 'null');
-    
-    // Merge DEFAULT_BOARDS with stored user boards so new updates always appear!
-    let boards = stored ? JSON.parse(JSON.stringify(DEFAULT_BOARDS)) : DEFAULT_BOARDS;
-    if (stored) {
-      for (const [bId, bData] of Object.entries(stored)) {
-        if (!boards[bId]) {
-          boards[bId] = bData;
-        } else {
-          boards[bId].name = bData.name || boards[bId].name;
-          boards[bId].tiles = Object.assign({}, boards[bId].tiles, bData.tiles || {});
-        }
-      }
-    }
+    let boards = stored || JSON.parse(JSON.stringify(DEFAULT_BOARDS));
 
-    let currentBoardId = 'home';
+    let currentBoardId = 'core';
     let isEditMode = false;
     let sentence = [];
 
-    // ==========================================
-    // AUDIO ENGINE & GOOGLE NATURAL VOICES
-    // ==========================================
-    const audioCtx = window.AudioContext || window.webkitAudioContext ? new (window.AudioContext || window.webkitAudioContext)() : null;
-
-    // GOOGLE NATURAL VOICE PROFILES & MULTI-LANGUAGE
+    // Voice & Speech
     const GOOGLE_VOICE_PROFILES = {
-      'en_female': { name: '🇺🇸 Google US (Female)', tl: 'en' },
-      'en_male': { name: '🇬🇧 Google UK (Male)', tl: 'en-gb' },
-      'en_au': { name: '🇦🇺 Google Australia (Female)', tl: 'en-au' },
-      'es': { name: '🇪🇸 Spanish / Español', tl: 'es' },
-      'es_mx': { name: '🇲🇽 Spanish (México)', tl: 'es-es' },
-      'fr': { name: '🇫🇷 French / Français', tl: 'fr' },
-      'de': { name: '🇩🇪 German / Deutsch', tl: 'de' },
-      'it': { name: '🇮🇹 Italian / Italiano', tl: 'it' },
-      'pt': { name: '🇵🇹 Portuguese / Português', tl: 'pt' },
-      'ja': { name: '🇯🇵 Japanese / 日本語', tl: 'ja' },
-      'ko': { name: '🇰🇷 Korean / 한국어', tl: 'ko' }
+      'en_female': { name: '🇺🇸 Natural US (Female)', tl: 'en' },
+      'en_male': { name: '🇬🇧 Natural UK (Male)', tl: 'en-gb' },
+      'es': { name: '🇲🇽 Español (Latinoamérica)', tl: 'es' },
+      'fr': { name: '🇫🇷 Français', tl: 'fr' },
+      'de': { name: '🇩🇪 Deutsch', tl: 'de' },
+      'pt': { name: '🇧🇷 Português', tl: 'pt' }
     };
-
     let currentVoiceKey = localStorage.getItem('open_aac_voice_profile') || 'en_female';
     let currentAudio = null;
 
     function renderVoiceDropdown() {
       const select = document.getElementById('voiceSelect');
-      if (!select) return;
       select.innerHTML = '';
       for (const [key, prof] of Object.entries(GOOGLE_VOICE_PROFILES)) {
         const opt = document.createElement('option');
@@ -1061,229 +936,142 @@
       if (GOOGLE_VOICE_PROFILES[key]) {
         currentVoiceKey = key;
         localStorage.setItem('open_aac_voice_profile', key);
-        speakText("Voice selected: " + GOOGLE_VOICE_PROFILES[key].name);
+        speakText("Voice ready");
       }
     }
 
-    function playBeep() {
-      if (!audioCtx) return;
-      try {
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.08);
-        gain.gain.setValueAtTime(0.18, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
-        osc.start();
-        osc.stop(audioCtx.currentTime + 0.13);
-      } catch (e) {}
-    }
-
-    // Global reference prevents Chrome from garbage-collecting speech mid-sentence
-    window._activeUtterance = null;
-
-    function speakText(text, pitch = 1.15, rate = 0.95) {
+    function speakText(text) {
       if (!text || !text.toString().trim()) return;
-      playBeep();
-
       const cleanText = text.toString().trim();
       const profile = GOOGLE_VOICE_PROFILES[currentVoiceKey] || GOOGLE_VOICE_PROFILES['en_female'];
-      const langCode = profile.tl;
 
-      // 1. PRIMARY: High-Definition Google Natural Audio (Plays real MP3, works on all systems including Linux!)
       try {
         if (currentAudio) {
           currentAudio.pause();
           currentAudio = null;
         }
-
         const ttsUrl = window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
-          ? `/tts?q=${encodeURIComponent(cleanText)}&tl=${encodeURIComponent(langCode)}`
-          : `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanText)}&tl=${encodeURIComponent(langCode)}&client=tw-ob`;
-
+          ? `/tts?q=${encodeURIComponent(cleanText)}&tl=${encodeURIComponent(profile.tl)}`
+          : `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(cleanText)}&tl=${encodeURIComponent(profile.tl)}&client=tw-ob`;
         const audio = new Audio(ttsUrl);
         currentAudio = audio;
-
-        const playPromise = audio.play();
-        if (playPromise !== undefined) {
-          playPromise.then(() => {
-            console.log("Speaking with Google Voice:", cleanText);
-          }).catch(err => {
-            console.warn("Direct audio play error, falling back to local speech engine:", err);
-            speakViaLocalEngine(cleanText, pitch, rate);
-          });
+        const p = audio.play();
+        if (p !== undefined) {
+          p.catch(() => speakFallback(cleanText));
           return;
         }
-      } catch (e) {
-        console.warn("Google TTS audio error:", e);
-      }
-
-      // 2. SECONDARY / OFFLINE FALLBACK: Browser local speech synthesis
-      speakViaLocalEngine(cleanText, pitch, rate);
+      } catch (e) {}
+      speakFallback(cleanText);
     }
 
-    function speakViaLocalEngine(cleanText, pitch, rate) {
+    function speakFallback(cleanText) {
       if (!('speechSynthesis' in window)) return;
       try {
         window.speechSynthesis.cancel();
-        window.speechSynthesis.resume();
-        const utterance = new SpeechSynthesisUtterance(cleanText);
-        window._activeUtterance = utterance;
-        utterance.pitch = pitch;
-        utterance.rate = rate;
-        utterance.onend = () => { window._activeUtterance = null; };
-        utterance.onerror = () => { window._activeUtterance = null; };
-        window.speechSynthesis.speak(utterance);
+        const u = new SpeechSynthesisUtterance(cleanText);
+        u.pitch = 1.15;
+        u.rate = 0.95;
+        window.speechSynthesis.speak(u);
       } catch (e) {}
     }
 
-    function testSound() {
-      playBeep();
-      speakText("Hello Genesis! Your speech tablet sound is working perfectly.");
-    }
-
-    function saveBoardsToStorage() {
+    function saveBoards() {
       localStorage.setItem(storageKey, JSON.stringify(boards));
     }
 
-    // ==========================================
-    // RENDER FUNCTIONS
-    // ==========================================
     function renderTabs() {
-      const container = document.getElementById('tabsBar');
-      container.innerHTML = '';
-
-      for (const [id, board] of Object.entries(boards)) {
+      const bar = document.getElementById('tabsBar');
+      bar.innerHTML = '';
+      for (const [id, b] of Object.entries(boards)) {
         const chip = document.createElement('div');
         chip.className = `tab-chip ${id === currentBoardId ? 'active' : ''}`;
-        chip.textContent = board.name;
-        chip.onclick = () => switchTab(id);
-        container.appendChild(chip);
+        chip.textContent = b.name;
+        chip.onclick = () => {
+          currentBoardId = id;
+          renderTabs();
+          renderGrid();
+        };
+        bar.appendChild(chip);
       }
-
-      // Add New Tab Chip
       const addChip = document.createElement('div');
       addChip.className = 'tab-chip tab-chip-add';
       addChip.innerHTML = '➕ New Tab';
-      addChip.onclick = openNewTabModal;
-      container.appendChild(addChip);
+      addChip.onclick = () => {
+        document.getElementById('newTabName').value = '';
+        document.getElementById('tabModal').classList.add('open');
+      };
+      bar.appendChild(addChip);
     }
 
     function renderGrid() {
       const container = document.getElementById('gridContainer');
       container.innerHTML = '';
-      const currentBoard = boards[currentBoardId] || boards['home'];
-      const tiles = currentBoard.tiles || {};
+      const board = boards[currentBoardId] || boards['core'];
+      const items = board.items || [];
 
-      for (let r = 0; r < 5; r++) {
-        for (let c = 0; c < 7; c++) {
-          const key = `${r}_${c}`;
-          const tile = tiles[key];
-
-          if (tile) {
-            const el = document.createElement('div');
-            el.className = `aac-tile ${tile.pos || 'pos-noun'}`;
-            
-            // Check if tile has a custom photo uploaded!
-            const visualContent = tile.photo 
-              ? `<img src="${tile.photo}" class="custom-photo" alt="${tile.label}">`
-              : `<div class="tile-icon">${tile.icon || '⭐'}</div>`;
-
-            el.innerHTML = `
-              ${visualContent}
-              <div class="tile-label">${tile.label}</div>
-              ${tile.targetBoard ? '<span class="nav-indicator">▶</span>' : ''}
-            `;
-            el.onclick = () => onTileClick(tile, r, c);
-            container.appendChild(el);
+      items.forEach((item, index) => {
+        const el = document.createElement('div');
+        el.className = `aac-tile ${item.pos || 'pos-noun'}`;
+        const visual = item.photo
+          ? `<img src="${item.photo}" alt="${item.label}">`
+          : `<div class="tile-icon">${item.icon || '⭐'}</div>`;
+        el.innerHTML = `
+          <div class="tile-well">${visual}</div>
+          <div class="tile-label">${item.label}</div>
+        `;
+        el.onclick = () => {
+          if (isEditMode) {
+            openEditWordModal(index);
           } else {
-            const emptyEl = document.createElement('div');
-            emptyEl.className = 'empty-slot';
-            if (isEditMode) {
-              emptyEl.innerHTML = '➕';
-              emptyEl.onclick = () => openAddTileModal(r, c);
-            }
-            container.appendChild(emptyEl);
+            speakText(item.speech || item.label);
+            sentence.push(item);
+            renderSentenceStrip();
           }
-        }
-      }
+        };
+        container.appendChild(el);
+      });
+
+      // Always show + Add Word or Photo card at the end of every grid
+      const addCard = document.createElement('div');
+      addCard.className = 'add-word-card';
+      addCard.innerHTML = `<div style="font-size:2rem;">📸➕</div><div>ADD WORD<br>OR PHOTO</div>`;
+      addCard.onclick = () => openAddWordModal();
+      container.appendChild(addCard);
     }
 
     function renderSentenceStrip() {
       const strip = document.getElementById('sentenceStrip');
       strip.innerHTML = '';
-
       if (sentence.length === 0) {
-        strip.innerHTML = `<span class="strip-placeholder">${isEditMode ? '🔧 Edit Mode is ON: Tap any empty tile to ADD words, or tap buttons to EDIT.' : 'Tap buttons below to formulate speech...'}</span>`;
+        strip.innerHTML = `<span class="strip-placeholder">${
+          isEditMode
+            ? '🔧 Customize Mode ON: Tap any button below to change its picture, photo, or voice!'
+            : '👆 Tap any symbol card below to speak & build a sentence...'
+        }</span>`;
         return;
       }
-
-      sentence.forEach((item, idx) => {
-        const itemEl = document.createElement('div');
-        itemEl.className = `strip-item ${item.pos}`;
-        const visual = item.photo ? `<img src="${item.photo}">` : `<span class="emoji">${item.icon || '⭐'}</span>`;
-        itemEl.innerHTML = `
-          ${visual}
-          <span>${item.label}</span>
+      sentence.forEach(item => {
+        const el = document.createElement('div');
+        el.className = `strip-item ${item.pos || 'pos-noun'}`;
+        const visual = item.photo
+          ? `<img src="${item.photo}">`
+          : `<span class="emoji">${item.icon || '⭐'}</span>`;
+        el.innerHTML = `
+          <div class="strip-item-well">${visual}</div>
+          <span style="overflow:hidden;text-overflow:ellipsis;max-width:62px;">${item.label}</span>
         `;
-        // Tapping an individual word in the sentence bar speaks it aloud again!
-        itemEl.onclick = (e) => {
+        el.onclick = (e) => {
           e.stopPropagation();
-          const wordToSay = item.speech || item.label;
-          if (wordToSay) speakText(wordToSay, item.pitch || 1.15);
+          speakText(item.speech || item.label);
         };
-        strip.appendChild(itemEl);
+        strip.appendChild(el);
       });
       strip.scrollLeft = strip.scrollWidth;
     }
 
-    // ==========================================
-    // INTERACTIONS
-    // ==========================================
-    function onTileClick(tile, r, c) {
-      if (isEditMode) {
-        openEditTileModal(tile, r, c);
-        return;
-      }
-
-      // 1. ALWAYS speak immediately on hitting the button!
-      const textToSay = (tile.speech && tile.speech.toString().trim())
-                     ? tile.speech.toString().trim()
-                     : (tile.spokenText && tile.spokenText.toString().trim() ? tile.spokenText.toString().trim() : tile.label);
-
-      if (textToSay) {
-        speakText(textToSay, tile.pitch || 1.15);
-      }
-
-      // 2. Add word to the top bar so child can build longer sentences
-      if (tile.label && !tile.label.includes('← Home')) {
-        sentence.push(tile);
-        renderSentenceStrip();
-      }
-
-      // 3. Navigate if this is a folder/category button
-      if (tile.targetBoard) {
-        switchTab(tile.targetBoard);
-      }
-    }
-
-    function switchTab(boardId) {
-      if (boards[boardId]) {
-        currentBoardId = boardId;
-        renderTabs();
-        renderGrid();
-      }
-    }
-
     function speakFullSentence() {
       if (sentence.length === 0) return;
-      // Speaks all words in the sentence bar together as one fluent thought!
-      const fullText = sentence.map(s => s.speech || s.label).join(' ');
-      speakText(fullText, 1.15, 0.95);
+      speakText(sentence.map(s => s.speech || s.label).join(' '));
     }
 
     function deleteLastWord() {
@@ -1296,99 +1084,75 @@
       renderSentenceStrip();
     }
 
+    function openShowOrderModal() {
+      if (sentence.length === 0) return;
+      speakFullSentence();
+      const cardsBox = document.getElementById('showOrderCards');
+      cardsBox.innerHTML = '';
+      sentence.forEach(item => {
+        const c = document.createElement('div');
+        c.className = `aac-tile ${item.pos || 'pos-noun'}`;
+        c.style.cssText = 'width:150px;height:160px;cursor:default;';
+        c.innerHTML = `
+          <div class="tile-well"><img src="${item.photo || 'assets/symbols/happy.png'}" style="max-height:90px;"></div>
+          <div class="tile-label" style="font-size:1.05rem;">${item.label}</div>
+        `;
+        cardsBox.appendChild(c);
+      });
+      document.getElementById('showOrderText').textContent = sentence.map(s => s.speech || s.label).join(' ');
+      document.getElementById('showOrderModal').classList.add('open');
+    }
+
     function toggleEditMode() {
       isEditMode = !isEditMode;
       const toggle = document.getElementById('modeToggle');
       const text = document.getElementById('modeText');
-      const icon = document.getElementById('modeIcon');
-
       if (isEditMode) {
         toggle.classList.add('active');
-        text.textContent = 'Edit Mode ON';
-        icon.textContent = '✏️';
+        text.textContent = 'Done Editing';
         document.body.classList.add('edit-mode');
       } else {
         toggle.classList.remove('active');
-        text.textContent = 'Child Mode';
-        icon.textContent = '🔒';
+        text.textContent = 'Customize';
         document.body.classList.remove('edit-mode');
       }
-      renderGrid();
       renderSentenceStrip();
     }
 
-    // ==========================================
-    // EMERGENCY OVERLOAD MODAL
-    // ==========================================
-    function openEmergencyOverloadModal() {
-      document.getElementById('overloadModal').classList.add('open');
-      speakText("I am having sensory overload right now. Please dim the lights, do not touch me, and give me quiet, safe space.");
-    }
+    // Add / Edit Studio Modal
+    let editingKey = null;
+    let currentPhotoUrl = 'assets/symbols/happy.png';
 
-    function closeEmergencyOverloadModal() {
-      document.getElementById('overloadModal').classList.remove('open');
-      speakText("Thank you for giving me space. I feel better.");
-    }
-
-    // ==========================================
-    // MODAL DIALOGS (ADD/EDIT WORDS WITH PHOTO UPLOAD)
-    // ==========================================
-    let editingCoord = null;
-    let editingTile = null;
-    let selectedIcon = '⭐';
-    let currentUploadedPhoto = null;
-
-    const EMOJI_LIST = ['🍓','🐱','🐶','🐰','🐴','🐬','🐼','🦆','🐯','🐘','🫐','🧁','🍋','🍊','🍰','💖','🎂','👒','🎶','🔇','💡','🎧','🤢','👕','🫂','🤫','🪑','🦷','🚀','😐','❓','🤯','😅','🙄','🔥','🧢','👀','✨','🧊','🚫','🧠','🎸','🍎','🍌','🍕','💧','🧃','🍪','⭐','🙋','👉','🤲','❤️','🏃','🛑','🆘','🍽️','🥤','🎮','➕','✅','😄','😠','😴','📱','🎵','🧸','🌳','🙏','🤝','🚻','⚡'];
-
-    function initEmojiPalette() {
-      const palette = document.getElementById('iconPalette');
-      palette.innerHTML = '';
-      EMOJI_LIST.forEach(em => {
-        const span = document.createElement('span');
-        span.className = `icon-opt ${em === selectedIcon ? 'selected' : ''}`;
-        span.textContent = em;
-        span.onclick = () => {
-          selectedIcon = em;
-          currentUploadedPhoto = null;
-          document.getElementById('imagePreviewContainer').style.display = 'none';
-          document.querySelectorAll('.icon-opt').forEach(el => el.classList.remove('selected'));
-          span.classList.add('selected');
+    function renderBuiltinSymbolPicker(filter = '') {
+      const grid = document.getElementById('builtinSymbolGrid');
+      grid.innerHTML = '';
+      const q = filter.toLowerCase().trim();
+      BUILTIN_ASSETS.filter(a => a.toLowerCase().replace('.png', '').includes(q)).forEach(asset => {
+        const path = `assets/symbols/${asset}`;
+        const div = document.createElement('div');
+        div.className = `builtin-sym-item ${currentPhotoUrl === path ? 'selected' : ''}`;
+        div.innerHTML = `
+          <img src="${path}" loading="lazy">
+          <span>${asset.replace('.png', '').replace('_', ' ')}</span>
+        `;
+        div.onclick = () => {
+          currentPhotoUrl = path;
+          document.getElementById('imagePreview').src = path;
+          renderBuiltinSymbolPicker(document.getElementById('builtinFilterInput').value);
         };
-        palette.appendChild(span);
+        grid.appendChild(div);
       });
     }
 
     function handleImageUpload(e) {
       const file = e.target.files[0];
       if (!file) return;
-
       const reader = new FileReader();
       reader.onload = function(evt) {
-        currentUploadedPhoto = evt.target.result;
-        document.getElementById('imagePreview').src = currentUploadedPhoto;
-        document.getElementById('imagePreviewContainer').style.display = 'flex';
+        currentPhotoUrl = evt.target.result;
+        document.getElementById('imagePreview').src = currentPhotoUrl;
       };
       reader.readAsDataURL(file);
-    }
-
-    function removeCustomImage() {
-      currentUploadedPhoto = null;
-      document.getElementById('tileImageInput').value = '';
-      document.getElementById('imagePreviewContainer').style.display = 'none';
-    }
-
-    function quickAddWordToCurrentBoard() {
-      const currentBoard = boards[currentBoardId] || boards['home'];
-      const tiles = currentBoard.tiles || {};
-      for (let r = 0; r < 5; r++) {
-        for (let c = 0; c < 7; c++) {
-          if (!tiles[`${r}_${c}`]) {
-            openAddTileModal(r, c);
-            return;
-          }
-        }
-      }
-      openAddTileModal(4, 6);
     }
 
     async function searchArasaacSymbols() {
@@ -1401,61 +1165,54 @@
         if (!res.ok) throw new Error('No results');
         const data = await res.json();
         box.innerHTML = '';
-        data.slice(0, 18).forEach(item => {
+        data.slice(0, 20).forEach(item => {
           const url = `https://static.arasaac.org/pictograms/${item._id}/${item._id}_500.png`;
           const img = document.createElement('img');
           img.src = url;
           img.style.cssText = 'width:58px;height:58px;object-fit:contain;background:#fff;border:2px solid #cbd5e1;border-radius:10px;padding:4px;cursor:pointer;flex-shrink:0;';
           img.onclick = () => {
-            currentUploadedPhoto = url;
+            currentPhotoUrl = url;
             document.getElementById('imagePreview').src = url;
-            document.getElementById('imagePreviewContainer').style.display = 'flex';
           };
           box.appendChild(img);
         });
       } catch (e) {
-        box.innerHTML = '<span style="font-size:0.85rem;color:#ef4444;">No symbols found for that word. Try another word!</span>';
+        box.innerHTML = '<span style="font-size:0.85rem;color:#ef4444;">No online symbols found for that word.</span>';
       }
     }
 
-    function openAddTileModal(r, c) {
-      editingCoord = `${r}_${c}`;
-      editingTile = null;
-      currentUploadedPhoto = null;
-      document.getElementById('modalTitle').textContent = `Add Word (Row ${r+1}, Col ${c+1})`;
+    function openAddWordModal() {
+      editingKey = null;
+      currentPhotoUrl = 'assets/symbols/happy.png';
+      document.getElementById('modalTitle').textContent = `➕ Add New Word to ${boards[currentBoardId].name}`;
       document.getElementById('tileLabel').value = '';
       document.getElementById('tileSpeech').value = '';
-      document.getElementById('tilePos').value = 'pos-noun';
-      document.getElementById('tilePitch').value = '1.15';
+      document.getElementById('tilePos').value = currentBoardId === 'restaurants' ? 'pos-strawberry' : 'pos-noun';
       document.getElementById('tileImageInput').value = '';
-      document.getElementById('imagePreviewContainer').style.display = 'none';
+      document.getElementById('arasaacSearchInput').value = '';
+      document.getElementById('arasaacResults').innerHTML = '';
+      document.getElementById('builtinFilterInput').value = '';
+      document.getElementById('imagePreview').src = currentPhotoUrl;
       document.getElementById('btnDeleteTile').style.display = 'none';
-      selectedIcon = '⭐';
-      initEmojiPalette();
+      renderBuiltinSymbolPicker('');
       document.getElementById('btnModal').classList.add('open');
     }
 
-    function openEditTileModal(tile, r, c) {
-      editingCoord = `${r}_${c}`;
-      editingTile = tile;
-      currentUploadedPhoto = tile.photo || null;
-      document.getElementById('modalTitle').textContent = `Edit Word (Row ${r+1}, Col ${c+1})`;
-      document.getElementById('tileLabel').value = tile.label || '';
-      document.getElementById('tileSpeech').value = tile.speech || '';
-      document.getElementById('tilePos').value = tile.pos || 'pos-noun';
-      document.getElementById('tilePitch').value = tile.pitch || '1.15';
+    function openEditWordModal(index) {
+      editingKey = index;
+      const item = boards[currentBoardId].items[index];
+      currentPhotoUrl = item.photo || 'assets/symbols/happy.png';
+      document.getElementById('modalTitle').textContent = `✏️ Customize "${item.label}"`;
+      document.getElementById('tileLabel').value = item.label || '';
+      document.getElementById('tileSpeech').value = item.speech || '';
+      document.getElementById('tilePos').value = item.pos || 'pos-noun';
       document.getElementById('tileImageInput').value = '';
-
-      if (currentUploadedPhoto) {
-        document.getElementById('imagePreview').src = currentUploadedPhoto;
-        document.getElementById('imagePreviewContainer').style.display = 'flex';
-      } else {
-        document.getElementById('imagePreviewContainer').style.display = 'none';
-      }
-
+      document.getElementById('arasaacSearchInput').value = '';
+      document.getElementById('arasaacResults').innerHTML = '';
+      document.getElementById('builtinFilterInput').value = '';
+      document.getElementById('imagePreview').src = currentPhotoUrl;
       document.getElementById('btnDeleteTile').style.display = 'block';
-      selectedIcon = tile.icon || '⭐';
-      initEmojiPalette();
+      renderBuiltinSymbolPicker('');
       document.getElementById('btnModal').classList.add('open');
     }
 
@@ -1463,129 +1220,100 @@
       document.getElementById('btnModal').classList.remove('open');
     }
 
-    function previewCurrentSpeech() {
-      const text = document.getElementById('tileSpeech').value || document.getElementById('tileLabel').value;
-      const pitch = parseFloat(document.getElementById('tilePitch').value) || 1.15;
-      speakText(text, pitch);
-    }
-
     function saveTileModal() {
       const label = document.getElementById('tileLabel').value.trim();
-      let speech = document.getElementById('tileSpeech').value.trim();
-      const pos = document.getElementById('tilePos').value;
-      const pitch = parseFloat(document.getElementById('tilePitch').value) || 1.15;
-
       if (!label) return alert("Please enter a button label.");
-      if (!speech) speech = label;
+      const speech = document.getElementById('tileSpeech').value.trim() || label;
+      const pos = document.getElementById('tilePos').value;
 
-      if (!boards[currentBoardId].tiles) {
-        boards[currentBoardId].tiles = {};
-      }
-
-      boards[currentBoardId].tiles[editingCoord] = {
+      const newItem = {
+        id: 'custom_' + Date.now(),
         label,
         speech,
-        pos,
-        icon: selectedIcon,
-        photo: currentUploadedPhoto,
-        pitch
+        photo: currentPhotoUrl,
+        pos
       };
 
-      saveBoardsToStorage();
+      if (editingKey !== null) {
+        boards[currentBoardId].items[editingKey] = newItem;
+      } else {
+        boards[currentBoardId].items.push(newItem);
+      }
+
+      saveBoards();
       closeTileModal();
       renderGrid();
     }
 
     function deleteCurrentTile() {
-      if (editingCoord && boards[currentBoardId].tiles) {
-        delete boards[currentBoardId].tiles[editingCoord];
-        saveBoardsToStorage();
+      if (editingKey !== null) {
+        boards[currentBoardId].items.splice(editingKey, 1);
+        saveBoards();
       }
       closeTileModal();
       renderGrid();
     }
 
-    // ==========================================
-    // ADD TAB MODAL
-    // ==========================================
-    function openNewTabModal() {
-      document.getElementById('newTabName').value = '';
-      document.getElementById('tabModal').classList.add('open');
-    }
-
-    function closeNewTabModal() {
-      document.getElementById('tabModal').classList.remove('open');
-    }
-
     function saveNewTab() {
       const name = document.getElementById('newTabName').value.trim();
-      if (!name) return alert("Please enter a category name.");
-
-      const newId = 'tab_' + Date.now();
-      boards[newId] = {
-        id: newId,
-        name: `📁 ${name}`,
-        tiles: {
-          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" }
-        }
+      if (!name) return;
+      const id = 'tab_' + Date.now();
+      boards[id] = {
+        id,
+        name: `⭐ ${name}`,
+        items: []
       };
-
-      saveBoardsToStorage();
-      closeNewTabModal();
-      switchTab(newId);
+      saveBoards();
+      document.getElementById('tabModal').classList.remove('open');
+      currentBoardId = id;
+      renderTabs();
+      renderGrid();
     }
 
-    // ==========================================
-    // MULTI-CHILD PROFILE SWITCHER
-    // ==========================================
+    function openEmergencyOverloadModal() {
+      document.getElementById('overloadModal').classList.add('open');
+      speakText("I am having sensory overload. Please give me quiet space and do not ask me questions right now.");
+    }
+
+    function closeEmergencyOverloadModal() {
+      document.getElementById('overloadModal').classList.remove('open');
+    }
+
     function switchProfilePrompt() {
-      const newName = prompt("Enter profile name for this child (e.g. Genesis or Sibling):", currentProfile);
-      if (newName && newName.trim() && newName.trim() !== currentProfile) {
+      const newName = prompt("Enter child profile name:", currentProfile);
+      if (newName && newName.trim()) {
         currentProfile = newName.trim();
         localStorage.setItem('open_aac_active_profile', currentProfile);
-        storageKey = `open_aac_boards_${currentProfile}`;
-        boards = JSON.parse(localStorage.getItem(storageKey) || 'null') || DEFAULT_BOARDS;
         document.getElementById('profileBadge').textContent = `🌸 ${currentProfile}`;
-        currentBoardId = 'home';
-        renderTabs();
-        renderGrid();
-        renderSentenceStrip();
       }
     }
 
-    // ==========================================
-    // SENSORY DARK THEME (LOW STIMULATION)
-    // ==========================================
     let isDarkTheme = localStorage.getItem('open_aac_dark_mode') === 'true';
-
     function applyTheme() {
       const icon = document.getElementById('themeIcon');
       const text = document.getElementById('themeText');
       if (isDarkTheme) {
         document.body.classList.add('dark-theme');
-        if (icon) icon.textContent = '☀️';
-        if (text) text.textContent = 'Day Mode';
+        icon.textContent = '☀️';
+        text.textContent = 'Light';
       } else {
         document.body.classList.remove('dark-theme');
-        if (icon) icon.textContent = '🌙';
-        if (text) text.textContent = 'Sensory Dark';
+        icon.textContent = '🌙';
+        text.textContent = 'Dark';
       }
     }
-
     function toggleSensoryTheme() {
       isDarkTheme = !isDarkTheme;
       localStorage.setItem('open_aac_dark_mode', isDarkTheme);
       applyTheme();
     }
 
-    // Init App
     applyTheme();
     renderVoiceDropdown();
     document.getElementById('profileBadge').textContent = `🌸 ${currentProfile}`;
     renderTabs();
     renderGrid();
     renderSentenceStrip();
-    initEmojiPalette();
   </script>
 </body>
 </html>
