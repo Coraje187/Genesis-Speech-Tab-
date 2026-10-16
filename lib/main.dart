@@ -1926,15 +1926,24 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
       child: Row(
         children: [
           // Brand Logo & Title
-          Container(
-            padding: const EdgeInsets.all(7),
-            decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [Color(0xFF4F46E5), Color(0xFF7C3AED)],
+          ClipRRect(
+            borderRadius: BorderRadius.circular(10),
+            child: Image.asset(
+              'assets/symbols/app_logo.png',
+              width: 36,
+              height: 36,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                padding: const EdgeInsets.all(7),
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF4F46E5), Color(0xFF7C3AED)],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: const Icon(Icons.record_voice_over_rounded, color: Colors.white, size: 20),
               ),
-              borderRadius: BorderRadius.circular(11),
             ),
-            child: const Icon(Icons.record_voice_over_rounded, color: Colors.white, size: 20),
           ),
           const SizedBox(width: 10),
           Text(
