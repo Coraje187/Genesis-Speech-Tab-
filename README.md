@@ -1,86 +1,91 @@
-# 🗣️ Genesis Speech Tab
+<div align="center">
+  <img src="assets/symbols/app_logo.png" alt="Genesis Speech Tab Logo" width="128" height="128" />
+  <h1>Genesis Speech Tab</h1>
+  <p><strong>A 100% Free, Clinical-Grade Motor-Planning AAC Speech Tablet App for Non-Verbal Autistic Children</strong></p>
+  <p><em>Because no child should lose their voice just because their family cannot afford an expensive device.</em></p>
 
-> **A 100% Free, Motor-Planning AAC Speech Tablet App for Non-Verbal Autistic Children**  
-> *Because no child should lose their voice just because their family cannot afford an expensive device.*
+  <p>
+    <a href="https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.0.0/GenesisSpeechTab.apk">
+      <img src="https://img.shields.io/badge/Download_Android_APK-v1.0.0-4F46E5?style=for-the-badge&logo=android&logoColor=white" alt="Download APK" />
+    </a>
+    <a href="https://coraje187.github.io/Genesis-Speech-Tab-/">
+      <img src="https://img.shields.io/badge/Launch_Web_App-Instant_Demo-10B981?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Launch Web App" />
+    </a>
+  </p>
+</div>
 
 ---
 
 ## 🌟 The Mission
 
-Commercial clinical speech tablets cost between **\$1,000 and \$8,000**, pricing out thousands of families who rely on under-resourced programs or budget devices.
+Commercial clinical speech tablets cost between **\$1,000 and \$8,000**, and many subscriptions or proprietary symbol packs lock out families who rely on budget tablets.
 
-**Genesis Speech Tab** brings the clinical gold standards of Augmentative and Alternative Communication (AAC)—specifically motor-planning mechanics and core-word layouts—to **any budget Android tablet, phone, Chromebook, or computer for free**.
+**Genesis Speech Tab** brings the clinical gold standards of Augmentative and Alternative Communication (AAC)—fixed motor-planning grids, Fitzgerald Key color coding, visual sentence strips, and real-world autonomy cards—to **any Android tablet, Amazon Fire tablet, iPad, Chromebook, or computer for 100% free**.
 
 ---
 
 ## ✨ Key Features
 
-### 1. 🧠 Strict Motor Planning (Fixed Coordinate Grid)
-* Built on an immutable **5 $\times$ 7 coordinate layout** (35 buttons).
-* Buttons **never move or shift positions** when categories change or new words are added.
-* Allows children to build unconscious motor memory—learning words the way a pianist learns keys or someone touches a keyboard without looking.
+### 1. 🧠 Strict Motor Planning + Visual Sentence Strip Bar
+* Built on a predictable **5 × 7 coordinate grid** (35 buttons per board) so buttons remain consistent and build unconscious motor memory.
+* **Immediate Voice + Visual Sentence Strip**: Every tap speaks the word aloud immediately *and* adds its visual symbol card to the top sentence bar. Tapping **🗣️ Speak** reads the entire sentence smoothly.
 
-### 2. ⚡ Modern Peer Slang & Realistic Kid Vocals
-* Clinical AAC apps often force children to talk like a textbook (*"I would like to request an apple, please"*).
-* **Genesis Speech Tab** includes a dedicated **⚡ Vibes & Slang** category with real playground language:
-  * *"Bruh..."*, *"Let's gooo!"*, *"No way!"*, *"That's cap!"*, *"Sus"*, *"Chill"*, and *"My bad"*.
-* Dynamic pitch and inflection modulation so excited phrases actually sound excited, rather than flat and robotic.
+### 2. 🍔 Restaurants & Full-Screen "Show What I Want" Order Card
+* Dedicated **🍔 Restaurants** board featuring major favorite spots (**McDonald's, Happy Meal, Chick-fil-A, Wendy's, Burger King, Taco Bell, Pizza Hut, Subway, Starbucks, Dunkin', Dairy Queen, IHOP, Panda Express**) alongside popular order items (*Chicken Nuggets, French Fries, Burger, Cheeseburger, Pizza, Taco, Pancakes, Ice Cream, Milkshake, Apple Slices, Chocolate Milk, Juice Box, Ketchup, Sweet & Sour*).
+* **🍽️ Show Order Button**: Opens a full-screen, high-contrast visual order card with a **"🔊 Read Order Aloud"** button so children can proudly show restaurant cashiers or servers exactly what they want.
 
-### 3. 🛡️ Autistic Sensory Boundary & Autonomy Buttons
-* Critical phrases for sensory overload and bodily autonomy:
-  * *"Leave me alone please"*
-  * *"It is too loud in here!"*
-  * *"This is too much for me right now"*
-  * *"I am all done with this"*
+### 3. 📸 Easy Add Word / Photo & Symbol Studio
+* Tap **`+ Add Word`** in the top bar (or unlock **`🔓 Edit`** and tap any slot) to customize any board in seconds:
+  * **📷 Take Photo / 🖼️ Pick from Gallery**: Snap a photo of your child's actual toy, pet, family member, or favorite snack directly from the tablet camera.
+  * **🌐 35,000+ Live ARASAAC Symbol Search**: Search thousands of clinical AAC pictograms online in real time.
+  * **🎨 111 Built-In Offline Symbols**: Bundled high-clarity vector symbols ready offline with zero internet required.
+  * **💾 Automatic Device Save**: All custom words, photos, and categories persist automatically on the device.
 
-### 4. 🎨 Fitzgerald Key Color Coding Standard
-Follows the clinical AAC standard:
+### 4. 🎧 Sensory & Feelings + 1-Tap 🆘 Sensory Overload Card
+* Dedicated sensory regulation phrases including *"Dishes Hurt Ears"*, *"Too Loud"*, *"Cover Ears"*, *"Headphones Please"*, *"Bright Lights"*, *"Quiet Space"*, *"Need a Break"*, *"Tight Hug"*, and *"Deep Breaths"*.
+* **🆘 Emergency Overload Card**: A 1-tap full-screen medical/sensory alert card explaining that the user is experiencing sensory overload and needs quiet space immediately, with a one-tap loud audio alert.
+
+### 5. 🐾 22 Animals, 🍓 Cartoons, 📚 Learning, 🤟 ASL Signs & ⚡ Slang
+* **🐾 Animals**: 22 animals (Dog, Cat, Horse, Cow, Pig, Sheep, Chicken, Duck, Lion, Tiger, Bear, Elephant, Monkey, Giraffe, Zebra, Dinosaur, Bunny, Frog, Fish, Bird, Butterfly, Turtle).
+* **🍓 Cartoons**: *Strawberry Shortcake* & friends (*Strawberry Shortcake, Custard the Cat, Pupcake, Berry Bitty City, Orange Blossom, Lemon Meringue, Blueberry Muffin, Raspberry Torte, Sing Song, Watch Episode*).
+* **🌎 Multi-Language & Male/Female Voices**: Instant switching between **English (`EN`)**, **Español (`ES`)**, and **Français (`FR`)** with natural **Female (`♀`)** and **Male (`♂`)** voice profiles.
+
+### 6. 🎨 Fitzgerald Key Clinical Color Coding
 * **Yellow:** Pronouns & People (`I`, `You`, `Mom`, `Dad`)
 * **Green:** Action Verbs (`Want`, `Go`, `Stop`, `Eat`, `Play`)
-* **Orange:** Nouns & Objects (`Apple`, `Tablet`, `Toy`, `Bathroom`)
-* **Blue:** Descriptors & Feelings (`More`, `All Done`, `Happy`, `Tired`)
-* **Pink:** Social & Manners (`Please`, `Thank You`, `Help`, `Yes`)
-* **Purple:** Slang & Peer Banter (`Bruh`, `Let's Go`, `Cap`, `Sus`)
-
-### 5. ✏️ In-App Visual Editor & Tab Creator
-* **Edit Mode:** Tap any empty slot (`➕`) to add a new word, customize the label, choose what it speaks, pick an emoji, adjust voice pitch, and assign a color.
-* **New Tabs:** Add categories like *School*, *Roblox*, *Park*, or *Sensory* with automatic home navigation.
-* **Auto-Save:** All customizations are saved directly to the device's local memory (`localStorage`).
+* **Orange:** Nouns, Places & Foods (`Apple`, `McDonald's`, `Tablet`, `Bathroom`)
+* **Blue:** Descriptors, Feelings & Sensory (`More`, `Happy`, `Too Loud`, `Dishes Hurt Ears`)
+* **Pink:** Social & Emergency (`Please`, `Thank You`, `Help`, `Overload Card`)
+* **Purple:** Peer Slang & Fun (`Bruh`, `Let's Gooo!`, `No Way!`, `Sus`)
 
 ---
 
-## 🚀 How to Run
+## 🚀 How to Install & Run
 
-### 📱 Direct APK Install (Instant on Android & Fire Tablets)
+### 📱 Option 1: Direct APK Install (Android & Amazon Fire Tablets)
 Download the pre-compiled Android APK directly to your tablet:
-👉 **[Download GenesisSpeechTab.apk (Release v1.0.0)](https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.0.0/GenesisSpeechTab.apk)**
+👉 **[Download GenesisSpeechTab.apk (Latest Release)](https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.0.0/GenesisSpeechTab.apk)**
 
-1. Tap the link above on your tablet to download.
-2. Open the downloaded file from your tablet's Notifications or Downloads.
-3. Tap **Install** (allow unknown sources if prompted).
+1. Tap the link above on your Android or Fire tablet to download `GenesisSpeechTab.apk`.
+2. Open the downloaded file from your tablet's **Notifications** or **Downloads** folder.
+3. Tap **Install** (allow installation from your browser if prompted).
 
-### Option A: Open Directly in Any Web Browser (Instant)
-Just open `index.html` in your web browser (Chrome, Edge, Firefox), or run a lightweight local server:
+### 🌐 Option 2: Run Instantly in Any Web Browser
+Open `index.html` directly or run a local web server:
 ```bash
-python3 -m http.server 8888
+python3 -m http.server 8090
 ```
-Then visit **`http://localhost:8888`** in your browser.
+Then visit **`http://localhost:8090`** in Chrome, Edge, or Safari. You can also tap **"Add to Home screen"** on any tablet browser to install it as a full-screen Progressive Web App.
 
-### Option B: Turn Any \$60 Android Tablet into a Dedicated Speech Device
-1. Open Chrome on the Android tablet and go to your hosted GitHub Pages link.
-2. Tap the Chrome **3 dots menu** $\rightarrow$ select **"Add to Home screen"**.
-3. It installs as a **full-screen app icon** with no browser URL bars.
-4. Turn on Android **App Pinning** in tablet settings to lock it into the app.
-
-### Option C: Flutter Native Android Build
+### 🛠️ Option 3: Build from Source with Flutter
 ```bash
-cd open_aac
+python3 setup_android_build.py
 flutter pub get
-flutter run
+flutter build apk --release
 ```
 
 ---
 
-## 📜 License & Symbols
-* Software: MIT License (Free and Open Source for all families).
-* Symbol & Pictogram support powered by [ARASAAC](https://arasaac.org/) (Creative Commons CC BY-NC-SA).
+## 📜 License & Acknowledgements
+* **Software License:** MIT License — 100% Free and Open Source for all families, therapists, and schools.
+* **Pictograms & Symbols:** Built-in and online searchable symbols powered by [ARASAAC](https://arasaac.org/) (Creative Commons BY-NC-SA) and custom vector badges.
