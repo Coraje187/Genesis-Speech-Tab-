@@ -51,6 +51,14 @@ Follows the clinical AAC standard:
 
 ## 🚀 How to Run
 
+### 📱 Direct APK Install (Instant on Android & Fire Tablets)
+Download the pre-compiled Android APK directly to your tablet:
+👉 **[Download GenesisSpeechTab.apk (Release v1.0.0)](https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.0.0/GenesisSpeechTab.apk)**
+
+1. Tap the link above on your tablet to download.
+2. Open the downloaded file from your tablet's Notifications or Downloads.
+3. Tap **Install** (allow unknown sources if prompted).
+
 ### Option A: Open Directly in Any Web Browser (Instant)
 Just open `index.html` in your web browser (Chrome, Edge, Firefox), or run a lightweight local server:
 ```bash
