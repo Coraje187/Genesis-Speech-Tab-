@@ -32,6 +32,24 @@ jobs:
       - name: Generate Android Skeleton & Fetch Dependencies
         run: |
           flutter create . --platforms=android --org=com.genesisspeech --project-name=genesis_speech_tab
+          python3 -c "
+          manifest_path = 'android/app/src/main/AndroidManifest.xml'
+          with open(manifest_path, 'r') as f:
+              content = f.read()
+          injections = '''
+              <uses-permission android:name=\"android.permission.INTERNET\" />
+              <queries>
+                  <intent>
+                      <action android:name=\"android.intent.action.TTS_SERVICE\" />
+                  </intent>
+                  <package android:name=\"com.ivona.tts.oem\" />
+                  <package android:name=\"com.google.android.tts\" />
+              </queries>
+          '''
+          content = content.replace('<application', injections + '\n    <application')
+          with open(manifest_path, 'w') as f:
+              f.write(content)
+          "
           flutter pub get
 
       - name: Build Android Release APK
