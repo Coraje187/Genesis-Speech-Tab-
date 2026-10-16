@@ -31,16 +31,20 @@ jobs:
 
       - name: Generate Android Skeleton & Fetch Dependencies
         run: |
-          flutter create . --platforms=android --org=com.genesisspeech --project-name=genesis_speech_tab
-          python3 -m pip install pillow
-          python3 setup_android_build.py
-          flutter pub get
+          flutter create . --platforms=android --org=com.genesisspeech --project-name=genesis_speech_tab 2>&1 | tee -a /tmp/build.log
+          python3 -m pip install --break-system-packages pillow 2>&1 | tee -a /tmp/build.log || sudo apt-get install -y python3-pil 2>&1 | tee -a /tmp/build.log
+          python3 setup_android_build.py 2>&1 | tee -a /tmp/build.log
+          flutter pub get 2>&1 | tee -a /tmp/build.log
 
       - name: Build Android Release APK
-        run: flutter build apk --release
+        run: |
+          set -o pipefail
+          flutter build apk --release 2>&1 | tee -a /tmp/build.log
 
       - name: Rename APK for Easy Download
-        run: cp build/app/outputs/flutter-apk/app-release.apk GenesisSpeechTab.apk
+        run: |
+          cp build/app/outputs/flutter-apk/app-release.apk GenesisSpeechTab.apk
+          cp GenesisSpeechTab.apk /tmp/GenesisSpeechTab.apk
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
@@ -59,25 +63,20 @@ jobs:
             ## 🗣️ Genesis Speech Tab - Free Android APK
             
             Download `GenesisSpeechTab.apk` below and install it directly onto any Android or Amazon Fire tablet!
-            
-            ### How to Install:
-            1. Tap **`GenesisSpeechTab.apk`** below to download to your tablet.
-            2. Tap the downloaded file in your tablet's Notifications or Downloads folder.
-            3. If Android prompts *"Install unknown apps"*, tap **Settings** and toggle **Allow from this source**.
-            4. Open Genesis Speech Tab and enjoy your child's free communication app!
           files: GenesisSpeechTab.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish APK to apk-release Branch
+      - name: Publish APK and Log to apk-release Branch
+        if: always()
         run: |
-          cp GenesisSpeechTab.apk /tmp/GenesisSpeechTab.apk
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout --orphan apk-release
           git rm -rf .
-          cp /tmp/GenesisSpeechTab.apk GenesisSpeechTab.apk
-          git add -f GenesisSpeechTab.apk
-          git commit -m "Build GenesisSpeechTab.apk"
+          if [ -f /tmp/build.log ]; then cp /tmp/build.log build.log; git add -f build.log; fi
+          if [ -f /tmp/GenesisSpeechTab.apk ]; then cp /tmp/GenesisSpeechTab.apk GenesisSpeechTab.apk; git add -f GenesisSpeechTab.apk; fi
+          git commit -m "Build GenesisSpeechTab.apk and log" || true
           git push -f origin apk-release
+
 
