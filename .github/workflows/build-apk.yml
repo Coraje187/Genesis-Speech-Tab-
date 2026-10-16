@@ -68,3 +68,16 @@ jobs:
           files: GenesisSpeechTab.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish APK to apk-release Branch
+        run: |
+          cp GenesisSpeechTab.apk /tmp/GenesisSpeechTab.apk
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout --orphan apk-release
+          git rm -rf .
+          cp /tmp/GenesisSpeechTab.apk GenesisSpeechTab.apk
+          git add -f GenesisSpeechTab.apk
+          git commit -m "Build GenesisSpeechTab.apk"
+          git push -f origin apk-release
+
