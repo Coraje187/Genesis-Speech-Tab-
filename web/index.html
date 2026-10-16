@@ -620,6 +620,10 @@
     </div>
 
     <div style="display: flex; align-items: center; gap: 8px;">
+      <button class="btn-icon" onclick="quickAddWordToCurrentBoard()" title="Quickly add a new word or photo to this board" style="background: #4f46e5; color: #ffffff; border-color: #4338ca; border-radius: 20px; padding: 6px 14px;">
+        <span>➕</span> Add Word / Photo
+      </button>
+
       <button class="btn-icon" id="themeToggleBtn" onclick="toggleSensoryTheme()" title="Toggle Sensory Dark / Low-Stim Mode" style="font-size: 0.85rem; padding: 5px 12px; border-radius: 20px;">
         <span id="themeIcon">🌙</span> <span id="themeText">Sensory Dark</span>
       </button>
@@ -664,19 +668,19 @@
       
       <div class="form-group">
         <label>Display Label (Button Text)</label>
-        <input type="text" id="tileLabel" placeholder="e.g. Pupcake, Bruh, Hug, Apple">
+        <input type="text" id="tileLabel" placeholder="e.g. McDonald's, Nuggets, Dolphin, Grandma">
       </div>
 
       <div class="form-group">
         <label>What the Tablet Speaks</label>
-        <input type="text" id="tileSpeech" placeholder="e.g. Look at Pupcake! / I need a hug please">
+        <input type="text" id="tileSpeech" placeholder="e.g. I want McDonald's please">
       </div>
 
       <div class="form-group">
         <label>Color / Category (Fitzgerald Standard)</label>
         <select id="tilePos">
-          <option value="pos-strawberry">🍓 Strawberry Pink - Characters & Sweet Treats</option>
-          <option value="pos-noun">Orange - Noun / Animals & Things</option>
+          <option value="pos-strawberry">🍔/🍓 Red/Pink - Restaurants, Characters & Treats</option>
+          <option value="pos-noun">Orange - Noun / Animals, Food & Things</option>
           <option value="pos-sensory">Indigo - Sensory & Body Regulation</option>
           <option value="pos-slang">Purple - Slang / Vibes & Banter</option>
           <option value="pos-pronoun">Yellow - Pronoun (I, You, Mom)</option>
@@ -688,16 +692,25 @@
       </div>
 
       <div class="form-group">
-        <label>Snap Camera Photo / Upload Custom Image</label>
+        <label>📸 Snap Camera Photo / Upload Custom Image</label>
         <input type="file" id="tileImageInput" accept="image/*" onchange="handleImageUpload(event)" style="font-size: 0.9rem;">
         <div id="imagePreviewContainer" style="margin-top: 8px; display: none; align-items: center; gap: 8px;">
-          <img id="imagePreview" style="width: 50px; height: 50px; object-fit: cover; border-radius: 8px; border: 1px solid #cbd5e1;">
-          <button type="button" class="btn-cancel" style="padding: 4px 10px; font-size: 0.8rem;" onclick="removeCustomImage()">Remove Photo</button>
+          <img id="imagePreview" style="width: 56px; height: 56px; object-fit: contain; background: #fff; border-radius: 8px; border: 2px solid #4f46e5; padding: 2px;">
+          <button type="button" class="btn-cancel" style="padding: 4px 10px; font-size: 0.8rem;" onclick="removeCustomImage()">Remove Image</button>
         </div>
       </div>
 
       <div class="form-group">
-        <label>Or Choose an Icon / Emoji</label>
+        <label>🌐 Or Search 35,000+ Online AAC Symbols</label>
+        <div style="display: flex; gap: 6px;">
+          <input type="text" id="arasaacSearchInput" placeholder="Type any word (e.g. nuggets, dolphin, grandma)..." style="flex: 1;">
+          <button type="button" class="btn-save" style="background: #0d9488; padding: 8px 14px;" onclick="searchArasaacSymbols()">Search</button>
+        </div>
+        <div id="arasaacResults" style="display: flex; gap: 8px; overflow-x: auto; padding: 8px 0; min-height: 10px;"></div>
+      </div>
+
+      <div class="form-group">
+        <label>😊 Or Choose an Icon / Emoji</label>
         <div class="icon-palette" id="iconPalette">
           <!-- Icons injected by JS -->
         </div>
@@ -835,25 +848,77 @@
         }
       },
 
-      // ANIMALS & PETS BOARD
+      // RESTAURANTS & FAST FOOD BOARD
+      restaurants: {
+        id: "restaurants",
+        name: "🍔 Restaurants",
+        tiles: {
+          "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
+          "0_1": { label: "McDonald's", speech: "I want McDonald's please", photo: "assets/symbols/mcdonalds.png", icon: "🍟", pos: "pos-strawberry", pitch: 1.2 },
+          "0_2": { label: "Happy Meal", speech: "I want a McDonald's Happy Meal", photo: "assets/symbols/happy_meal.png", icon: "🎁", pos: "pos-strawberry", pitch: 1.25 },
+          "0_3": { label: "Chick-fil-A", speech: "I want Chick-fil-A please", photo: "assets/symbols/chickfila.png", icon: "🐔", pos: "pos-strawberry", pitch: 1.2 },
+          "0_4": { label: "Wendy's", speech: "I want Wendy's please", photo: "assets/symbols/wendys.png", icon: "🍔", pos: "pos-strawberry", pitch: 1.2 },
+          "0_5": { label: "Burger King", speech: "I want Burger King please", photo: "assets/symbols/burgerking.png", icon: "👑", pos: "pos-strawberry", pitch: 1.15 },
+          "0_6": { label: "Taco Bell", speech: "I want Taco Bell please", photo: "assets/symbols/tacobell.png", icon: "🌮", pos: "pos-slang", pitch: 1.2 },
+
+          "1_0": { label: "Pizza Hut", speech: "I want Pizza Hut please", photo: "assets/symbols/pizzahut.png", icon: "🍕", pos: "pos-strawberry", pitch: 1.2 },
+          "1_1": { label: "Subway", speech: "I want Subway please", photo: "assets/symbols/subway.png", icon: "🥪", pos: "pos-verb", pitch: 1.15 },
+          "1_2": { label: "Starbucks", speech: "I want Starbucks please", photo: "assets/symbols/starbucks.png", icon: "☕", pos: "pos-verb", pitch: 1.2 },
+          "1_3": { label: "Dunkin'", speech: "I want Dunkin' Donuts please", photo: "assets/symbols/dunkin.png", icon: "🍩", pos: "pos-noun", pitch: 1.2 },
+          "1_4": { label: "Dairy Queen", speech: "I want Dairy Queen ice cream please", photo: "assets/symbols/dairyqueen.png", icon: "🍦", pos: "pos-adjective", pitch: 1.25 },
+          "1_5": { label: "IHOP", speech: "I want IHOP pancakes please", photo: "assets/symbols/ihop.png", icon: "🥞", pos: "pos-adjective", pitch: 1.2 },
+          "1_6": { label: "Panda Express", speech: "I want Panda Express please", photo: "assets/symbols/pandaexpress.png", icon: "🐼", pos: "pos-strawberry", pitch: 1.2 },
+
+          "2_0": { label: "Nuggets", speech: "Chicken nuggets please", photo: "assets/symbols/nuggets.png", icon: "🍗", pos: "pos-noun", pitch: 1.2 },
+          "2_1": { label: "French Fries", speech: "French fries please", photo: "assets/symbols/fries.png", icon: "🍟", pos: "pos-noun", pitch: 1.2 },
+          "2_2": { label: "Cheeseburger", speech: "Cheeseburger please", photo: "assets/symbols/burger.png", icon: "🍔", pos: "pos-noun", pitch: 1.15 },
+          "2_3": { label: "Pizza", speech: "Pizza slice please", photo: "assets/symbols/pizza.png", icon: "🍕", pos: "pos-noun", pitch: 1.2 },
+          "2_4": { label: "Taco", speech: "Taco please", photo: "assets/symbols/taco.png", icon: "🌮", pos: "pos-noun", pitch: 1.2 },
+          "2_5": { label: "Hot Dog", speech: "Hot dog please", photo: "assets/symbols/hotdog.png", icon: "🌭", pos: "pos-noun", pitch: 1.2 },
+          "2_6": { label: "Pancakes", speech: "Pancakes please", photo: "assets/symbols/pancakes.png", icon: "🥞", pos: "pos-noun", pitch: 1.2 },
+
+          "3_0": { label: "Mac & Cheese", speech: "Macaroni and cheese please", photo: "assets/symbols/pasta.png", icon: "🧀", pos: "pos-noun", pitch: 1.2 },
+          "3_1": { label: "Sandwich", speech: "Sandwich please", photo: "assets/symbols/sandwich.png", icon: "🥪", pos: "pos-noun", pitch: 1.15 },
+          "3_2": { label: "Ice Cream", speech: "Ice cream please", photo: "assets/symbols/ice_cream.png", icon: "🍦", pos: "pos-noun", pitch: 1.25 },
+          "3_3": { label: "Milkshake", speech: "Milkshake please", photo: "assets/symbols/milkshake.png", icon: "🥤", pos: "pos-noun", pitch: 1.2 },
+          "3_4": { label: "Donut", speech: "Donut please", photo: "assets/symbols/donut.png", icon: "🍩", pos: "pos-noun", pitch: 1.2 },
+          "3_5": { label: "Soda", speech: "Soda please", photo: "assets/symbols/soda.png", icon: "🥤", pos: "pos-noun", pitch: 1.15 },
+          "3_6": { label: "Ketchup", speech: "Ketchup for dipping please", photo: "assets/symbols/ketchup.png", icon: "🍅", pos: "pos-noun", pitch: 1.15 }
+        }
+      },
+
+      // ANIMALS & PETS BOARD (22 Animals!)
       animals: {
         id: "animals",
         name: "🐾 Animals & Pets",
         tiles: {
           "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
-          "0_1": { label: "Puppy", speech: "Woof woof! I love puppies!", icon: "🐶", pos: "pos-noun", pitch: 1.25 },
-          "0_2": { label: "Kitty", speech: "Meow! Look at the cute kitty!", icon: "🐱", pos: "pos-noun", pitch: 1.3 },
-          "0_3": { label: "Bunny", speech: "Hop hop! Look at the fluffy bunny!", icon: "🐰", pos: "pos-noun", pitch: 1.3 },
-          "0_4": { label: "Horse", speech: "Neigh! I love horses!", icon: "🐴", pos: "pos-noun", pitch: 1.1 },
-          "0_5": { label: "Dolphin", speech: "Look at the swimming dolphin!", icon: "🐬", pos: "pos-noun", pitch: 1.25 },
-          "0_6": { label: "Bear", speech: "Teddy bear!", icon: "🧸", pos: "pos-noun", pitch: 1.15 },
+          "0_1": { label: "Dog / Puppy", speech: "Woof woof! Dog!", photo: "assets/symbols/dog.png", icon: "🐶", pos: "pos-noun", pitch: 1.25 },
+          "0_2": { label: "Cat / Kitty", speech: "Meow! Cute kitty cat!", photo: "assets/symbols/cat.png", icon: "🐱", pos: "pos-noun", pitch: 1.3 },
+          "0_3": { label: "Bunny Rabbit", speech: "Hop hop! Fluffy bunny rabbit!", photo: "assets/symbols/rabbit.png", icon: "🐰", pos: "pos-noun", pitch: 1.3 },
+          "0_4": { label: "Horse", speech: "Neigh! Horse!", photo: "assets/symbols/horse.png", icon: "🐴", pos: "pos-noun", pitch: 1.1 },
+          "0_5": { label: "Dolphin", speech: "Look at the swimming dolphin!", photo: "assets/symbols/dolphin.png", icon: "🐬", pos: "pos-noun", pitch: 1.25 },
+          "0_6": { label: "Bird", speech: "Chirp chirp! Bird!", photo: "assets/symbols/bird.png", icon: "🐦", pos: "pos-noun", pitch: 1.3 },
 
-          "1_1": { label: "Panda", speech: "Look at the cute panda!", icon: "🐼", pos: "pos-noun", pitch: 1.2 },
-          "1_2": { label: "Duck", speech: "Quack quack!", icon: "🦆", pos: "pos-noun", pitch: 1.3 },
-          "1_3": { label: "Tiger", speech: "Roar! Look at the tiger!", icon: "🐯", pos: "pos-noun", pitch: 1.1 },
-          "1_4": { label: "Elephant", speech: "Look at the big elephant!", icon: "🐘", pos: "pos-noun", pitch: 1.1 },
-          "1_5": { label: "Pet Animal", speech: "I want to pet the animal gently.", icon: "🤲", pos: "pos-verb", pitch: 1.15 },
-          "1_6": { label: "Bird", speech: "Chirp chirp! Beautiful bird!", icon: "🐦", pos: "pos-noun", pitch: 1.3 }
+          "1_0": { label: "Fish", speech: "Swimming fish!", photo: "assets/symbols/fish.png", icon: "🐟", pos: "pos-noun", pitch: 1.2 },
+          "1_1": { label: "Duck", speech: "Quack quack! Duck!", photo: "assets/symbols/duck.png", icon: "🦆", pos: "pos-noun", pitch: 1.3 },
+          "1_2": { label: "Cow", speech: "Moo! Cow!", photo: "assets/symbols/cow.png", icon: "🐮", pos: "pos-noun", pitch: 1.05 },
+          "1_3": { label: "Pig", speech: "Oink oink! Pig!", photo: "assets/symbols/pig.png", icon: "🐷", pos: "pos-noun", pitch: 1.2 },
+          "1_4": { label: "Sheep", speech: "Baa! Sheep!", photo: "assets/symbols/sheep.png", icon: "🐑", pos: "pos-noun", pitch: 1.2 },
+          "1_5": { label: "Chicken", speech: "Cluck cluck! Chicken!", photo: "assets/symbols/chicken_animal.png", icon: "🐔", pos: "pos-noun", pitch: 1.25 },
+          "1_6": { label: "Frog", speech: "Ribbit! Frog!", photo: "assets/symbols/frog.png", icon: "🐸", pos: "pos-noun", pitch: 1.2 },
+
+          "2_0": { label: "Monkey", speech: "Ooh ooh aah aah! Monkey!", photo: "assets/symbols/monkey.png", icon: "🐵", pos: "pos-noun", pitch: 1.25 },
+          "2_1": { label: "Lion", speech: "Roar! Lion!", photo: "assets/symbols/lion.png", icon: "🦁", pos: "pos-noun", pitch: 1.05 },
+          "2_2": { label: "Tiger", speech: "Roar! Tiger!", photo: "assets/symbols/tiger.png", icon: "🐯", pos: "pos-noun", pitch: 1.1 },
+          "2_3": { label: "Elephant", speech: "Big elephant!", photo: "assets/symbols/elephant.png", icon: "🐘", pos: "pos-noun", pitch: 1.05 },
+          "2_4": { label: "Teddy Bear", speech: "Bear!", photo: "assets/symbols/bear.png", icon: "🧸", pos: "pos-noun", pitch: 1.15 },
+          "2_5": { label: "Giraffe", speech: "Tall giraffe!", photo: "assets/symbols/giraffe.png", icon: "🦒", pos: "pos-noun", pitch: 1.15 },
+          "2_6": { label: "Dinosaur", speech: "Dinosaur! Stomp and roar!", photo: "assets/symbols/dinosaur.png", icon: "🦖", pos: "pos-noun", pitch: 1.0 },
+
+          "3_0": { label: "Butterfly", speech: "Pretty butterfly!", photo: "assets/symbols/butterfly.png", icon: "🦋", pos: "pos-noun", pitch: 1.3 },
+          "3_1": { label: "Turtle", speech: "Turtle!", photo: "assets/symbols/turtle.png", icon: "🐢", pos: "pos-noun", pitch: 1.1 },
+          "3_2": { label: "Pet Animal", speech: "I want to pet the animal gently.", icon: "🤲", pos: "pos-verb", pitch: 1.15 }
         }
       },
 
@@ -863,16 +928,16 @@
         name: "🧠 Sensory & Body",
         tiles: {
           "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
-          "0_1": { label: "Dishes Hurt", speech: "The dishes clattering is hurting my ears! Please give me headphones.", icon: "🍽️", pos: "pos-sensory", pitch: 1.25 },
-          "0_2": { label: "Too Loud", speech: "It is way too loud in here!", icon: "🔇", pos: "pos-sensory", pitch: 1.2 },
-          "0_3": { label: "Too Bright", speech: "The lights are way too bright for my eyes.", icon: "💡", pos: "pos-sensory", pitch: 1.1 },
-          "0_4": { label: "Headphones", speech: "Please give me my headphones right now.", icon: "🎧", pos: "pos-sensory", pitch: 1.2 },
-          "0_5": { label: "Tummy Hurts", speech: "My tummy hurts.", icon: "🤢", pos: "pos-sensory", pitch: 1.0 },
-          "0_6": { label: "Need Hug", speech: "I need deep pressure or a tight hug please.", icon: "🫂", pos: "pos-sensory", pitch: 1.1 },
+          "0_1": { label: "Dishes Hurt", speech: "The dishes clattering is hurting my ears! Please give me headphones.", photo: "assets/symbols/dishes.png", icon: "🍽️", pos: "pos-sensory", pitch: 1.25 },
+          "0_2": { label: "Too Loud", speech: "It is way too loud in here!", photo: "assets/symbols/loud.png", icon: "🔇", pos: "pos-sensory", pitch: 1.2 },
+          "0_3": { label: "Too Bright", speech: "The lights are way too bright for my eyes.", photo: "assets/symbols/bright.png", icon: "💡", pos: "pos-sensory", pitch: 1.1 },
+          "0_4": { label: "Headphones", speech: "Please give me my headphones right now.", photo: "assets/symbols/headphones.png", icon: "🎧", pos: "pos-sensory", pitch: 1.2 },
+          "0_5": { label: "Tummy Hurts", speech: "My tummy hurts.", photo: "assets/symbols/sick.png", icon: "🤢", pos: "pos-sensory", pitch: 1.0 },
+          "0_6": { label: "Need Hug", speech: "I need deep pressure or a tight hug please.", photo: "assets/symbols/hug.png", icon: "🫂", pos: "pos-sensory", pitch: 1.1 },
 
-          "1_1": { label: "Quiet Room", speech: "I need to go to a quiet room.", icon: "🤫", pos: "pos-sensory", pitch: 1.0 },
-          "1_2": { label: "Rocking", speech: "Rocking my body helps me calm down.", icon: "🪑", pos: "pos-sensory", pitch: 1.1 },
-          "1_3": { label: "Go to Room", speech: "Can I please go to my quiet bedroom?", icon: "🚪", pos: "pos-sensory", pitch: 1.1 },
+          "1_1": { label: "Quiet Room", speech: "I need to go to a quiet room.", photo: "assets/symbols/quiet.png", icon: "🤫", pos: "pos-sensory", pitch: 1.0 },
+          "1_2": { label: "Swing / Rock", speech: "Rocking my body helps me calm down.", photo: "assets/symbols/swing.png", icon: "🪑", pos: "pos-sensory", pitch: 1.1 },
+          "1_3": { label: "Cozy Blanket", speech: "I want my cozy blanket please.", photo: "assets/symbols/blanket.png", icon: "🛌", pos: "pos-sensory", pitch: 1.1 },
           "1_4": { label: "Kitchen Noise", speech: "The kitchen sounds are way too loud for me right now.", icon: "🥄", pos: "pos-sensory", pitch: 1.2 },
           "1_5": { label: "Take Break", speech: "I really need a break right now.", icon: "⏸️", pos: "pos-sensory", pitch: 1.1 },
           "1_6": { label: "Itchy Clothes", speech: "My clothes feel too itchy on my skin.", icon: "👕", pos: "pos-sensory", pitch: 1.15 },
@@ -917,12 +982,19 @@
         name: "🍎 Food & Drinks",
         tiles: {
           "0_0": { label: "← Home", speech: "", icon: "🏠", pos: "pos-preposition", targetBoard: "home" },
-          "1_0": { label: "Apple", speech: "Apple", icon: "🍎", pos: "pos-noun", pitch: 1.1 },
-          "1_1": { label: "Banana", speech: "Banana", icon: "🍌", pos: "pos-noun", pitch: 1.1 },
-          "1_2": { label: "Pizza", speech: "Pizza", icon: "🍕", pos: "pos-noun", pitch: 1.1 },
-          "1_3": { label: "Water", speech: "Water", icon: "💧", pos: "pos-noun", pitch: 1.1 },
-          "1_4": { label: "Juice", speech: "Juice", icon: "🧃", pos: "pos-noun", pitch: 1.1 },
-          "1_5": { label: "Snack", speech: "Snack", icon: "🍪", pos: "pos-noun", pitch: 1.1 }
+          "0_1": { label: "Apple", speech: "Apple", photo: "assets/symbols/apple.png", icon: "🍎", pos: "pos-noun", pitch: 1.1 },
+          "0_2": { label: "Banana", speech: "Banana", photo: "assets/symbols/banana.png", icon: "🍌", pos: "pos-noun", pitch: 1.1 },
+          "0_3": { label: "Strawberries", speech: "Strawberries", photo: "assets/symbols/strawberry.png", icon: "🍓", pos: "pos-noun", pitch: 1.15 },
+          "0_4": { label: "Pizza", speech: "Pizza", photo: "assets/symbols/pizza.png", icon: "🍕", pos: "pos-noun", pitch: 1.1 },
+          "0_5": { label: "Nuggets", speech: "Chicken nuggets", photo: "assets/symbols/nuggets.png", icon: "🍗", pos: "pos-noun", pitch: 1.15 },
+          "0_6": { label: "Fries", speech: "French fries", photo: "assets/symbols/fries.png", icon: "🍟", pos: "pos-noun", pitch: 1.15 },
+          "1_0": { label: "Water", speech: "Water please", photo: "assets/symbols/water.png", icon: "💧", pos: "pos-noun", pitch: 1.1 },
+          "1_1": { label: "Juice", speech: "Juice please", photo: "assets/symbols/juice.png", icon: "🧃", pos: "pos-noun", pitch: 1.1 },
+          "1_2": { label: "Milk", speech: "Milk please", photo: "assets/symbols/milk.png", icon: "🥛", pos: "pos-noun", pitch: 1.1 },
+          "1_3": { label: "Cookie", speech: "Cookie please", photo: "assets/symbols/cookie.png", icon: "🍪", pos: "pos-noun", pitch: 1.15 },
+          "1_4": { label: "Crackers", speech: "Crackers please", photo: "assets/symbols/cracker.png", icon: "🍘", pos: "pos-noun", pitch: 1.15 },
+          "1_5": { label: "Ice Cream", speech: "Ice cream please", photo: "assets/symbols/ice_cream.png", icon: "🍦", pos: "pos-noun", pitch: 1.2 },
+          "1_6": { label: "Pancakes", speech: "Pancakes please", photo: "assets/symbols/pancakes.png", icon: "🥞", pos: "pos-noun", pitch: 1.15 }
         }
       }
     };
@@ -1303,6 +1375,47 @@
       currentUploadedPhoto = null;
       document.getElementById('tileImageInput').value = '';
       document.getElementById('imagePreviewContainer').style.display = 'none';
+    }
+
+    function quickAddWordToCurrentBoard() {
+      const currentBoard = boards[currentBoardId] || boards['home'];
+      const tiles = currentBoard.tiles || {};
+      for (let r = 0; r < 5; r++) {
+        for (let c = 0; c < 7; c++) {
+          if (!tiles[`${r}_${c}`]) {
+            openAddTileModal(r, c);
+            return;
+          }
+        }
+      }
+      openAddTileModal(4, 6);
+    }
+
+    async function searchArasaacSymbols() {
+      const q = document.getElementById('arasaacSearchInput').value.trim();
+      const box = document.getElementById('arasaacResults');
+      if (!q) return;
+      box.innerHTML = '<span style="font-size:0.85rem;color:#64748b;">Searching 35,000+ symbols...</span>';
+      try {
+        const res = await fetch(`https://api.arasaac.org/api/pictograms/en/search/${encodeURIComponent(q)}`);
+        if (!res.ok) throw new Error('No results');
+        const data = await res.json();
+        box.innerHTML = '';
+        data.slice(0, 18).forEach(item => {
+          const url = `https://static.arasaac.org/pictograms/${item._id}/${item._id}_500.png`;
+          const img = document.createElement('img');
+          img.src = url;
+          img.style.cssText = 'width:58px;height:58px;object-fit:contain;background:#fff;border:2px solid #cbd5e1;border-radius:10px;padding:4px;cursor:pointer;flex-shrink:0;';
+          img.onclick = () => {
+            currentUploadedPhoto = url;
+            document.getElementById('imagePreview').src = url;
+            document.getElementById('imagePreviewContainer').style.display = 'flex';
+          };
+          box.appendChild(img);
+        });
+      } catch (e) {
+        box.innerHTML = '<span style="font-size:0.85rem;color:#ef4444;">No symbols found for that word. Try another word!</span>';
+      }
     }
 
     function openAddTileModal(r, c) {
