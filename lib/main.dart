@@ -52,7 +52,7 @@ class _GenesisSpeechAppState extends State<GenesisSpeechApp> {
 // DATA MODELS & FITZGERALD KEY
 // ==========================================
 
-enum WordType { pronoun, verb, social, adjective, noun, question, learning, slang }
+enum WordType { pronoun, verb, social, adjective, noun, question, learning, slang, sign }
 
 class SymbolItem {
   String id;
@@ -63,6 +63,7 @@ class SymbolItem {
   WordType type;
   String category;
   Color? customColor;
+  String? signGestureHint;
 
   SymbolItem({
     required this.id,
@@ -73,6 +74,7 @@ class SymbolItem {
     required this.type,
     this.category = 'Core',
     this.customColor,
+    this.signGestureHint,
   });
 
   Color getColor(bool isDark) {
@@ -89,6 +91,7 @@ class SymbolItem {
         case WordType.question: return const Color(0xFF6B21A8);  // Dark Purple
         case WordType.learning: return const Color(0xFF374151);  // Dark Slate
         case WordType.slang: return const Color(0xFF581C87);     // Deep Purple
+        case WordType.sign: return const Color(0xFF1E3A8A);      // Royal Indigo
       }
     } else {
       switch (type) {
@@ -100,6 +103,7 @@ class SymbolItem {
         case WordType.question: return const Color(0xFFCE93D8);  // Light Purple
         case WordType.learning: return const Color(0xFFE2E8F0);  // Soft Slate
         case WordType.slang: return const Color(0xFFE9D5FF);     // Lavender
+        case WordType.sign: return const Color(0xFFDBEAFE);      // Soft Sky
       }
     }
   }
@@ -115,11 +119,12 @@ class SymbolItem {
       case WordType.question: return const Color(0xFF9333EA);
       case WordType.learning: return const Color(0xFF94A3B8);
       case WordType.slang: return const Color(0xFF7E22CE);
+      case WordType.sign: return const Color(0xFF2563EB);
     }
   }
 }
 
-// List of all 48 locally cached ARASAAC PNG files for the image picker
+// All locally cached ARASAAC PNGs
 const List<String> availableSymbolAssets = [
   'apple.png', 'banana.png', 'pizza.png', 'cracker.png', 'snack.png',
   'cookie.png', 'eat.png', 'drink.png', 'water.png', 'juice.png',
@@ -158,16 +163,16 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
   String _selectedCategory = 'Core';
   bool _useQwerty = false;
   bool _phonicsMode = false;
-  bool _isEditMode = false; // Toggle to customize buttons & images
+  bool _isEditMode = false;
 
   // Voice & Language Settings
   String _selectedLanguage = 'en-US';
-  String _voiceGender = 'female'; // 'female' or 'male'
+  String _voiceGender = 'female';
   double _speechRate = 0.48;
-  double _pitch = 1.30; // 1.30 = natural female kid-friendly tone
+  double _pitch = 1.30;
   List<dynamic> _availableVoices = [];
 
-  // Master Vocabulary with Real 48 ARASAAC Symbols
+  // Master Vocabulary
   late List<SymbolItem> _vocabulary = [
     // -------------------------------------------------------------
     // 1. CORE BOARD (Always accessible high-frequency motor words)
@@ -257,7 +262,26 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
     SymbolItem(id: 'gd_job', label: 'Good Job!', spokenText: 'Great job! You did it!', fallbackIcon: Icons.thumb_up, type: WordType.social, category: 'Learning'),
 
     // -------------------------------------------------------------
-    // 5. VIBES & PEER SLANG
+    // 5. SIGN LANGUAGE (Total Communication: Sign + Speech + Symbol)
+    // -------------------------------------------------------------
+    SymbolItem(id: 'asl_ily', label: 'I Love You 🤟', spokenText: 'I love you. To sign, raise thumb, index, and pinky finger.', fallbackIcon: Icons.favorite, type: WordType.sign, category: 'Signs', signGestureHint: '🤟 Raise thumb, index, and pinky'),
+    SymbolItem(id: 'asl_more', label: 'More 🤲', spokenText: 'More. In sign language, bring your fingertips together repeatedly.', assetName: 'more.png', fallbackIcon: Icons.add_circle, type: WordType.sign, category: 'Signs', signGestureHint: '🤲 Tap fingertips together'),
+    SymbolItem(id: 'asl_please', label: 'Please 🙏', spokenText: 'Please. In sign language, rub flat palm in a circle on your chest.', assetName: 'please.png', fallbackIcon: Icons.volunteer_activism, type: WordType.sign, category: 'Signs', signGestureHint: '🙏 Rub flat hand over chest'),
+    SymbolItem(id: 'asl_thanks', label: 'Thank You 🤝', spokenText: 'Thank you. Touch fingers to chin and bring hand forward.', assetName: 'thank_you.png', fallbackIcon: Icons.handshake, type: WordType.sign, category: 'Signs', signGestureHint: '🤝 Touch chin, move forward'),
+    SymbolItem(id: 'asl_help', label: 'Help 🆘', spokenText: 'Help. Place thumbs-up fist on flat palm and lift both up.', assetName: 'help.png', fallbackIcon: Icons.help_outline, type: WordType.sign, category: 'Signs', signGestureHint: '🆘 Thumbs up on flat palm'),
+    SymbolItem(id: 'asl_stop', label: 'Stop 🛑', spokenText: 'Stop. Bring the edge of one hand down onto your other palm.', assetName: 'stop.png', fallbackIcon: Icons.front_hand, type: WordType.sign, category: 'Signs', signGestureHint: '🛑 Chop edge of hand to palm'),
+    SymbolItem(id: 'asl_eat', label: 'Eat 🍽️', spokenText: 'Eat. Bring grouped fingertips to your mouth repeatedly.', assetName: 'eat.png', fallbackIcon: Icons.restaurant, type: WordType.sign, category: 'Signs', signGestureHint: '🍽️ Fingertips to mouth'),
+    SymbolItem(id: 'asl_drink', label: 'Drink 🥤', spokenText: 'Drink. Hold a C-hand to your mouth like a cup.', assetName: 'drink.png', fallbackIcon: Icons.local_drink, type: WordType.sign, category: 'Signs', signGestureHint: '🥤 Tip C-hand to mouth'),
+    SymbolItem(id: 'asl_water', label: 'Water 💧', spokenText: 'Water. Make a W with three fingers and tap index to your chin.', assetName: 'water.png', fallbackIcon: Icons.water_drop, type: WordType.sign, category: 'Signs', signGestureHint: '💧 Tap W to chin'),
+    SymbolItem(id: 'asl_toilet', label: 'Bathroom 🚻', spokenText: 'Bathroom. Make a T hand shape and shake side to side.', assetName: 'toilet.png', fallbackIcon: Icons.wc, type: WordType.sign, category: 'Signs', signGestureHint: '🚻 Shake T handshape'),
+    SymbolItem(id: 'asl_yes', label: 'Yes ✅', spokenText: 'Yes. Make a fist and nod it up and down like a head.', assetName: 'yes.png', fallbackIcon: Icons.check_circle, type: WordType.sign, category: 'Signs', signGestureHint: '✅ Nod fist up and down'),
+    SymbolItem(id: 'asl_no', label: 'No ❌', spokenText: 'No. Snap index and middle finger down to touch thumb.', assetName: 'no.png', fallbackIcon: Icons.cancel, type: WordType.sign, category: 'Signs', signGestureHint: '❌ Snap 2 fingers to thumb'),
+    SymbolItem(id: 'asl_done', label: 'All Done ✨', spokenText: 'All done. Start palms in, twist both open hands outward.', fallbackIcon: Icons.done_all, type: WordType.sign, category: 'Signs', signGestureHint: '✨ Flash palms outward'),
+    SymbolItem(id: 'asl_hug', label: 'Hug 🫂', spokenText: 'Hug. Cross both arms over your chest.', assetName: 'hug.png', fallbackIcon: Icons.favorite, type: WordType.sign, category: 'Signs', signGestureHint: '🫂 Cross arms over chest'),
+    SymbolItem(id: 'asl_bed', label: 'Sleep 🛌', spokenText: 'Sleep. Draw hand down over face, closing fingers to thumb.', assetName: 'bed.png', fallbackIcon: Icons.bedtime, type: WordType.sign, category: 'Signs', signGestureHint: '🛌 Hand draws down face'),
+
+    // -------------------------------------------------------------
+    // 6. VIBES & PEER SLANG
     // -------------------------------------------------------------
     SymbolItem(id: 'sl_lets_go', label: "Let's Go!", spokenText: "Let's gooo!", fallbackIcon: Icons.rocket_launch, type: WordType.slang, category: 'Slang'),
     SymbolItem(id: 'sl_bruh', label: 'Bruh', spokenText: 'Bruh...', fallbackIcon: Icons.sentiment_neutral, type: WordType.slang, category: 'Slang'),
@@ -498,6 +522,187 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
   }
 
   // ==========================================
+  // ADD NEW WORD TO SECTION DIALOG
+  // ==========================================
+  void _showAddWordDialog(String category) {
+    final labelCtrl = TextEditingController();
+    final speechCtrl = TextEditingController();
+    String? selectedAsset;
+    WordType selectedType = WordType.noun;
+
+    showDialog(
+      context: context,
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              title: Row(
+                children: [
+                  const Icon(Icons.add_box_rounded, color: Color(0xFF16A34A)),
+                  const SizedBox(width: 8),
+                  Text('Add Word to $category', style: const TextStyle(fontWeight: FontWeight.bold)),
+                ],
+              ),
+              content: SizedBox(
+                width: 480,
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      TextField(
+                        controller: labelCtrl,
+                        decoration: const InputDecoration(
+                          labelText: 'Display Label',
+                          hintText: 'e.g. Pancakes, Grandma, Park',
+                          border: OutlineInputBorder(),
+                        ),
+                        onChanged: (val) {
+                          if (speechCtrl.text.isEmpty) {
+                            speechCtrl.text = val;
+                          }
+                        },
+                      ),
+                      const SizedBox(height: 10),
+                      TextField(
+                        controller: speechCtrl,
+                        decoration: const InputDecoration(
+                          labelText: 'What it Speaks',
+                          hintText: 'e.g. I want delicious pancakes please',
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      const Text('Choose Image / Symbol:', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 6),
+                      Container(
+                        height: 160,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.shade300),
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.grey.shade50,
+                        ),
+                        child: GridView.builder(
+                          padding: const EdgeInsets.all(6),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 5,
+                            crossAxisSpacing: 6,
+                            mainAxisSpacing: 6,
+                          ),
+                          itemCount: availableSymbolAssets.length,
+                          itemBuilder: (context, idx) {
+                            final asset = availableSymbolAssets[idx];
+                            final isSelected = selectedAsset == asset;
+
+                            return InkWell(
+                              onTap: () {
+                                setDialogState(() => selectedAsset = asset);
+                              },
+                              borderRadius: BorderRadius.circular(8),
+                              child: Container(
+                                padding: const EdgeInsets.all(4),
+                                decoration: BoxDecoration(
+                                  color: isSelected ? const Color(0xFFC7D2FE) : Colors.white,
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(
+                                    color: isSelected ? const Color(0xFF4F46E5) : Colors.black12,
+                                    width: isSelected ? 2.5 : 1,
+                                  ),
+                                ),
+                                child: Image.asset('assets/symbols/$asset', fit: BoxFit.contain),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                      const Text('Category Color Type:', style: TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 6),
+                      Wrap(
+                        spacing: 6,
+                        runSpacing: 6,
+                        children: [
+                          ChoiceChip(
+                            label: const Text('Noun (Orange)'),
+                            selected: selectedType == WordType.noun,
+                            selectedColor: const Color(0xFFFFCC80),
+                            onSelected: (_) => setDialogState(() => selectedType = WordType.noun),
+                          ),
+                          ChoiceChip(
+                            label: const Text('Verb (Green)'),
+                            selected: selectedType == WordType.verb,
+                            selectedColor: const Color(0xFFA5D6A7),
+                            onSelected: (_) => setDialogState(() => selectedType = WordType.verb),
+                          ),
+                          ChoiceChip(
+                            label: const Text('Social (Pink)'),
+                            selected: selectedType == WordType.social,
+                            selectedColor: const Color(0xFFF48FB1),
+                            onSelected: (_) => setDialogState(() => selectedType = WordType.social),
+                          ),
+                          ChoiceChip(
+                            label: const Text('Adjective (Blue)'),
+                            selected: selectedType == WordType.adjective,
+                            selectedColor: const Color(0xFF90CAF9),
+                            onSelected: (_) => setDialogState(() => selectedType = WordType.adjective),
+                          ),
+                          ChoiceChip(
+                            label: const Text('Slang (Purple)'),
+                            selected: selectedType == WordType.slang,
+                            selectedColor: const Color(0xFFE9D5FF),
+                            onSelected: (_) => setDialogState(() => selectedType = WordType.slang),
+                          ),
+                          ChoiceChip(
+                            label: const Text('Sign (Sky Blue)'),
+                            selected: selectedType == WordType.sign,
+                            selectedColor: const Color(0xFFDBEAFE),
+                            onSelected: (_) => setDialogState(() => selectedType = WordType.sign),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    final label = labelCtrl.text.trim();
+                    if (label.isEmpty) return;
+
+                    final newItem = SymbolItem(
+                      id: 'custom_${DateTime.now().millisecondsSinceEpoch}',
+                      label: label,
+                      spokenText: speechCtrl.text.trim().isNotEmpty ? speechCtrl.text.trim() : label,
+                      assetName: selectedAsset,
+                      fallbackIcon: Icons.star_rounded,
+                      type: selectedType,
+                      category: category,
+                    );
+
+                    setState(() {
+                      _vocabulary.add(newItem);
+                    });
+
+                    Navigator.pop(ctx);
+                  },
+                  style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF16A34A), foregroundColor: Colors.white),
+                  child: const Text('Add Word'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  // ==========================================
   // IN-APP BUTTON & IMAGE CUSTOMIZER / EDITOR
   // ==========================================
   void _showEditButtonDialog(SymbolItem item) {
@@ -610,6 +815,12 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
                             selectedColor: const Color(0xFF90CAF9),
                             onSelected: (_) => setDialogState(() => currentType = WordType.adjective),
                           ),
+                          ChoiceChip(
+                            label: const Text('Slang (Purple)'),
+                            selected: currentType == WordType.slang,
+                            selectedColor: const Color(0xFFE9D5FF),
+                            onSelected: (_) => setDialogState(() => currentType = WordType.slang),
+                          ),
                         ],
                       ),
                     ],
@@ -617,6 +828,14 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
                 ),
               ),
               actions: [
+                TextButton.icon(
+                  onPressed: () {
+                    setState(() => _vocabulary.remove(item));
+                    Navigator.pop(ctx);
+                  },
+                  icon: const Icon(Icons.delete_outline, color: Colors.redAccent),
+                  label: const Text('Delete', style: TextStyle(color: Colors.redAccent)),
+                ),
                 TextButton(
                   onPressed: () => Navigator.pop(ctx),
                   child: const Text('Cancel'),
@@ -685,8 +904,8 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
                   if (_sentenceBuffer.isEmpty && _typingBuffer.isEmpty)
                     Text(
                       _isEditMode
-                          ? "🔧 Edit Mode ON: Tap any button to change its image or label!"
-                          : "Tap symbols or letters to speak...",
+                          ? "🔧 Edit Mode ON: Tap any button to edit its image or label!"
+                          : "Tap symbols, letters, or sign gestures to speak...",
                       style: TextStyle(
                         fontSize: 18,
                         color: _isEditMode
@@ -761,13 +980,13 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
               });
             },
           ),
-          // Voice & Language Settings Dialog
+          // Voice & Language Settings
           IconButton(
             icon: const Icon(Icons.record_voice_over_rounded, size: 26, color: Color(0xFF4F46E5)),
             tooltip: "Voice & Language Settings",
             onPressed: _showVoiceSettingsDialog,
           ),
-          // Image / Button Edit Mode Toggle
+          // Edit Mode Toggle
           IconButton(
             icon: Icon(
               _isEditMode ? Icons.check_circle_rounded : Icons.edit_note_rounded,
@@ -801,6 +1020,7 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
       {'name': 'Food', 'label': 'Food & Drinks', 'icon': Icons.restaurant_rounded},
       {'name': 'Feelings', 'label': 'Feelings & Body', 'icon': Icons.emoji_emotions_rounded},
       {'name': 'Learning', 'label': '🎓 Learning', 'icon': Icons.school_rounded},
+      {'name': 'Signs', 'label': '🤟 ASL Signs', 'icon': Icons.front_hand_rounded},
       {'name': 'ABC', 'label': '🔤 ABC & 123', 'icon': Icons.keyboard_alt_rounded},
       {'name': 'Slang', 'label': '⚡ Vibes & Slang', 'icon': Icons.rocket_launch_rounded},
     ];
@@ -845,7 +1065,7 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
     );
   }
 
-  // 3. SYMBOL GRID (Real ARASAAC PNGs with Fallback Icons + Edit Mode)
+  // 3. SYMBOL GRID (With Real Symbols + ➕ Add Word Tile + Edit Mode)
   Widget _buildSymbolGrid(bool isDark) {
     final items = _vocabulary.where((item) => item.category == _selectedCategory).toList();
 
@@ -857,8 +1077,42 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
         crossAxisSpacing: 10,
         childAspectRatio: 0.95,
       ),
-      itemCount: items.length,
+      itemCount: items.length + 1, // +1 for the Add Word card
       itemBuilder: (context, index) {
+        // Last Tile: ➕ Add Word to Section Button
+        if (index == items.length) {
+          return InkWell(
+            onTap: () => _showAddWordDialog(_selectedCategory),
+            borderRadius: BorderRadius.circular(16),
+            child: Ink(
+              decoration: BoxDecoration(
+                color: isDark ? const Color(0xFF1E293B) : const Color(0xFFEFF6FF),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: const Color(0xFF3B82F6),
+                  width: 2,
+                ),
+                boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 2, offset: Offset(0, 1))],
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.add_circle_outline_rounded, size: 40, color: Color(0xFF3B82F6)),
+                  const SizedBox(height: 6),
+                  Text(
+                    'ADD WORD',
+                    style: TextStyle(
+                      fontSize: 13,
+                      fontWeight: FontWeight.w900,
+                      color: isDark ? Colors.blue.shade200 : const Color(0xFF1D4ED8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
         final item = items[index];
 
         return InkWell(
@@ -908,11 +1162,11 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(bottom: 8, left: 4, right: 4),
+                        padding: const EdgeInsets.only(bottom: 6, left: 4, right: 4),
                         child: Text(
                           item.label.toUpperCase(),
                           style: TextStyle(
-                            fontSize: 14,
+                            fontSize: 13,
                             fontWeight: FontWeight.w900,
                             color: isDark ? Colors.white : Colors.black87,
                           ),
@@ -921,6 +1175,21 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      if (item.signGestureHint != null)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 4, left: 4, right: 4),
+                          child: Text(
+                            item.signGestureHint!,
+                            style: TextStyle(
+                              fontSize: 9,
+                              fontWeight: FontWeight.w600,
+                              color: isDark ? Colors.blue.shade200 : const Color(0xFF1E3A8A),
+                            ),
+                            textAlign: TextAlign.center,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                     ],
                   ),
                 ),
