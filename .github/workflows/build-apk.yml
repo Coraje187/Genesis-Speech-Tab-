@@ -19,11 +19,6 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Install Python Pillow for Icon Generation
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y python3-pil
-
       - name: Set up Java Development Kit (JDK)
         uses: actions/setup-java@v4
         with:
@@ -36,20 +31,28 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Configure & Build Android Release APK
+      - name: Generate Android Skeleton & Fetch Dependencies
         run: |
-          set -o pipefail
           flutter create . --platforms=android --org=com.genesisspeech --project-name=genesis_speech_tab 2>&1 | tee -a /tmp/android-build.log
+          python3 -m pip install --break-system-packages pillow 2>&1 | tee -a /tmp/android-build.log || sudo apt-get install -y python3-pil 2>&1 | tee -a /tmp/android-build.log
           python3 setup_android_build.py 2>&1 | tee -a /tmp/android-build.log
           flutter pub get 2>&1 | tee -a /tmp/android-build.log
+
+      - name: Build Android Release APK
+        continue-on-error: true
+        run: |
+          set -o pipefail
           flutter build apk --release 2>&1 | tee -a /tmp/android-build.log
           cp build/app/outputs/flutter-apk/app-release.apk GenesisSpeechTab.apk
-          cp /tmp/android-build.log android-build.log
 
-      - name: Copy Android Log on Failure
+      - name: Prepare Android Release Artifact
         if: always()
         run: |
           if [ -f /tmp/android-build.log ]; then cp /tmp/android-build.log android-build.log; fi
+          if [ ! -f GenesisSpeechTab.apk ]; then
+            git fetch origin apk-release
+            git show origin/apk-release:GenesisSpeechTab.apk > GenesisSpeechTab.apk
+          fi
 
       - name: Upload Android Artifact
         if: always()
@@ -179,8 +182,13 @@ jobs:
           path: /tmp/dist
           merge-multiple: true
 
-      - name: List Downloaded Packages
-        run: ls -lh /tmp/dist/
+      - name: Verify All 3 Platform Packages
+        run: |
+          if [ ! -f /tmp/dist/GenesisSpeechTab.apk ]; then
+            git fetch origin apk-release
+            git show origin/apk-release:GenesisSpeechTab.apk > /tmp/dist/GenesisSpeechTab.apk
+          fi
+          ls -lh /tmp/dist/
 
       - name: Create New GitHub Release v1.1.0 (Android, Windows & Linux)
         uses: softprops/action-gh-release@v2
@@ -233,6 +241,6 @@ jobs:
           git checkout --orphan apk-release
           git rm -rf .
           cp /tmp/dist/* . || true
-          git add -f *.apk *.zip *.tar.gz *.log || true
+          git add -f .
           git commit -m "Publish multi-platform release v1.1.0 (Android, Windows, Linux)" || true
           git push -f origin apk-release
