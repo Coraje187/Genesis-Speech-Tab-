@@ -1,7 +1,7 @@
 name: genesis_speech_tab
-description: A high-performance, free motor-planning AAC communicator for Android tablets.
+description: A high-performance, free motor-planning AAC communicator for Android, Windows, Linux, and Web.
 publish_to: "none"
-version: 1.0.0+1
+version: 1.1.0+2
 
 environment:
   sdk: ">=3.0.0 <4.0.0"

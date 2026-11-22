@@ -1,4 +1,4 @@
-name: Build Android APK
+name: Build Android, Windows & Linux Releases
 
 on:
   push:
@@ -9,10 +9,12 @@ permissions:
   contents: write
 
 jobs:
-  build:
-    name: Build & Release Android APK
+  # ==========================================
+  # 1. ANDROID APK BUILD
+  # ==========================================
+  build-android:
+    name: Build Android APK
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -29,54 +31,196 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Generate Android Skeleton & Fetch Dependencies
-        run: |
-          flutter create . --platforms=android --org=com.genesisspeech --project-name=genesis_speech_tab 2>&1 | tee -a /tmp/build.log
-          python3 -m pip install --break-system-packages pillow 2>&1 | tee -a /tmp/build.log || sudo apt-get install -y python3-pil 2>&1 | tee -a /tmp/build.log
-          python3 setup_android_build.py 2>&1 | tee -a /tmp/build.log
-          flutter pub get 2>&1 | tee -a /tmp/build.log
-
-      - name: Build Android Release APK
+      - name: Configure & Build Android Release APK
         run: |
           set -o pipefail
-          flutter build apk --release 2>&1 | tee -a /tmp/build.log
-
-      - name: Rename APK for Easy Download
-        run: |
+          flutter create . --platforms=android --org=com.genesisspeech --project-name=genesis_speech_tab 2>&1 | tee -a android-build.log
+          python3 -m pip install --break-system-packages pillow 2>&1 | tee -a android-build.log || sudo apt-get install -y python3-pil 2>&1 | tee -a android-build.log
+          python3 setup_android_build.py 2>&1 | tee -a android-build.log
+          flutter pub get 2>&1 | tee -a android-build.log
+          flutter build apk --release 2>&1 | tee -a android-build.log
           cp build/app/outputs/flutter-apk/app-release.apk GenesisSpeechTab.apk
-          cp GenesisSpeechTab.apk /tmp/GenesisSpeechTab.apk
 
-      - name: Upload APK Artifact
+      - name: Upload Android Artifact
+        if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: GenesisSpeechTab-Android-APK
-          path: GenesisSpeechTab.apk
+          name: android-release
+          path: |
+            GenesisSpeechTab.apk
+            android-build.log
 
-      - name: Create GitHub Release with APK
+  # ==========================================
+  # 2. LINUX DESKTOP (x86_64) BUILD
+  # ==========================================
+  build-linux:
+    name: Build Linux Desktop App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Linux Desktop Build Dependencies
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev libstdc++-12-dev python3-pil espeak-ng speech-dispatcher
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Configure & Build Linux Desktop Bundle
+        run: |
+          set -o pipefail
+          flutter config --enable-linux-desktop 2>&1 | tee -a linux-build.log
+          flutter create . --platforms=linux --org=com.genesisspeech --project-name=genesis_speech_tab 2>&1 | tee -a linux-build.log
+          python3 setup_android_build.py 2>&1 | tee -a linux-build.log
+          flutter pub get 2>&1 | tee -a linux-build.log
+          flutter build linux --release 2>&1 | tee -a linux-build.log
+
+          mkdir -p GenesisSpeechTab-Linux
+          cp -r build/linux/x64/release/bundle/* GenesisSpeechTab-Linux/
+          cp assets/symbols/app_logo.png GenesisSpeechTab-Linux/app_logo.png
+
+          cat << 'EOF' > GenesisSpeechTab-Linux/run-genesis-speech-tab.sh
+          #!/usr/bin/env bash
+          DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+          exec "$DIR/GenesisSpeechTab" "$@"
+          EOF
+          chmod +x GenesisSpeechTab-Linux/run-genesis-speech-tab.sh GenesisSpeechTab-Linux/GenesisSpeechTab
+
+          tar -czvf GenesisSpeechTab-Linux-x64.tar.gz GenesisSpeechTab-Linux
+
+      - name: Upload Linux Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-release
+          path: |
+            GenesisSpeechTab-Linux-x64.tar.gz
+            linux-build.log
+
+  # ==========================================
+  # 3. WINDOWS DESKTOP (x86_64) BUILD
+  # ==========================================
+  build-windows:
+    name: Build Windows Desktop App (.exe)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up NuGet for Windows C++ Plugins
+        uses: NuGet/setup-nuget@v2
+
+      - name: Set up Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Configure & Build Windows Release (.exe)
+        shell: bash
+        run: |
+          set -o pipefail
+          flutter config --enable-windows-desktop 2>&1 | tee -a windows-build.log
+          flutter create . --platforms=windows --org=com.genesisspeech --project-name=genesis_speech_tab 2>&1 | tee -a windows-build.log
+          python -m pip install pillow 2>&1 | tee -a windows-build.log
+          python setup_android_build.py 2>&1 | tee -a windows-build.log
+          flutter pub get 2>&1 | tee -a windows-build.log
+          flutter build windows --release 2>&1 | tee -a windows-build.log
+
+          WIN_OUT="build/windows/x64/runner/Release"
+          if [ ! -d "$WIN_OUT" ]; then
+            WIN_OUT="build/windows/runner/Release"
+          fi
+          mkdir -p GenesisSpeechTab-Windows
+          cp -r "$WIN_OUT"/* GenesisSpeechTab-Windows/
+          powershell -Command "Compress-Archive -Path 'GenesisSpeechTab-Windows\*' -DestinationPath 'GenesisSpeechTab-Windows-x64.zip' -Force"
+
+      - name: Upload Windows Artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release
+          path: |
+            GenesisSpeechTab-Windows-x64.zip
+            windows-build.log
+
+  # ==========================================
+  # 4. PUBLISH UNIFIED GITHUB RELEASE (v1.1.0 & v1.0.0)
+  # ==========================================
+  publish-release:
+    name: Publish Multi-Platform GitHub Release
+    needs: [build-android, build-linux, build-windows]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Download Built Platform Packages
+        uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: List Downloaded Packages
+        run: ls -lh dist/
+
+      - name: Create New GitHub Release v1.1.0 (Android, Windows & Linux)
         uses: softprops/action-gh-release@v2
         continue-on-error: true
-        if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
         with:
-          tag_name: v1.0.0
-          name: Genesis Speech Tab (Android APK v1.0.0)
+          tag_name: v1.1.0
+          name: Genesis Speech Tab v1.1.0 (Android APK, Windows PC & Linux PC)
+          make_latest: true
           body: |
-            ## 🗣️ Genesis Speech Tab - Free Android APK
-            
-            Download `GenesisSpeechTab.apk` below and install it directly onto any Android or Amazon Fire tablet!
-          files: GenesisSpeechTab.apk
+            ## 🗣️ Genesis Speech Tab v1.1.0 — Android, Windows & Linux Release
+
+            100% Free, Clinical-Grade AAC Speech Communicator for Non-Verbal Autistic Children.
+
+            ### 📥 Downloads
+            * 📱 **Android & Amazon Fire Tablets**: Download **`GenesisSpeechTab.apk`** and tap to install.
+            * 🪟 **Windows 10 / 11 PC & Touchscreen Laptops**: Download **`GenesisSpeechTab-Windows-x64.zip`**, extract the zip folder, and double-click **`GenesisSpeechTab.exe`**.
+            * 🐧 **Linux Desktop (Ubuntu / Debian / Mint / Fedora x64)**: Download **`GenesisSpeechTab-Linux-x64.tar.gz`**, extract (`tar -xzf GenesisSpeechTab-Linux-x64.tar.gz`), and run **`./GenesisSpeechTab-Linux/GenesisSpeechTab`**.
+
+            ### ✨ What's Included
+            * 🍔 **Restaurants Board & "Show Order" Card** (McDonald's, Happy Meal, Chick-fil-A, Wendy's, Burger King, Taco Bell, Pizza Hut, Subway, Starbucks, Dunkin', Dairy Queen, IHOP, Panda Express + 16 foods/drinks)
+            * 📸 **Easy Add Word / Photo & Symbol Studio** (Camera, Gallery, 35,000+ Live Online ARASAAC Symbol Search, and 111 Built-in Offline Symbols)
+            * 🎧 **Sensory & Feelings Board + 1-Tap 🆘 Emergency Sensory Overload Card** (*"Dishes Hurt Ears"*, *"Too Loud"*, *"Headphones Please"*, *"Quiet Space"*)
+            * 🐾 **22 Animals**, 🍓 **Strawberry Shortcake Cartoons**, 📚 **Learning**, 🤟 **ASL Signs**, and ⚡ **Slang**
+            * 🌎 **Multi-Language (`EN` / `ES` / `FR`) + Female & Male Voices**
+          files: |
+            dist/GenesisSpeechTab.apk
+            dist/GenesisSpeechTab-Windows-x64.zip
+            dist/GenesisSpeechTab-Linux-x64.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish APK and Log to apk-release Branch
+      - name: Update v1.0.0 Release with All 3 Platforms
+        uses: softprops/action-gh-release@v2
+        continue-on-error: true
+        with:
+          tag_name: v1.0.0
+          name: Genesis Speech Tab v1.0.0 (Android, Windows & Linux)
+          files: |
+            dist/GenesisSpeechTab.apk
+            dist/GenesisSpeechTab-Windows-x64.zip
+            dist/GenesisSpeechTab-Linux-x64.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Sync Built Packages & Logs to apk-release Branch
         if: always()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout --orphan apk-release
           git rm -rf .
-          if [ -f /tmp/build.log ]; then cp /tmp/build.log build.log; git add -f build.log; fi
-          if [ -f /tmp/GenesisSpeechTab.apk ]; then cp /tmp/GenesisSpeechTab.apk GenesisSpeechTab.apk; git add -f GenesisSpeechTab.apk; fi
-          git commit -m "Build GenesisSpeechTab.apk and log" || true
+          cp dist/* . || true
+          git add -f *.apk *.zip *.tar.gz *.log || true
+          git commit -m "Publish multi-platform release v1.1.0 (Android, Windows, Linux)" || true
           git push -f origin apk-release
-
-

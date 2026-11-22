@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:image_picker/image_picker.dart';
@@ -766,17 +767,22 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
   }
 
   // ==========================================
-  // TEXT TO SPEECH (TTS) ENGINE
+  // TEXT TO SPEECH (TTS) ENGINE (Android, Windows, Linux, Web)
   // ==========================================
   Future<void> _initTts() async {
+    if (!kIsWeb && Platform.isLinux) {
+      return;
+    }
     try {
       await _flutterTts.awaitSynthCompletion(true);
-      final dynamic engines = await _flutterTts.getEngines;
-      if (engines is List && engines.isNotEmpty) {
-        if (engines.contains("com.google.android.tts")) {
-          await _flutterTts.setEngine("com.google.android.tts");
-        } else if (engines.contains("com.ivona.tts.oem")) {
-          await _flutterTts.setEngine("com.ivona.tts.oem");
+      if (!kIsWeb && Platform.isAndroid) {
+        final dynamic engines = await _flutterTts.getEngines;
+        if (engines is List && engines.isNotEmpty) {
+          if (engines.contains("com.google.android.tts")) {
+            await _flutterTts.setEngine("com.google.android.tts");
+          } else if (engines.contains("com.ivona.tts.oem")) {
+            await _flutterTts.setEngine("com.ivona.tts.oem");
+          }
         }
       }
 
@@ -792,6 +798,10 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
   }
 
   Future<void> _applyVoiceSettings() async {
+    await _saveVoicePreferences();
+    if (!kIsWeb && Platform.isLinux) {
+      return;
+    }
     try {
       await _flutterTts.setLanguage(_selectedLanguage);
       await _flutterTts.setSpeechRate(_speechRate);
@@ -811,6 +821,7 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
                       name.contains('salli') ||
                       name.contains('kendra') ||
                       name.contains('zira') ||
+                      name.contains('hazel') ||
                       name.contains('samantha') ||
                       name.contains('network') ||
                       name.contains('iob') ||
@@ -821,6 +832,7 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
                   (name.contains('male') ||
                       name.contains('joey') ||
                       name.contains('david') ||
+                      name.contains('mark') ||
                       name.contains('guy') ||
                       name.contains('iom'))) {
                 await _flutterTts.setVoice({"name": v['name'], "locale": v['locale']});
@@ -830,19 +842,54 @@ class _AACHomeScreenState extends State<AACHomeScreen> {
           }
         }
       }
-      await _saveVoicePreferences();
     } catch (e) {
       debugPrint("Error applying voice settings: $e");
     }
   }
 
   void _speakText(String text) async {
-    if (text.trim().isEmpty) return;
+    final clean = text.trim();
+    if (clean.isEmpty) return;
+
+    // Linux Desktop Native Speech (speech-dispatcher / espeak-ng / espeak)
+    if (!kIsWeb && Platform.isLinux) {
+      final langPrefix = _selectedLanguage.toLowerCase().substring(0, 2);
+      final spdVoice = _voiceGender == 'male' ? 'male1' : 'female1';
+      final espeakVoice = _voiceGender == 'male' ? '$langPrefix+m3' : '$langPrefix+f3';
+      final espeakSpeed = (160 * (_speechRate / 0.48)).round().clamp(100, 260).toString();
+      try {
+        final res = await Process.run('spd-say', ['-C', '-l', langPrefix, '-t', spdVoice, clean]);
+        if (res.exitCode == 0) return;
+      } catch (_) {}
+      try {
+        final res = await Process.run('espeak-ng', ['-v', espeakVoice, '-s', espeakSpeed, clean]);
+        if (res.exitCode == 0) return;
+      } catch (_) {}
+      try {
+        await Process.run('espeak', ['-v', espeakVoice, '-s', espeakSpeed, clean]);
+      } catch (e) {
+        debugPrint("Linux TTS error: $e");
+      }
+      return;
+    }
+
+    // Android, Windows, macOS, iOS & Web TTS
     try {
       await _flutterTts.stop();
-      await _flutterTts.speak(text);
+      await _flutterTts.speak(clean);
     } catch (e) {
       debugPrint("TTS speak error: $e");
+      if (!kIsWeb && Platform.isWindows) {
+        try {
+          final safe = clean.replaceAll("'", "''");
+          final genderCap = _voiceGender == 'male' ? 'Male' : 'Female';
+          await Process.run('powershell', [
+            '-NoProfile',
+            '-Command',
+            "Add-Type -AssemblyName System.Speech; \$s = New-Object System.Speech.Synthesis.SpeechSynthesizer; \$s.SelectVoiceByHints([System.Speech.Synthesis.VoiceGender]::$genderCap); \$s.Speak('$safe');"
+          ]);
+        } catch (_) {}
+      }
     }
   }
 

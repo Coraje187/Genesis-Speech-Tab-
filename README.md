@@ -1,12 +1,18 @@
 <div align="center">
   <img src="assets/symbols/app_logo.png" alt="Genesis Speech Tab Logo" width="128" height="128" />
   <h1>Genesis Speech Tab</h1>
-  <p><strong>A 100% Free, Clinical-Grade Motor-Planning AAC Speech Tablet App for Non-Verbal Autistic Children</strong></p>
+  <p><strong>A 100% Free, Clinical-Grade Motor-Planning AAC Speech App for Non-Verbal Autistic Children</strong></p>
   <p><em>Because no child should lose their voice just because their family cannot afford an expensive device.</em></p>
 
   <p>
-    <a href="https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.0.0/GenesisSpeechTab.apk">
-      <img src="https://img.shields.io/badge/Download_Android_APK-v1.0.0-4F46E5?style=for-the-badge&logo=android&logoColor=white" alt="Download APK" />
+    <a href="https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.1.0/GenesisSpeechTab.apk">
+      <img src="https://img.shields.io/badge/Download_Android_APK-v1.1.0-4F46E5?style=for-the-badge&logo=android&logoColor=white" alt="Download Android APK" />
+    </a>
+    <a href="https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.1.0/GenesisSpeechTab-Windows-x64.zip">
+      <img src="https://img.shields.io/badge/Download_Windows_PC-v1.1.0-0078D6?style=for-the-badge&logo=windows&logoColor=white" alt="Download Windows PC" />
+    </a>
+    <a href="https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.1.0/GenesisSpeechTab-Linux-x64.tar.gz">
+      <img src="https://img.shields.io/badge/Download_Linux_PC-v1.1.0-FCC624?style=for-the-badge&logo=linux&logoColor=black" alt="Download Linux PC" />
     </a>
     <a href="https://coraje187.github.io/Genesis-Speech-Tab-/">
       <img src="https://img.shields.io/badge/Launch_Web_App-Instant_Demo-10B981?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Launch Web App" />
@@ -18,9 +24,9 @@
 
 ## 🌟 The Mission
 
-Commercial clinical speech tablets cost between **\$1,000 and \$8,000**, and many subscriptions or proprietary symbol packs lock out families who rely on budget tablets.
+Commercial clinical speech tablets cost between **\$1,000 and \$8,000**, and many subscriptions or proprietary symbol packs lock out families who rely on budget tablets or home computers.
 
-**Genesis Speech Tab** brings the clinical gold standards of Augmentative and Alternative Communication (AAC)—fixed motor-planning grids, Fitzgerald Key color coding, visual sentence strips, and real-world autonomy cards—to **any Android tablet, Amazon Fire tablet, iPad, Chromebook, or computer for 100% free**.
+**Genesis Speech Tab** brings the clinical gold standards of Augmentative and Alternative Communication (AAC)—fixed motor-planning grids, Fitzgerald Key color coding, visual sentence strips, and real-world autonomy cards—to **any Android tablet, Amazon Fire tablet, Windows PC, Linux computer, iPad, or Chromebook for 100% free**.
 
 ---
 
@@ -36,7 +42,7 @@ Commercial clinical speech tablets cost between **\$1,000 and \$8,000**, and man
 
 ### 3. 📸 Easy Add Word / Photo & Symbol Studio
 * Tap **`+ Add Word`** in the top bar (or unlock **`🔓 Edit`** and tap any slot) to customize any board in seconds:
-  * **📷 Take Photo / 🖼️ Pick from Gallery**: Snap a photo of your child's actual toy, pet, family member, or favorite snack directly from the tablet camera.
+  * **📷 Take Photo / 🖼️ Pick from Gallery**: Snap a photo of your child's actual toy, pet, family member, or favorite snack directly from the tablet camera or computer folder.
   * **🌐 35,000+ Live ARASAAC Symbol Search**: Search thousands of clinical AAC pictograms online in real time.
   * **🎨 111 Built-In Offline Symbols**: Bundled high-clarity vector symbols ready offline with zero internet required.
   * **💾 Automatic Device Save**: All custom words, photos, and categories persist automatically on the device.
@@ -62,27 +68,30 @@ Commercial clinical speech tablets cost between **\$1,000 and \$8,000**, and man
 
 ## 🚀 How to Install & Run
 
-### 📱 Option 1: Direct APK Install (Android & Amazon Fire Tablets)
-Download the pre-compiled Android APK directly to your tablet:
-👉 **[Download GenesisSpeechTab.apk (Latest Release)](https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.0.0/GenesisSpeechTab.apk)**
-
+### 📱 Option 1: Android & Amazon Fire Tablets (APK)
+👉 **[Download GenesisSpeechTab.apk (v1.1.0)](https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.1.0/GenesisSpeechTab.apk)**
 1. Tap the link above on your Android or Fire tablet to download `GenesisSpeechTab.apk`.
-2. Open the downloaded file from your tablet's **Notifications** or **Downloads** folder.
-3. Tap **Install** (allow installation from your browser if prompted).
+2. Open the downloaded file from your tablet's **Notifications** or **Downloads** folder and tap **Install**.
 
-### 🌐 Option 2: Run Instantly in Any Web Browser
+### 🪟 Option 2: Windows 10 / 11 PC & Touchscreen Laptops (`.exe`)
+👉 **[Download GenesisSpeechTab-Windows-x64.zip (v1.1.0)](https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.1.0/GenesisSpeechTab-Windows-x64.zip)**
+1. Download and extract `GenesisSpeechTab-Windows-x64.zip`.
+2. Double-click **`GenesisSpeechTab.exe`** to launch (no installation required!).
+
+### 🐧 Option 3: Linux Desktop PC (x86_64 `.tar.gz`)
+👉 **[Download GenesisSpeechTab-Linux-x64.tar.gz (v1.1.0)](https://github.com/Coraje187/Genesis-Speech-Tab-/releases/download/v1.1.0/GenesisSpeechTab-Linux-x64.tar.gz)**
+```bash
+tar -xzf GenesisSpeechTab-Linux-x64.tar.gz
+./GenesisSpeechTab-Linux/GenesisSpeechTab
+```
+*(Optional: For Linux voice synthesis, make sure `speech-dispatcher` or `espeak-ng` is installed: `sudo apt install espeak-ng speech-dispatcher`)*
+
+### 🌐 Option 4: Run Instantly in Any Web Browser
 Open `index.html` directly or run a local web server:
 ```bash
 python3 -m http.server 8090
 ```
-Then visit **`http://localhost:8090`** in Chrome, Edge, or Safari. You can also tap **"Add to Home screen"** on any tablet browser to install it as a full-screen Progressive Web App.
-
-### 🛠️ Option 3: Build from Source with Flutter
-```bash
-python3 setup_android_build.py
-flutter pub get
-flutter build apk --release
-```
+Then visit **`http://localhost:8090`** in Chrome, Edge, or Safari.
 
 ---
 
