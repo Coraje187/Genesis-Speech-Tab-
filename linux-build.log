@@ -1,0 +1,44 @@
+Setting "enable-linux-desktop" value to "true".
+
+You may need to restart any open editors for them to read new settings.
+Recreating project ....
+  linux/.gitignore (created)
+  linux/CMakeLists.txt (created)
+  linux/runner/my_application.cc (created)
+  linux/runner/CMakeLists.txt (created)
+  linux/runner/main.cc (created)
+  linux/runner/my_application.h (created)
+  linux/flutter/CMakeLists.txt (created)
+  analysis_options.yaml (created)
+  genesis_speech_tab.iml (created)
+  .idea/libraries/Dart_SDK.xml (created)
+  .idea/libraries/KotlinJavaRuntime.xml (created)
+  .idea/modules.xml (created)
+  .idea/workspace.xml (created)
+  .idea/runConfigurations/main_dart.xml (created)
+  test/widget_test.dart (created)
+Got dependencies.
+Upgrading analysis_options.yaml to exclude build and platform directories.
+Wrote 15 files.
+
+All done!
+You can find general documentation for Flutter at: https://docs.flutter.dev/
+Detailed API documentation is available at: https://api.flutter.dev/
+If you prefer video documentation, consider: https://www.youtube.com/c/flutterdev
+
+In order to run your application, type:
+
+  $ flutter run
+
+Your application code is in ./lib/main.dart.
+
+Resolving dependencies...
+Downloading packages...
+  cross_file 0.3.5+5 (0.4.0 available)
+  material_color_utilities 0.13.0 (0.13.1 available)
+  vector_math 2.4.3 (2.4.4 available)
+Got dependencies!
+3 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+Building Linux application...                                   
+✓ Built build/linux/x64/release/bundle/genesis_speech_tab
