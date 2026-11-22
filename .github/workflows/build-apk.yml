@@ -19,6 +19,11 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Install Python Pillow for Icon Generation
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y python3-pil
+
       - name: Set up Java Development Kit (JDK)
         uses: actions/setup-java@v4
         with:
@@ -34,12 +39,17 @@ jobs:
       - name: Configure & Build Android Release APK
         run: |
           set -o pipefail
-          flutter create . --platforms=android --org=com.genesisspeech --project-name=genesis_speech_tab 2>&1 | tee -a android-build.log
-          python3 -m pip install --break-system-packages pillow 2>&1 | tee -a android-build.log || sudo apt-get install -y python3-pil 2>&1 | tee -a android-build.log
-          python3 setup_android_build.py 2>&1 | tee -a android-build.log
-          flutter pub get 2>&1 | tee -a android-build.log
-          flutter build apk --release 2>&1 | tee -a android-build.log
+          flutter create . --platforms=android --org=com.genesisspeech --project-name=genesis_speech_tab 2>&1 | tee -a /tmp/android-build.log
+          python3 setup_android_build.py 2>&1 | tee -a /tmp/android-build.log
+          flutter pub get 2>&1 | tee -a /tmp/android-build.log
+          flutter build apk --release 2>&1 | tee -a /tmp/android-build.log
           cp build/app/outputs/flutter-apk/app-release.apk GenesisSpeechTab.apk
+          cp /tmp/android-build.log android-build.log
+
+      - name: Copy Android Log on Failure
+        if: always()
+        run: |
+          if [ -f /tmp/android-build.log ]; then cp /tmp/android-build.log android-build.log; fi
 
       - name: Upload Android Artifact
         if: always()
@@ -74,24 +84,26 @@ jobs:
       - name: Configure & Build Linux Desktop Bundle
         run: |
           set -o pipefail
-          flutter config --enable-linux-desktop 2>&1 | tee -a linux-build.log
-          flutter create . --platforms=linux --org=com.genesisspeech --project-name=genesis_speech_tab 2>&1 | tee -a linux-build.log
-          python3 setup_android_build.py 2>&1 | tee -a linux-build.log
-          flutter pub get 2>&1 | tee -a linux-build.log
-          flutter build linux --release 2>&1 | tee -a linux-build.log
+          flutter config --enable-linux-desktop 2>&1 | tee -a /tmp/linux-build.log
+          flutter create . --platforms=linux --org=com.genesisspeech --project-name=genesis_speech_tab 2>&1 | tee -a /tmp/linux-build.log
+          python3 setup_android_build.py 2>&1 | tee -a /tmp/linux-build.log
+          flutter pub get 2>&1 | tee -a /tmp/linux-build.log
+          flutter build linux --release 2>&1 | tee -a /tmp/linux-build.log
 
           mkdir -p GenesisSpeechTab-Linux
           cp -r build/linux/x64/release/bundle/* GenesisSpeechTab-Linux/
           cp assets/symbols/app_logo.png GenesisSpeechTab-Linux/app_logo.png
-
-          cat << 'EOF' > GenesisSpeechTab-Linux/run-genesis-speech-tab.sh
-          #!/usr/bin/env bash
-          DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-          exec "$DIR/GenesisSpeechTab" "$@"
-          EOF
+          if [ -f GenesisSpeechTab-Linux/genesis_speech_tab ] && [ ! -f GenesisSpeechTab-Linux/GenesisSpeechTab ]; then
+            cp GenesisSpeechTab-Linux/genesis_speech_tab GenesisSpeechTab-Linux/GenesisSpeechTab
+          fi
+          printf '#!/usr/bin/env bash\nDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"\nexec "$DIR/GenesisSpeechTab" "$@"\n' > GenesisSpeechTab-Linux/run-genesis-speech-tab.sh
           chmod +x GenesisSpeechTab-Linux/run-genesis-speech-tab.sh GenesisSpeechTab-Linux/GenesisSpeechTab
-
           tar -czvf GenesisSpeechTab-Linux-x64.tar.gz GenesisSpeechTab-Linux
+
+      - name: Copy Linux Log
+        if: always()
+        run: |
+          if [ -f /tmp/linux-build.log ]; then cp /tmp/linux-build.log linux-build.log; fi
 
       - name: Upload Linux Artifact
         if: always()
@@ -164,11 +176,11 @@ jobs:
       - name: Download Built Platform Packages
         uses: actions/download-artifact@v4
         with:
-          path: dist
+          path: /tmp/dist
           merge-multiple: true
 
       - name: List Downloaded Packages
-        run: ls -lh dist/
+        run: ls -lh /tmp/dist/
 
       - name: Create New GitHub Release v1.1.0 (Android, Windows & Linux)
         uses: softprops/action-gh-release@v2
@@ -194,9 +206,9 @@ jobs:
             * 🐾 **22 Animals**, 🍓 **Strawberry Shortcake Cartoons**, 📚 **Learning**, 🤟 **ASL Signs**, and ⚡ **Slang**
             * 🌎 **Multi-Language (`EN` / `ES` / `FR`) + Female & Male Voices**
           files: |
-            dist/GenesisSpeechTab.apk
-            dist/GenesisSpeechTab-Windows-x64.zip
-            dist/GenesisSpeechTab-Linux-x64.tar.gz
+            /tmp/dist/GenesisSpeechTab.apk
+            /tmp/dist/GenesisSpeechTab-Windows-x64.zip
+            /tmp/dist/GenesisSpeechTab-Linux-x64.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -207,9 +219,9 @@ jobs:
           tag_name: v1.0.0
           name: Genesis Speech Tab v1.0.0 (Android, Windows & Linux)
           files: |
-            dist/GenesisSpeechTab.apk
-            dist/GenesisSpeechTab-Windows-x64.zip
-            dist/GenesisSpeechTab-Linux-x64.tar.gz
+            /tmp/dist/GenesisSpeechTab.apk
+            /tmp/dist/GenesisSpeechTab-Windows-x64.zip
+            /tmp/dist/GenesisSpeechTab-Linux-x64.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -220,7 +232,7 @@ jobs:
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git checkout --orphan apk-release
           git rm -rf .
-          cp dist/* . || true
+          cp /tmp/dist/* . || true
           git add -f *.apk *.zip *.tar.gz *.log || true
           git commit -m "Publish multi-platform release v1.1.0 (Android, Windows, Linux)" || true
           git push -f origin apk-release
